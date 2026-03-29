@@ -1,0 +1,131 @@
+---
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Panel from '../components/Panel.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects } from '../data/projects';
+import { getCollection } from 'astro:content';
+import '../styles/global.css';
+
+const posts = (await getCollection('writing'))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Chase Lee — Community Builder, Platform Engineer, Problem Solver" />
+    <title>Chase Lee</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+
+  <body>
+    <Nav />
+
+    <main>
+      <Hero />
+    </main>
+
+    <!-- ── Projects Panel ──────────────────────────────────────────── -->
+    <Panel id="panel-projects" title="Projects">
+      <ul class="project-list">
+        {projects.map((project) => (
+          <li>
+            <ProjectCard project={project} />
+          </li>
+        ))}
+      </ul>
+    </Panel>
+
+    <!-- ── Writing Panel ───────────────────────────────────────────── -->
+    <Panel id="panel-writing" title="Writing">
+      {posts.length === 0 ? (
+        <p class="empty-state">No posts yet.</p>
+      ) : (
+        <ul class="writing-list">
+          {posts.map((post) => (
+            <li class="writing-item">
+              <time class="writing-date" datetime={post.data.date.toISOString()}>
+                {formatDate(post.data.date)}
+              </time>
+              <h3 class="writing-title">{post.data.title}</h3>
+              <p class="writing-description">{post.data.description}</p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </Panel>
+
+    <script>
+      import '../scripts/panels.ts';
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .project-list {
+    list-style: none;
+  }
+
+  /* ── Writing list ────────────────────────────────────────────────── */
+  .writing-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    list-style: none;
+  }
+
+  .writing-item {
+    padding: var(--sp-6) 0;
+    border-bottom: 1px solid var(--c-border);
+  }
+
+  .writing-item:first-child {
+    padding-top: 0;
+  }
+
+  .writing-item:last-child {
+    border-bottom: none;
+  }
+
+  .writing-date {
+    display: block;
+    font-size: 0.6875rem;
+    font-family: var(--font-mono);
+    letter-spacing: 0.08em;
+    color: var(--c-text-dim);
+    margin-bottom: var(--sp-2);
+    text-transform: uppercase;
+  }
+
+  .writing-title {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--c-text);
+    margin-bottom: var(--sp-2);
+  }
+
+  .writing-description {
+    font-size: 0.8125rem;
+    color: var(--c-text-muted);
+    line-height: 1.65;
+  }
+
+  /* ── Empty state ─────────────────────────────────────────────────── */
+  .empty-state {
+    font-size: 0.8125rem;
+    color: var(--c-text-dim);
+    letter-spacing: 0.03em;
+  }
+</style>
