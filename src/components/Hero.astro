@@ -1,106 +1,275 @@
 ---
-import RotatingSubtitle from './RotatingSubtitle.astro';
+import { Image } from 'astro:assets';
+import photo from '../assets/photo.jpg';
+
+// Slideshow photos — add/remove imports here as needed.
+// Keep in sync with @keyframes photo-cycle in global.css (13 photos = 65s cycle).
+import p1  from '../assets/photos/IMG_4109.jpg';
+import p2  from '../assets/photos/IMG_4412.jpg';
+import p3  from '../assets/photos/IMG_9286.jpg';
+import p4  from '../assets/photos/IMG_9285.jpg';
+import p5  from '../assets/photos/IMG_7969.png';
+import p6  from '../assets/photos/IMG_1871.png';
+import p7  from '../assets/photos/IMG_2243.png';
+import p8  from '../assets/photos/IMG_9282.png';
+import p9  from '../assets/photos/IMG_3907.png';
+import p10 from '../assets/photos/IMG_1458.png';
+import p11 from '../assets/photos/IMG_0034.png';
+import p12 from '../assets/photos/IMG_9631.png';
+import p13 from '../assets/photos/IMG-4.png';
+
+const slidePhotos = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13];
+
+// Slideshow timing — must stay in sync with @keyframes photo-cycle in global.css.
+const PHOTO_VISIBLE = 4;
+const PHOTO_FADE    = 1;
+const PHOTO_SLOT    = PHOTO_VISIBLE + PHOTO_FADE; // 5s
+const PHOTO_TOTAL   = slidePhotos.length * PHOTO_SLOT; // 65s
+
+// Subtitle timing — must stay in sync with @keyframes phrase-cycle in global.css.
+const phrases = [
+  'Community Builder',
+  'Platform Engineer',
+  'Problem Solver',
+  'Tournament Organizer',
+  'Backend Engineer',
+  'Photographer',
+];
+const VISIBLE = 3;
+const FADE    = 0.5;
+const SLOT    = VISIBLE + FADE; // 3.5s
+const TOTAL   = phrases.length * SLOT; // 21s
 ---
 
-<section class="hero" aria-label="Introduction">
+<section class="hero">
+
+  <!-- Background slideshow -->
+  <div class="slideshow" aria-hidden="true">
+    {slidePhotos.map((src, i) => (
+      <Image
+        src={src}
+        alt=""
+        class="slideshow__photo"
+        style={`animation-delay: ${i * PHOTO_SLOT}s`}
+        width={1920}
+        height={1080}
+        loading={i === 0 ? 'eager' : 'lazy'}
+      />
+    ))}
+    <div class="slideshow__overlay" />
+  </div>
+
+  <!-- Foreground content -->
   <div class="hero__content">
-    <h1 class="hero__name">Chase Lee</h1>
-    <RotatingSubtitle />
+    <Image
+      src={photo}
+      alt="Noah Lee"
+      width={96}
+      height={96}
+      class="hero__photo"
+    />
 
-    <nav class="hero__links" aria-label="Social links">
-      <!-- GitHub personal -->
-      <a
-        href="https://github.com/chzylee"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="hero__link"
-        aria-label="GitHub (personal)"
-        title="GitHub"
-      >
-        <!-- Lucide: github -->
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <h1 class="hero__name">Noah Lee</h1>
+
+    <div
+      class="subtitle"
+      style={`--subtitle-total: ${TOTAL}s`}
+      aria-label={phrases.join(' / ')}
+    >
+      {phrases.map((phrase, i) => (
+        <span
+          class="subtitle__phrase"
+          style={`animation-delay: ${i * SLOT}s`}
+          aria-hidden="true"
+        >
+          {phrase}
+        </span>
+      ))}
+    </div>
+
+    <nav class="hero__nav" aria-label="Page sections">
+      <a href="#projects" class="hero__nav-link">Projects</a>
+      <a href="#writing"  class="hero__nav-link">Writing</a>
+      <a href="/NoahLeeResume.pdf" target="_blank" rel="noopener noreferrer" class="hero__nav-link">Resume</a>
+    </nav>
+
+    <div class="hero__icons" role="list">
+      <a href="https://github.com/chzylee" target="_blank" rel="noopener noreferrer" class="hero__icon-link" aria-label="GitHub (personal)" title="GitHub" role="listitem">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
           <path d="M9 18c-4.51 2-5-2-7-2"/>
         </svg>
       </a>
-
-      <!-- GitHub org -->
-      <a
-        href="https://github.com/enpicie"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="hero__link"
-        aria-label="GitHub (enpicie org)"
-        title="GitHub — enpicie"
-      >
-        <!-- Lucide: github (org) -->
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <a href="https://github.com/enpicie" target="_blank" rel="noopener noreferrer" class="hero__icon-link" aria-label="GitHub (enpicie org)" title="GitHub — enpicie" role="listitem">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
           <path d="M9 18c-4.51 2-5-2-7-2"/>
-          <!-- small dot badge to visually distinguish org icon -->
-          <circle cx="20" cy="4" r="2.5" fill="currentColor" stroke="none"/>
         </svg>
+        <span class="hero__icon-badge">org</span>
       </a>
-
-      <!-- LinkedIn -->
-      <a
-        href="https://linkedin.com/in/chzylee"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="hero__link"
-        aria-label="LinkedIn"
-        title="LinkedIn"
-      >
-        <!-- LinkedIn mark (not in Lucide — hand-drawn to match style) -->
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <a href="https://www.linkedin.com/in/noah-lee-892b11144/" target="_blank" rel="noopener noreferrer" class="hero__icon-link" aria-label="LinkedIn" title="LinkedIn" role="listitem">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
           <rect width="4" height="12" x="2" y="9"/>
           <circle cx="4" cy="4" r="2"/>
         </svg>
       </a>
-    </nav>
+    </div>
   </div>
+
 </section>
 
 <style>
+  /* ── Hero shell ── */
   .hero {
-    height: calc(100dvh - var(--nav-h));
-    margin-top: var(--nav-h);
+    position: relative;
+    width: 100%;
+    height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    overflow: hidden;
   }
 
+  @media (max-width: 640px) {
+    .hero {
+      height: auto;
+      min-height: 0;
+      padding-top: 4rem;
+      padding-bottom: 3rem;
+    }
+  }
+
+  /* ── Slideshow ── */
+  .slideshow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .slideshow__photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    animation: photo-cycle 65s infinite;
+    animation-fill-mode: backwards;
+  }
+
+  .slideshow__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.58);
+  }
+
+  /* ── Foreground content ── */
   .hero__content {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--sp-6);
+    gap: 1rem;
+    padding: 2rem;
+  }
+
+  .hero__photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    margin-bottom: 0.25rem;
+  }
+
+  @media (max-width: 640px) {
+    .hero__content {
+      gap: 0.625rem;
+    }
+
+    .hero__photo {
+      width: 56px;
+      height: 56px;
+    }
   }
 
   .hero__name {
-    font-size: clamp(2.75rem, 7vw, 5.5rem);
+    font-size: clamp(3.5rem, 10vw, 8rem);
     font-weight: 300;
-    letter-spacing: -0.02em;
-    line-height: 1.05;
-    color: var(--c-text);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--color-text);
   }
 
-  .hero__links {
+  /* ── Rotating subtitle ── */
+  .subtitle {
+    display: grid;
+    height: 1.5em;
+  }
+
+  .subtitle__phrase {
+    grid-area: 1 / 1;
+    font-size: var(--font-size-subtitle);
+    color: var(--color-text);
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    opacity: 0;
+    animation: phrase-cycle var(--subtitle-total) infinite;
+    animation-fill-mode: backwards;
+  }
+
+  /* ── Text nav ── */
+  .hero__nav {
     display: flex;
     align-items: center;
-    gap: var(--sp-5);
-    margin-top: var(--sp-4);
+    gap: 2rem;
+    margin-top: 0.25rem;
   }
 
-  .hero__link {
-    color: var(--c-text);
-    opacity: 0.45;
+  .hero__nav-link {
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    color: var(--color-text);
+    opacity: 0.85;
     transition: opacity 0.2s ease;
   }
 
-  .hero__link:hover {
+  .hero__nav-link:hover {
     opacity: 1;
+  }
+
+  /* ── Icon links ── */
+  .hero__icons {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .hero__icon-link {
+    position: relative;
+    color: var(--color-text);
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+    display: flex;
+    align-items: center;
+  }
+
+  .hero__icon-link:hover {
+    opacity: 1;
+  }
+
+  .hero__icon-badge {
+    position: absolute;
+    bottom: -6px;
+    right: -8px;
+    font-size: 0.5rem;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    text-transform: lowercase;
+    pointer-events: none;
   }
 </style>
