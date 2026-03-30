@@ -3,16 +3,8 @@ import StickyNav from '../components/StickyNav.astro';
 import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
 import { projects } from '../data/projects';
-import { getCollection } from 'astro:content';
+import Photography from '../components/Photography.astro';
 import '../styles/global.css';
-
-const posts = (await getCollection('writing'))
-  .filter((p) => !p.data.draft)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-
-function fmtDate(d: Date) {
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-}
 ---
 
 <!doctype html>
@@ -82,28 +74,12 @@ function fmtDate(d: Date) {
       </div>
     </section>
 
-    <!-- ── Writing ───────────────────────────────────────────────────── -->
-    <section id="writing" class="content-section">
-      <div class="content-inner">
-        <h2 class="section-label">Writing</h2>
+    <Photography />
 
-        {posts.length === 0 ? (
-          <p class="empty">No posts published yet.</p>
-        ) : (
-          <ul class="post-list">
-            {posts.map((post) => (
-              <li class="post">
-                <time class="post__date" datetime={post.data.date.toISOString()}>
-                  {fmtDate(post.data.date)}
-                </time>
-                <h3 class="post__title">{post.data.title}</h3>
-                <p class="post__desc">{post.data.description}</p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </section>
+    <!-- ── Contact ───────────────────────────────────────────────────── -->
+    <footer class="contact">
+      <a href="mailto:i.knowa.lee@gmail.com" class="contact__email">i.knowa.lee@gmail.com</a>
+    </footer>
 
     <script>
       import '../scripts/nav.ts';
@@ -204,49 +180,22 @@ function fmtDate(d: Date) {
     border-radius: 3px;
   }
 
-  /* ── Writing ──────────────────────────────────────────────────────── */
-  .post-list {
-    list-style: none;
+  /* ── Contact footer ───────────────────────────────────────────────── */
+  .contact {
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--color-border);
     display: flex;
-    flex-direction: column;
+    justify-content: center;
   }
 
-  .post {
-    padding: 1.75rem 0;
-    border-bottom: 1px solid var(--color-border);
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
-  }
-
-  .post:first-child { padding-top: 0; }
-  .post:last-child  { border-bottom: none; }
-
-  .post__date {
-    font-size: 0.6875rem;
-    font-family: monospace;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+  .contact__email {
+    font-size: 0.875rem;
+    letter-spacing: 0.04em;
     color: var(--color-text-muted);
-    opacity: 0.6;
+    transition: color 0.2s ease;
   }
 
-  .post__title {
-    font-size: 0.9375rem;
-    font-weight: 500;
+  .contact__email:hover {
     color: var(--color-text);
-    line-height: 1.35;
-  }
-
-  .post__desc {
-    font-size: 0.8125rem;
-    line-height: 1.65;
-    color: var(--color-text-muted);
-  }
-
-  .empty {
-    font-size: 0.8125rem;
-    color: var(--color-text-muted);
-    opacity: 0.5;
   }
 </style>

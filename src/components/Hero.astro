@@ -2,29 +2,22 @@
 import { Image } from 'astro:assets';
 import photo from '../assets/photo.jpg';
 
-// Slideshow photos — add/remove imports here as needed.
-// Keep in sync with @keyframes photo-cycle in global.css (13 photos = 65s cycle).
-import p1  from '../assets/photos/IMG_4109.jpg';
-import p2  from '../assets/photos/IMG_4412.jpg';
-import p3  from '../assets/photos/IMG_9286.jpg';
-import p4  from '../assets/photos/IMG_9285.jpg';
-import p5  from '../assets/photos/IMG_7969.png';
-import p6  from '../assets/photos/IMG_1871.png';
-import p7  from '../assets/photos/IMG_2243.png';
-import p8  from '../assets/photos/IMG_9282.png';
-import p9  from '../assets/photos/IMG_3907.png';
-import p10 from '../assets/photos/IMG_1458.png';
-import p11 from '../assets/photos/IMG_0034.png';
-import p12 from '../assets/photos/IMG_9631.png';
-import p13 from '../assets/photos/IMG-4.png';
-
-const slidePhotos = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13];
+// Slideshow — all photos directly in src/assets/photos/ (not gallery/).
+// Add or remove files from that folder freely — no code changes needed.
+// IMPORTANT: if the photo count changes, update @keyframes photo-cycle in
+// global.css and the animation duration on .slideshow__photo to match:
+//   TOTAL = count × 5s
+const slideshowImports = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/photos/*.{jpg,jpeg,png,webp}',
+  { eager: true }
+);
+const slidePhotos = Object.values(slideshowImports).map((m) => m.default);
 
 // Slideshow timing — must stay in sync with @keyframes photo-cycle in global.css.
 const PHOTO_VISIBLE = 4;
 const PHOTO_FADE    = 1;
 const PHOTO_SLOT    = PHOTO_VISIBLE + PHOTO_FADE; // 5s
-const PHOTO_TOTAL   = slidePhotos.length * PHOTO_SLOT; // 65s
+const PHOTO_TOTAL   = slidePhotos.length * PHOTO_SLOT;
 
 // Subtitle timing — must stay in sync with @keyframes phrase-cycle in global.css.
 const phrases = [
@@ -44,7 +37,7 @@ const TOTAL   = phrases.length * SLOT; // 21s
 <section class="hero">
 
   <!-- Background slideshow -->
-  <div class="slideshow" aria-hidden="true">
+  <div class="slideshow" aria-hidden="true" style={`--photo-total: ${PHOTO_TOTAL}s`}>
     {slidePhotos.map((src, i) => (
       <Image
         src={src}
@@ -89,7 +82,7 @@ const TOTAL   = phrases.length * SLOT; // 21s
 
     <nav class="hero__nav" aria-label="Page sections">
       <a href="#projects" class="hero__nav-link">Projects</a>
-      <a href="#writing"  class="hero__nav-link">Writing</a>
+      <a href="#photography" class="hero__nav-link">Photography</a>
       <a href="/NoahLeeResume.pdf" target="_blank" rel="noopener noreferrer" class="hero__nav-link">Resume</a>
     </nav>
 
@@ -156,7 +149,7 @@ const TOTAL   = phrases.length * SLOT; // 21s
     object-fit: cover;
     object-position: center;
     opacity: 0;
-    animation: photo-cycle 65s infinite;
+    animation: photo-cycle var(--photo-total) infinite;
     animation-fill-mode: backwards;
   }
 

@@ -76,17 +76,19 @@ svg {
 
 /* ─── Photo slideshow @keyframes ─────────────────────────────────────────── */
 /*
- * 13 photos × 5s per slot (4s visible + 1s fade) = 65s total cycle.
- * Keyframe % = (seconds / 65) × 100:
- *   fade-in ends:    1 / 65 = 1.538%
- *   fade-out starts: 4 / 65 = 6.154%
- *   slot ends:       5 / 65 = 7.692%
+ * 11 photos × 5s per slot (4s visible + 1s fade) = 55s total cycle.
+ * Keyframe % = (seconds / 55) × 100:
+ *   fade-in ends:    1 / 55 = 1.818%
+ *   fade-out starts: 4 / 55 = 7.273%
+ *   slot ends:       5 / 55 = 9.091%
  *
- * Each photo is hidden for the remaining 57.308% of the cycle.
+ * If you add/remove photos from src/assets/photos/, update the total here
+ * and in Hero.astro: PHOTO_TOTAL = count × 5, and update the animation
+ * duration on .slideshow__photo to match.
  */
 @keyframes photo-cycle {
   0%, 100%  { opacity: 0; }
-  1.538%    { opacity: 1; }
-  6.154%    { opacity: 1; }
-  7.692%    { opacity: 0; }
+  1.818%    { opacity: 1; }
+  7.273%    { opacity: 1; }
+  9.091%    { opacity: 0; }
 }
