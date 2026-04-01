@@ -1,38 +1,67 @@
 ---
-// No props — static content. Replace placeholder text when ready.
+import { Image } from 'astro:assets';
+import aboutPhoto from '../assets/about.png';
 ---
 
 <section class="about" id="about">
+  <Image src={aboutPhoto} alt="" class="about__bg" aria-hidden="true" width={2880} height={1440} />
   <div class="about__inner">
     <h2 class="about__heading">About</h2>
     <p class="about__body">
-      I'm a backend and platform engineer focused on cloud infrastructure,
-      developer tooling, and distributed systems. I spend most of my time
-      designing systems that stay out of the way — reliable, observable, and
-      easy to reason about.
+      I'm a backend and platform engineer building cloud-native systems on AWS and enjoy 
+      designing reliable, scalable services that's as comfortable for engineers to maintain
+      as it is for users to depend on.
     </p>
     <p class="about__body">
-      Outside of work, I organize competitive gaming events and help run a
-      local fighting game community. I care a lot about the people side of
-      technology — building spaces where folks can learn, compete, and connect.
+      My background spans <strong>6 years</strong> across startups and enterprise — <strong>event-driven architecture</strong>,
+      <strong>cloud infrastructure</strong>, <strong>Kubernetes</strong> deployments, and full-stack work across multiple languages. I most
+      recently built <a href="https://www.findmyfgc.cc" target="_blank" rel="noopener noreferrer">FindMyFGC.cc</a>
+      — a website helping people find events for their favorite fighting games near them. Currently
+      deepening that foundation through personal projects and <strong>open to new opportunities</strong>.
+    </p>
+    <p class="about__body">
+      My personal time is often spent organizing competitive gaming events, dabbling in music,
+      finding photo opportunities, or crafting new project ideas to support my favorite video games.
     </p>
   </div>
 </section>
 
 <style>
   .about {
+    position: relative;
     padding: 6rem 2rem;
     display: flex;
     justify-content: center;
     border-top: 1px solid var(--color-border);
+    overflow: hidden;
+  }
+
+  .about__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 60%;
+    filter: brightness(0.35) saturate(0.5);
+    z-index: 0;
   }
 
   .about__inner {
+    position: relative;
+    z-index: 1;
     max-width: 640px;
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 1.5rem 2.5rem;
+    box-shadow: 0 8px 48px rgba(0, 0, 0, 0.6);
   }
 
   .about__heading {
@@ -48,5 +77,22 @@
     line-height: 1.75;
     color: var(--color-text);
     opacity: 0.85;
+  }
+
+  .about__body a {
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(255, 255, 255, 0.35);
+  }
+
+  .about__body a:hover {
+    text-decoration-color: rgba(255, 255, 255, 0.8);
+  }
+
+  .about__body strong {
+    font-weight: 600;
+    color: var(--color-text);
+    opacity: 1;
   }
 </style>
