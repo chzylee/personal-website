@@ -12,7 +12,7 @@ const galleryOnlyImports = import.meta.glob<{ default: ImageMetadata }>(
 
 const slidePhotos   = Object.values(slideshowImports).map((m) => m.default);
 const galleryPhotos = Object.values(galleryOnlyImports).map((m) => m.default);
-const allPhotos     = [...slidePhotos, ...galleryPhotos];
+const allPhotos     = [...galleryPhotos, ...slidePhotos];
 ---
 
 <section id="photography" class="content-section">
