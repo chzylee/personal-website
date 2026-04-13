@@ -13,6 +13,7 @@ export const projects: Project[] = [
       'Full-stack tournament finder website for the Fighting Game Community. React frontend on S3/CloudFront, Swift Vapor backend on ECS in a private VPC, traffic routed through Cloudflare DNS to ACM-validated HTTPS endpoints. Integrates Google Maps API to convert intuitive user location input into coordinates. Infrastructure managed with Terraform and GitHub Actions.',
     tags: ['React', 'Swift', 'AWS', 'Terraform', 'Cloudflare'],
     githubUrl: 'https://github.com/enpicie/find-my-fgc',
+    liveUrl: 'https://www.findmyfgc.cc/',
   },
   {
     title: 'adomi-san-bot',
@@ -20,6 +21,14 @@ export const projects: Project[] = [
       'Discord bot that automates administration for online events and FGC tournaments hosted on start.gg. Serverless architecture on Lambda and SQS — quick responses are returned immediately while heavier operations are dispatched to worker Lambdas asynchronously. Includes onboarding a collaborator and mentoring them through architecture and infrastructure decisions. Shares reusable GitHub Actions pipeline steps with FindMyFGC.',
     tags: ['Python', 'AWS', 'Discord', 'Terraform'],
     githubUrl: 'https://github.com/enpicie/adomi-san-bot',
+  },
+  {
+    title: 'NEST',
+    description:
+      'Documentation site for tools for getting started running FGC netplay events. Covers OBS stream scene setup, a Discord server template, and guides for using adomi-san-bot to handle check-ins, reminders, and score reporting. Used by Midweek Melting and other Melty Blood netplay events.',
+    tags: ['Jekyll', 'GitHub Pages'],
+    githubUrl: 'https://github.com/enpicie/nest',
+    liveUrl: 'https://enpicie.github.io/nest/',
   },
   {
     title: 'FGC League Sheets',
