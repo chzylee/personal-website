@@ -4,7 +4,13 @@ import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
 import { projects } from '../data/projects';
 import Photography from '../components/Photography.astro';
+import { getCollection } from 'astro:content';
 import '../styles/global.css';
+
+const allPosts = await getCollection('writing', ({ data }) => !data.draft);
+const recentPosts = allPosts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
 ---
 
 <!doctype html>
@@ -13,6 +19,8 @@ import '../styles/global.css';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Noah Lee — Community Builder, Platform Engineer, Backend Engineer" />
+    <meta property="og:title" content="Noah Lee" />
+    <meta property="og:description" content="Noah Lee — Community Builder, Platform Engineer, Backend Engineer" />
     <title>Noah Lee</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
@@ -28,7 +36,7 @@ import '../styles/global.css';
         <h2 class="section-label">Projects</h2>
 
         <ul class="project-list">
-          {projects.map((p) => (
+          {projects.slice(0, 3).map((p) => (
             <li class="project">
               <div class="project__header">
                 <div class="project__title-row">
@@ -74,10 +82,51 @@ import '../styles/global.css';
           ))}
         </ul>
 
-        <a href="/NoahLeeResume.pdf" target="_blank" rel="noopener noreferrer" class="resume-link">
-          View full resume
+        <div class="project-footer">
+          <a href="/work" class="section-more-link">
+            See all work
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </a>
+          <a href="/NoahLeeResume.pdf" target="_blank" rel="noopener noreferrer" class="resume-link">
+            View full resume
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Writing ────────────────────────────────────────────────────── -->
+    <section id="writing" class="content-section">
+      <div class="content-inner">
+        <h2 class="section-label">Writing</h2>
+
+        <ul class="post-list">
+          {recentPosts.map((post) => {
+            const date = post.data.date.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            });
+            return (
+              <li class="post-item">
+                <div class="post-item__row">
+                  <a href={`/blog/${post.slug}`} class="post-item__title">{post.data.title}</a>
+                  <time class="post-item__date" datetime={post.data.date.toISOString()}>{date}</time>
+                </div>
+                <p class="post-item__desc">{post.data.description}</p>
+              </li>
+            );
+          })}
+        </ul>
+
+        <a href="/blog" class="section-more-link">
+          See all writing
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
           </svg>
         </a>
       </div>
@@ -191,6 +240,26 @@ import '../styles/global.css';
     gap: 0.375rem;
   }
 
+  .project-footer {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .section-more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+    transition: color 0.2s ease;
+  }
+
+  .section-more-link:hover {
+    color: var(--color-text);
+  }
+
   .resume-link {
     display: inline-flex;
     align-items: center;
@@ -203,6 +272,57 @@ import '../styles/global.css';
 
   .resume-link:hover {
     color: var(--color-text);
+  }
+
+  /* ── Writing section ──────────────────────────────────────────────── */
+  .post-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .post-item {
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .post-item:first-child { padding-top: 0; }
+  .post-item:last-child  { border-bottom: none; }
+
+  .post-item__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .post-item__title {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-text);
+    line-height: 1.3;
+    opacity: 0.9;
+    transition: opacity 0.2s ease;
+  }
+
+  .post-item__title:hover { opacity: 1; }
+
+  .post-item__date {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .post-item__desc {
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
   }
 
   .tag {
