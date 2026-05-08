@@ -4,7 +4,7 @@ import photo from '../assets/photo.jpg';
 ---
 
 <header class="sticky-nav">
-  <div class="sticky-nav__left">
+  <a href="#" class="sticky-nav__left" aria-label="Back to top">
     <Image
       src={photo}
       alt=""
@@ -14,7 +14,7 @@ import photo from '../assets/photo.jpg';
       aria-hidden="true"
     />
     <span class="sticky-nav__name">Noah Lee</span>
-  </div>
+  </a>
 
   <nav class="sticky-nav__links" aria-label="Page sections">
     <a href="/work" class="sticky-nav__link">Work</a>
@@ -60,11 +60,17 @@ import photo from '../assets/photo.jpg';
     pointer-events: auto;
   }
 
-  /* ── Left: photo + name ── */
+  /* ── Left: photo + name (back-to-top link) ── */
   .sticky-nav__left {
     display: flex;
     align-items: center;
     gap: 0.625rem;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+
+  .sticky-nav__left:hover {
+    opacity: 1;
   }
 
   .sticky-nav__photo {
