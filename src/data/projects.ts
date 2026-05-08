@@ -4,6 +4,7 @@ export interface Project {
   tags: string[];
   githubUrl: string;
   liveUrl?: string;
+  iconFile?: string;
 }
 
 export const projects: Project[] = [
@@ -14,6 +15,7 @@ export const projects: Project[] = [
     tags: ['React', 'Swift', 'AWS', 'Terraform', 'Cloudflare'],
     githubUrl: 'https://github.com/enpicie/find-my-fgc',
     liveUrl: 'https://www.findmyfgc.cc/',
+    iconFile: 'findmyfgclogo.png',
   },
   {
     title: 'adomi-san-bot',
@@ -21,6 +23,7 @@ export const projects: Project[] = [
       'Discord bot that automates administration for online events and FGC tournaments hosted on start.gg. Serverless architecture on Lambda and SQS — quick responses are returned immediately while heavier operations are dispatched to worker Lambdas asynchronously. Includes onboarding a collaborator and mentoring them through architecture and infrastructure decisions. Shares reusable GitHub Actions pipeline steps with FindMyFGC.',
     tags: ['Python', 'AWS', 'Discord', 'Terraform'],
     githubUrl: 'https://github.com/enpicie/adomi-san-bot',
+    iconFile: 'adomin.jpg',
   },
   {
     title: 'NEST',
@@ -29,6 +32,7 @@ export const projects: Project[] = [
     tags: ['Jekyll', 'GitHub Pages'],
     githubUrl: 'https://github.com/enpicie/nest',
     liveUrl: 'https://enpicie.github.io/nest/',
+    iconFile: 'nest-logo.png',
   },
   {
     title: 'FGC League Sheets',
@@ -36,6 +40,7 @@ export const projects: Project[] = [
       'Google Sheets extension for running long-term competitive FGC leagues: distributes players into groups, ranks them by win rate, and manages adding/removing players. Partnered directly with end users to identify real edge cases and follow an intuitive workflow. Distributed as a viewable, copyable Sheet with in-file documentation so non-technical users can get started without a setup guide.',
     tags: ['TypeScript', 'Apps Script', 'Clasp'],
     githubUrl: 'https://github.com/enpicie/fgc-league-sheets',
+    iconFile: 'fgc-league-sheets logo.png',
   },
   {
     title: 'Melty Frame Data Bot',
@@ -43,5 +48,6 @@ export const projects: Project[] = [
       'Discord bot serving fighting game frame data from DynamoDB via Lambda and API Gateway. Used Beautiful Soup to scrape and ingest wiki data automatically. Full GitHub Actions prod and dev pipelines for safe, fast deployments.',
     tags: ['Python', 'AWS', 'Discord'],
     githubUrl: 'https://github.com/chzylee/melty-frame-data-bot',
+    iconFile: 'framedata-icon.png',
   },
 ];

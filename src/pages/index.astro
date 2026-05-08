@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import StickyNav from '../components/StickyNav.astro';
 import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
@@ -6,6 +7,16 @@ import { projects } from '../data/projects';
 import Photography from '../components/Photography.astro';
 import { getCollection } from 'astro:content';
 import '../styles/global.css';
+
+const iconModules = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/project-icons/**/*',
+  { eager: true }
+);
+function resolveIcon(iconFile?: string) {
+  if (!iconFile) return undefined;
+  const entry = Object.entries(iconModules).find(([k]) => k.endsWith('/' + iconFile));
+  return entry ? entry[1].default : undefined;
+}
 
 const allPosts = await getCollection('writing', ({ data }) => !data.draft);
 const recentPosts = allPosts
@@ -36,27 +47,35 @@ const recentPosts = allPosts
         <h2 class="section-label">Projects</h2>
 
         <ul class="project-list">
-          {projects.slice(0, 3).map((p) => (
+          {projects.slice(0, 3).map((p) => {
+            const icon = resolveIcon(p.iconFile);
+            return (
             <li class="project">
               <div class="project__header">
-                <div class="project__title-row">
-                  <h3 class="project__title">{p.title}</h3>
-                  {p.liveUrl && (
-                    <a
-                      href={p.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      class="project__link"
-                      aria-label={`${p.title} live site`}
-                    >
-                      <!-- Lucide: external-link -->
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M15 3h6v6"/>
-                        <path d="M10 14 21 3"/>
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                      </svg>
-                    </a>
+                <div class="project__title-group">
+                  {icon && (
+                    <div class="project__icon">
+                      <Image src={icon} alt="" width={32} height={32} class="project__icon-img" />
+                    </div>
                   )}
+                  <div class="project__title-row">
+                    <h3 class="project__title">{p.title}</h3>
+                    {p.liveUrl && (
+                      <a
+                        href={p.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="project__link"
+                        aria-label={`${p.title} live site`}
+                      >
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <path d="M15 3h6v6"/>
+                          <path d="M10 14 21 3"/>
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        </svg>
+                      </a>
+                    )}
+                  </div>
                 </div>
                 <div class="project__links">
                   <a
@@ -79,7 +98,8 @@ const recentPosts = allPosts
                 {p.tags.map((t) => <span class="tag">{t}</span>)}
               </div>
             </li>
-          ))}
+          );
+          })}
         </ul>
 
         <div class="project-footer">
@@ -174,6 +194,30 @@ const recentPosts = allPosts
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--color-text-muted);
+  }
+
+  /* ── Project icon bubble ─────────────────────────────────────────── */
+  .project__title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .project__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 7px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  .project__icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
   }
 
   /* ── Projects ─────────────────────────────────────────────────────── */

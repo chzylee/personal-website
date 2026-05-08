@@ -1,8 +1,19 @@
 ---
+import { Image } from 'astro:assets';
 import { projects } from '../../data/projects';
 import { communityProjects } from '../../data/communityProjects';
 import PageNav from '../../components/PageNav.astro';
 import '../../styles/global.css';
+
+const iconModules = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/project-icons/**/*',
+  { eager: true }
+);
+function resolveIcon(iconFile?: string) {
+  if (!iconFile) return undefined;
+  const entry = Object.entries(iconModules).find(([k]) => k.endsWith('/' + iconFile));
+  return entry ? entry[1].default : undefined;
+}
 
 function slugify(title: string) {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -29,10 +40,19 @@ function slugify(title: string) {
           <h1 class="section-label">Software Projects</h1>
 
           <ul class="card-list">
-            {projects.map((p) => (
+            {projects.map((p) => {
+              const icon = resolveIcon(p.iconFile);
+              return (
               <li class="card">
                 <div class="card__header">
-                  <a href={`/work/${slugify(p.title)}`} class="card__title">{p.title}</a>
+                  <div class="card__title-group">
+                    {icon && (
+                      <div class="card__icon">
+                        <Image src={icon} alt="" width={32} height={32} class="card__icon-img" />
+                      </div>
+                    )}
+                    <a href={`/work/${slugify(p.title)}`} class="card__title">{p.title}</a>
+                  </div>
                   <div class="card__icons">
                     {p.liveUrl && (
                       <a
@@ -66,7 +86,8 @@ function slugify(title: string) {
                   {p.tags.map((t) => <span class="tag">{t}</span>)}
                 </div>
               </li>
-            ))}
+              );
+            })}
           </ul>
         </section>
 
@@ -156,6 +177,29 @@ function slugify(title: string) {
     justify-content: space-between;
     gap: 1rem;
     margin-bottom: 0.625rem;
+  }
+
+  .card__title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .card__icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 7px;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  .card__icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
   }
 
   .card__title {
