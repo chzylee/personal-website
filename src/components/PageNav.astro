@@ -3,34 +3,34 @@ import { Image } from 'astro:assets';
 import photo from '../assets/photo.jpg';
 ---
 
-<header class="sticky-nav">
-  <a href="#" class="sticky-nav__left" aria-label="Back to top">
+<header class="page-nav">
+  <a href="/" class="page-nav__left" aria-label="Go to home">
     <Image
       src={photo}
       alt=""
       width={24}
       height={24}
-      class="sticky-nav__photo"
+      class="page-nav__photo"
       aria-hidden="true"
     />
-    <span class="sticky-nav__name">Noah Lee</span>
+    <span class="page-nav__name">Noah Lee</span>
   </a>
 
-  <nav class="sticky-nav__links" aria-label="Page sections">
-    <a href="/work" class="sticky-nav__link">Work</a>
-    <a href="/blog" class="sticky-nav__link">Writing</a>
-    <a href="#photography" class="sticky-nav__link">Photography</a>
+  <nav class="page-nav__links" aria-label="Site navigation">
+    <a href="/work" class="page-nav__link">Work</a>
+    <a href="/blog" class="page-nav__link">Writing</a>
+    <a href="/#photography" class="page-nav__link">Photography</a>
     <a
       href="/NoahLeeResume.pdf"
       target="_blank"
       rel="noopener noreferrer"
-      class="sticky-nav__link"
+      class="page-nav__link"
     >Resume</a>
   </nav>
 </header>
 
 <style>
-  .sticky-nav {
+  .page-nav {
     position: fixed;
     top: 0;
     left: 0;
@@ -45,23 +45,9 @@ import photo from '../assets/photo.jpg';
     justify-content: center;
     gap: 2.5rem;
     padding: 0 2rem;
-
-    /* Hidden by default; revealed by body.scrolled (toggled in nav.ts) */
-    opacity: 0;
-    transform: translateY(-100%);
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    pointer-events: none;
   }
 
-  /* Toggled directly by nav.ts — no body-class indirection needed */
-  .sticky-nav--visible {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  /* ── Left: photo + name (back-to-top link) ── */
-  .sticky-nav__left {
+  .page-nav__left {
     display: flex;
     align-items: center;
     gap: 0.625rem;
@@ -69,11 +55,11 @@ import photo from '../assets/photo.jpg';
     transition: opacity 0.2s ease;
   }
 
-  .sticky-nav__left:hover {
+  .page-nav__left:hover {
     opacity: 1;
   }
 
-  .sticky-nav__photo {
+  .page-nav__photo {
     width: 24px;
     height: 24px;
     border-radius: 50%;
@@ -81,21 +67,20 @@ import photo from '../assets/photo.jpg';
     object-position: center;
   }
 
-  .sticky-nav__name {
+  .page-nav__name {
     font-size: 0.8125rem;
     font-weight: 500;
     letter-spacing: 0.02em;
     color: var(--color-text);
   }
 
-  /* ── Right: links ── */
-  .sticky-nav__links {
+  .page-nav__links {
     display: flex;
     align-items: center;
     gap: 1.75rem;
   }
 
-  .sticky-nav__link {
+  .page-nav__link {
     font-size: 0.8125rem;
     letter-spacing: 0.04em;
     color: var(--color-text);
@@ -103,7 +88,7 @@ import photo from '../assets/photo.jpg';
     transition: opacity 0.2s ease;
   }
 
-  .sticky-nav__link:hover {
+  .page-nav__link:hover {
     opacity: 1;
   }
 

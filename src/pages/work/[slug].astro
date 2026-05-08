@@ -1,6 +1,7 @@
 ---
 import { projects, type Project } from '../../data/projects';
 import { communityProjects, type CommunityProject } from '../../data/communityProjects';
+import PageNav from '../../components/PageNav.astro';
 import '../../styles/global.css';
 
 export function getStaticPaths() {
@@ -42,12 +43,8 @@ const pageDescription = type === 'software' ? project.description : project.summ
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
+    <PageNav />
     <div class="page">
-      <nav class="page-nav">
-        <a href="/" class="page-nav__home">Noah Lee</a>
-        <a href="/work" class="page-nav__back">← Work</a>
-      </nav>
-
       <main>
         {type === 'software' ? (
           <!-- Software project layout -->
@@ -149,41 +146,12 @@ const pageDescription = type === 'software' ? project.description : project.summ
   .page {
     max-width: 640px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: calc(var(--nav-height) + 3rem) 2rem 2rem;
   }
 
   @media (max-width: 480px) {
-    .page { padding: 1.5rem 1rem; }
+    .page { padding: calc(var(--nav-height) + 2rem) 1rem 1.5rem; }
   }
-
-  .page-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 3rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .page-nav__home {
-    font-size: 0.875rem;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    color: var(--color-text);
-    opacity: 0.7;
-    transition: opacity 0.2s ease;
-  }
-
-  .page-nav__home:hover { opacity: 1; }
-
-  .page-nav__back {
-    font-size: 0.8125rem;
-    letter-spacing: 0.04em;
-    color: var(--color-text-muted);
-    transition: color 0.2s ease;
-  }
-
-  .page-nav__back:hover { color: var(--color-text); }
 
   .work-detail__header {
     display: flex;

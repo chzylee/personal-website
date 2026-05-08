@@ -40,6 +40,13 @@ const allPhotos     = [...galleryPhotos, ...slidePhotos];
         </button>
       ))}
     </div>
+
+    <a
+      href="https://500px.com/p/enpicie"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="gallery__500px"
+    >500px ↗</a>
   </div>
 </section>
 
@@ -181,6 +188,19 @@ const allPhotos     = [...galleryPhotos, ...slidePhotos];
       grid-template-columns: repeat(3, 1fr);
       gap: 2px;
     }
+  }
+
+  .gallery__500px {
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+    opacity: 0.4;
+    transition: opacity 0.2s ease;
+    align-self: flex-end;
+  }
+
+  .gallery__500px:hover {
+    opacity: 0.8;
   }
 
   /* ── Modal ────────────────────────────────────────────────────────── */

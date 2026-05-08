@@ -1,6 +1,7 @@
 ---
 import { projects } from '../../data/projects';
 import { communityProjects } from '../../data/communityProjects';
+import PageNav from '../../components/PageNav.astro';
 import '../../styles/global.css';
 
 function slugify(title: string) {
@@ -20,11 +21,8 @@ function slugify(title: string) {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
+    <PageNav />
     <div class="page">
-      <nav class="page-nav">
-        <a href="/" class="page-nav__home">Noah Lee</a>
-      </nav>
-
       <main>
         <!-- Software Projects -->
         <section class="work-section">
@@ -114,29 +112,12 @@ function slugify(title: string) {
   .page {
     max-width: 640px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: calc(var(--nav-height) + 3rem) 2rem 2rem;
   }
 
   @media (max-width: 480px) {
-    .page { padding: 1.5rem 1rem; }
+    .page { padding: calc(var(--nav-height) + 2rem) 1rem 1.5rem; }
   }
-
-  .page-nav {
-    margin-bottom: 3rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .page-nav__home {
-    font-size: 0.875rem;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    color: var(--color-text);
-    opacity: 0.7;
-    transition: opacity 0.2s ease;
-  }
-
-  .page-nav__home:hover { opacity: 1; }
 
   .work-section {
     display: flex;
