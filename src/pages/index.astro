@@ -130,6 +130,7 @@ const recentPosts = allPosts
               year: 'numeric',
               month: 'long',
               day: 'numeric',
+              timeZone: 'UTC',
             });
             return (
               <li class="post-item">
@@ -251,7 +252,7 @@ const recentPosts = allPosts
 
   .project__title {
     font-size: 0.9375rem;
-    font-weight: 500;
+    font-weight: 700;
     color: var(--color-text);
     line-height: 1.3;
   }
@@ -346,14 +347,13 @@ const recentPosts = allPosts
 
   .post-item__title {
     font-size: 0.9375rem;
-    font-weight: 500;
+    font-weight: 700;
     color: var(--color-text);
     line-height: 1.3;
-    opacity: 0.9;
     transition: opacity 0.2s ease;
   }
 
-  .post-item__title:hover { opacity: 1; }
+  .post-item__title:hover { opacity: 0.75; }
 
   .post-item__date {
     font-size: 0.75rem;

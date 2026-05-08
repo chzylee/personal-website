@@ -96,10 +96,19 @@ function slugify(title: string) {
           <h2 class="section-label">Community &amp; Events</h2>
 
           <ul class="card-list">
-            {communityProjects.map((p) => (
+            {communityProjects.map((p) => {
+              const icon = resolveIcon(p.iconFile);
+              return (
               <li class="card">
                 <div class="card__header">
-                  <a href={`/work/${p.slug}`} class="card__title">{p.title}</a>
+                  <div class="card__title-group">
+                    {icon && (
+                      <div class="card__icon">
+                        <Image src={icon} alt="" width={32} height={32} class="card__icon-img" />
+                      </div>
+                    )}
+                    <a href={`/work/${p.slug}`} class="card__title">{p.title}</a>
+                  </div>
                   <div class="card__icons">
                     {p.liveUrl && (
                       <a
@@ -121,7 +130,8 @@ function slugify(title: string) {
                   {p.tags.map((t) => <span class="tag">{t}</span>)}
                 </div>
               </li>
-            ))}
+              );
+            })}
           </ul>
         </section>
       </main>

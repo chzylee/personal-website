@@ -18,6 +18,7 @@ const date = post.data.date.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
+  timeZone: 'UTC',
 });
 ---
 
@@ -101,7 +102,7 @@ const date = post.data.date.toLocaleDateString('en-US', {
 
   .post__body :global(h2) {
     font-size: 1.125rem;
-    font-weight: 500;
+    font-weight: 700;
     letter-spacing: -0.01em;
     margin-top: 2.5rem;
     margin-bottom: 0.75rem;
