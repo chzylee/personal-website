@@ -81,7 +81,8 @@ const TOTAL   = phrases.length * SLOT; // 11.4s
     </div>
 
     <nav class="hero__nav" aria-label="Page sections">
-      <a href="#projects" class="hero__nav-link">Work</a>
+      <a href="#about" class="hero__nav-link">About</a>
+      <a href="#projects" class="hero__nav-link">Projects</a>
       <a href="#writing" class="hero__nav-link">Writing</a>
       <a href="#photography" class="hero__nav-link">Photography</a>
       <a href="/NoahLeeResume.pdf" target="_blank" rel="noopener noreferrer" class="hero__nav-link">Resume</a>
@@ -173,7 +174,7 @@ const TOTAL   = phrases.length * SLOT; // 11.4s
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 2.5rem;
     padding: 2rem;
   }
 
@@ -183,13 +184,12 @@ const TOTAL   = phrases.length * SLOT; // 11.4s
     border-radius: 50%;
     object-fit: cover;
     object-position: center;
-    margin-bottom: 0.25rem;
     box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 4px 20px rgba(0, 0, 0, 0.7);
   }
 
   @media (max-width: 640px) {
     .hero__content {
-      gap: 0.625rem;
+      gap: 1.5rem;
     }
 
     .hero__photo {
@@ -199,7 +199,7 @@ const TOTAL   = phrases.length * SLOT; // 11.4s
   }
 
   .hero__name {
-    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-size: var(--font-size-name);
     font-weight: 300;
     letter-spacing: -0.03em;
     line-height: 1;
@@ -209,6 +209,7 @@ const TOTAL   = phrases.length * SLOT; // 11.4s
   /* ── Rotating subtitle ── */
   .subtitle {
     display: grid;
+    font-size: var(--font-size-subtitle);
     height: 1.5em;
   }
 
@@ -221,6 +222,7 @@ const TOTAL   = phrases.length * SLOT; // 11.4s
     opacity: 0;
     animation: phrase-cycle var(--subtitle-total) infinite;
     animation-fill-mode: backwards;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
   }
 
   /* ── Text nav ── */
@@ -228,20 +230,18 @@ const TOTAL   = phrases.length * SLOT; // 11.4s
     display: flex;
     align-items: center;
     gap: 2rem;
-    margin-top: 0.25rem;
   }
 
   .hero__nav-link {
-    font-size: 1rem;
+    font-size: 1.125rem;
     letter-spacing: 0.1em;
     color: var(--color-text);
-    opacity: 0.85;
-    transition: opacity 0.2s ease;
+    opacity: 1;
+    transition: text-shadow 0.2s ease;
   }
 
   .hero__nav-link:hover {
-    opacity: 1;
-    text-shadow: 0 0 12px rgba(232, 232, 232, 0.6);
+    text-shadow: 0 0 14px rgba(232, 232, 232, 0.7);
   }
 
   /* ── Icon links ── */

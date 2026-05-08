@@ -9,7 +9,7 @@
 
   --font-sans:          'Inter', system-ui, sans-serif;
   --font-size-name:     clamp(3rem, 8vw, 6rem);
-  --font-size-subtitle: clamp(1rem, 2vw, 1.5rem);
+  --font-size-subtitle: clamp(1.25rem, 2.5vw, 2rem);
   --nav-height:         52px;
 }
 
