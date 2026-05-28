@@ -1,104 +1,104 @@
 ---
-import { Image } from 'astro:assets';
-import aboutPhoto from '../assets/about.png';
 ---
 
 <section class="about" id="about">
-  <Image src={aboutPhoto} alt="" class="about__bg" aria-hidden="true" width={2880} height={1440} />
   <div class="about__inner">
-    <h2 class="about__heading">About</h2>
-    <p class="about__body">
-      The most transformative solutions do more than just improve how we do things — they change 
-      what we thought was possible. My favorite moments as an engineer and community leader always
-      stem from questioning the status quo to change even a small slice of our world.
+    <span class="eyebrow about__eyebrow">About</span>
+
+    <p class="about__lede">
+      I'm an engineer who grew up<br>
+      <em class="serif-italic">building for communities.</em><br>
+      Understand how people work,<br>
+      Discern their real needs,<br>
+      And ship what fits.
     </p>
 
     <p class="about__body">
-      I'm a software engineer by trade with <strong>6 years</strong> across startups and enterprise building
-      <strong>cloud-native infrastructure</strong>, <strong>event-driven architecture</strong>, 
-      and <strong>full-stack applications</strong>. I've adapted across many technical stacks while
-      asking "what haven't we thought of yet and what will we be grateful for in the future?"
-      I practiced what I preach with 
-      <a href="https://www.findmyfgc.cc" target="_blank" rel="noopener noreferrer">FindMyFGC.cc</a> 
-      — giving a grassroots community an easy way to help friends near and far find real events for
-      our niche hobby, and I'm currently working on resources and projects to help both technical and
-      non-technical builders get more out of AI.
+      Seven years professionally on AWS &mdash; cloud-native infrastructure, event-driven
+      systems, full-stack applications &mdash; most recently at United Airlines where
+      I drove on-prem to cloud system migrations and led a cross-team effort that resolved
+      16,000+ CVEs in a year. I've worked across startups and enterprises, adapted to various
+      stacks, and built a strong intuition for how to read a team's needs and design solutions
+      that support long-term growth and sustainable operations.
     </p>
 
     <p class="about__body">
-      Outside of work I mentor developers, organize competitive gaming events, and hop on the arcade
-      sticks myself. I'm currently building, learning, and <strong>open to new opportunities</strong>.
+      Alongside that, I fostered and grew a niche fighting game community, lifting offline major
+      event attendance from under 100 to 200+ players. I built tools that streamline online
+      tournament organization for more organizers to support their communities, and I mentor both
+      engineers and competitors in the scenes I'm part of.
+    </p>
+
+    <p class="about__body">
+      I'm currently building, learning, and <strong>open to freelance and full-time work</strong>.
+      If you're looking for someone who can step into a complex workflow, drive team growth,
+      and build sustainable solutions, <a href="#contact">get in touch</a>.
     </p>
   </div>
 </section>
 
 <style>
   .about {
-    position: relative;
     padding: 6rem 2rem;
+    background: var(--color-paper);
     display: flex;
     justify-content: center;
-    border-top: 1px solid var(--color-border);
-    overflow: hidden;
-  }
-
-  .about__bg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 60%;
-    filter: brightness(0.35) saturate(0.5);
-    z-index: 0;
   }
 
   .about__inner {
-    position: relative;
-    z-index: 1;
-    max-width: 640px;
+    max-width: 38rem;
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
-    background: rgba(0, 0, 0, 0.45);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    padding: 1.5rem 2.5rem;
-    box-shadow: 0 8px 48px rgba(0, 0, 0, 0.6);
+    gap: 1.5rem;
+    min-width: 0;
   }
 
-  .about__heading {
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
+  .about__eyebrow {
+    margin-bottom: 0.5rem;
+  }
+
+  .about__lede {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.005em;
+    color: var(--color-ink);
+  }
+
+  .about__lede .serif-italic {
+    color: var(--color-rust);
+    font-size: 0.95em;
+    letter-spacing: -0.015em;
   }
 
   .about__body {
-    font-size: 1rem;
-    line-height: 1.75;
-    color: var(--color-text);
-    opacity: 0.85;
-  }
-
-  .about__body a {
-    font-weight: 600;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-color: rgba(255, 255, 255, 0.35);
-  }
-
-  .about__body a:hover {
-    text-decoration-color: rgba(255, 255, 255, 0.8);
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-ink);
   }
 
   .about__body strong {
     font-weight: 600;
-    color: var(--color-text);
-    opacity: 1;
+  }
+
+  .about__body a {
+    color: var(--color-rust);
+    border-bottom: 1px solid var(--color-rust);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .about__body a:hover {
+    color: var(--color-ink);
+    border-bottom-color: var(--color-ink);
+  }
+
+  @media (max-width: 640px) {
+    .about { padding: 4rem 1.5rem; }
+  }
+
+  @media (max-width: 480px) {
+    .about { padding: 3.5rem 1.25rem; }
   }
 </style>

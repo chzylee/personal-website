@@ -15,9 +15,12 @@ const galleryPhotos = Object.values(galleryOnlyImports).map((m) => m.default);
 const allPhotos     = [...galleryPhotos, ...slidePhotos];
 ---
 
-<section id="photography" class="content-section">
-  <div class="content-inner photography-inner">
-    <h2 class="section-label">Photography</h2>
+<section id="photography" class="photography">
+  <div class="photography__inner">
+    <header class="photography__header">
+      <span class="eyebrow">Photography</span>
+      <h2 class="photography__heading">A practice of paying attention.</h2>
+    </header>
 
     <div class="gallery" role="list">
       {allPhotos.map((src, i) => (
@@ -46,7 +49,12 @@ const allPhotos     = [...galleryPhotos, ...slidePhotos];
       target="_blank"
       rel="noopener noreferrer"
       class="gallery__500px"
-    >500px ↗</a>
+    >
+      More on 500px
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+      </svg>
+    </a>
   </div>
 </section>
 
@@ -126,11 +134,40 @@ const allPhotos     = [...galleryPhotos, ...slidePhotos];
 </script>
 
 <style>
-  /* ── Gallery ──────────────────────────────────────────────────────── */
-  .photography-inner {
-    max-width: 1400px;
+  /* ── Photography shell ────────────────────────────────────────────── */
+  .photography {
+    padding: 6rem 2rem;
+    background: var(--color-paper);
+    display: flex;
+    justify-content: center;
   }
 
+  .photography__inner {
+    max-width: 1400px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    min-width: 0;
+  }
+
+  .photography__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    max-width: 44rem;
+  }
+
+  .photography__heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+    line-height: 1.05;
+    letter-spacing: -0.005em;
+    color: var(--color-ink);
+    font-weight: 400;
+  }
+
+  /* ── Gallery ──────────────────────────────────────────────────────── */
   .gallery {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -162,7 +199,7 @@ const allPhotos     = [...galleryPhotos, ...slidePhotos];
     display: block;
     transform: scale(1);
     transition: transform 0.3s ease, opacity 0.3s ease;
-    opacity: 0.88;
+    opacity: 0.95;
   }
 
   .gallery__item:hover .gallery__photo,
@@ -172,7 +209,7 @@ const allPhotos     = [...galleryPhotos, ...slidePhotos];
   }
 
   .gallery__item:focus-visible {
-    outline: 2px solid var(--color-text);
+    outline: 2px solid var(--color-rust);
     outline-offset: 2px;
   }
 
@@ -191,17 +228,20 @@ const allPhotos     = [...galleryPhotos, ...slidePhotos];
   }
 
   .gallery__500px {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
     font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    color: var(--color-text-muted);
-    opacity: 0.4;
-    transition: opacity 0.2s ease;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    transition: color 0.2s ease;
     align-self: flex-end;
+    padding: 0.5rem 0;
   }
 
-  .gallery__500px:hover {
-    opacity: 0.8;
-  }
+  .gallery__500px:hover { color: var(--color-rust); }
 
   /* ── Modal ────────────────────────────────────────────────────────── */
   .modal {
@@ -218,7 +258,7 @@ const allPhotos     = [...galleryPhotos, ...slidePhotos];
   .modal__backdrop {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(14, 13, 11, 0.92);
     border: none;
     cursor: default;
     padding: 0;
@@ -255,9 +295,9 @@ const allPhotos     = [...galleryPhotos, ...slidePhotos];
     top: 50%;
     transform: translateY(-50%);
     z-index: 2;
-    color: var(--color-text);
-    opacity: 0.5;
-    transition: opacity 0.2s ease;
+    color: var(--color-paper);
+    opacity: 0.65;
+    transition: opacity 0.2s ease, color 0.2s ease;
     padding: 1rem;
     background: none;
     border: none;
@@ -267,7 +307,7 @@ const allPhotos     = [...galleryPhotos, ...slidePhotos];
     justify-content: center;
   }
 
-  .modal__arrow:hover { opacity: 1; }
+  .modal__arrow:hover { opacity: 1; color: var(--color-rust); }
 
   .modal__arrow--prev { left: 1rem; }
   .modal__arrow--next { right: 1rem; }
@@ -277,9 +317,9 @@ const allPhotos     = [...galleryPhotos, ...slidePhotos];
     top: 1.25rem;
     right: 1.25rem;
     z-index: 2;
-    color: var(--color-text);
-    opacity: 0.5;
-    transition: opacity 0.2s ease;
+    color: var(--color-paper);
+    opacity: 0.65;
+    transition: opacity 0.2s ease, color 0.2s ease;
     padding: 0.5rem;
     background: none;
     border: none;
@@ -289,7 +329,7 @@ const allPhotos     = [...galleryPhotos, ...slidePhotos];
     justify-content: center;
   }
 
-  .modal__close:hover { opacity: 1; }
+  .modal__close:hover { opacity: 1; color: var(--color-rust); }
 
   .modal__counter {
     position: absolute;
@@ -297,9 +337,11 @@ const allPhotos     = [...galleryPhotos, ...slidePhotos];
     left: 50%;
     transform: translateX(-50%);
     z-index: 2;
+    font-family: var(--font-mono);
     font-size: 0.75rem;
-    font-family: monospace;
-    letter-spacing: 0.08em;
-    color: var(--color-text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-paper);
+    opacity: 0.7;
   }
 </style>

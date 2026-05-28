@@ -36,42 +36,27 @@ import photo from '../assets/photo.jpg';
     left: 0;
     right: 0;
     height: var(--nav-height);
-    background: var(--color-bg);
-    border-bottom: 1px solid var(--color-border);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+    background: rgba(14, 13, 11, 0.78);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--color-rule);
     z-index: 100;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 2.5rem;
+    justify-content: space-between;
+    gap: 2rem;
     padding: 0 2rem;
-
-    /* Hidden by default; revealed by body.scrolled (toggled in nav.ts) */
-    opacity: 0;
-    transform: translateY(-100%);
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    pointer-events: none;
   }
 
-  /* Toggled directly by nav.ts — no body-class indirection needed */
-  .sticky-nav--visible {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  /* ── Left: photo + name (back-to-top link) ── */
   .sticky-nav__left {
     display: flex;
     align-items: center;
-    gap: 0.625rem;
-    opacity: 0.7;
-    transition: opacity 0.2s ease;
+    gap: 0.875rem;
+    color: var(--color-ink);
+    transition: color 0.2s ease;
   }
 
-  .sticky-nav__left:hover {
-    opacity: 1;
-  }
+  .sticky-nav__left:hover { color: var(--color-rust); }
 
   .sticky-nav__photo {
     width: 24px;
@@ -82,13 +67,13 @@ import photo from '../assets/photo.jpg';
   }
 
   .sticky-nav__name {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: inherit;
   }
 
-  /* ── Right: links ── */
   .sticky-nav__links {
     display: flex;
     align-items: center;
@@ -96,15 +81,23 @@ import photo from '../assets/photo.jpg';
   }
 
   .sticky-nav__link {
-    font-size: 0.8125rem;
-    letter-spacing: 0.04em;
-    color: var(--color-text);
-    opacity: 0.5;
-    transition: opacity 0.2s ease;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    transition: color 0.2s ease;
+    padding: 0.75rem 0;
   }
 
-  .sticky-nav__link:hover {
-    opacity: 1;
-  }
+  .sticky-nav__link:hover { color: var(--color-rust); }
 
+  @media (max-width: 640px) {
+    .sticky-nav {
+      gap: 1rem;
+      padding: 0 1rem;
+    }
+    .sticky-nav__links { gap: 1rem; }
+    .sticky-nav__link { font-size: 0.6875rem; letter-spacing: 0.06em; }
+  }
 </style>

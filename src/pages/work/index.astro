@@ -1,8 +1,9 @@
 ---
 import { Image } from 'astro:assets';
+import BaseHead from '../../components/BaseHead.astro';
+import PageNav from '../../components/PageNav.astro';
 import { projects } from '../../data/projects';
 import { communityProjects } from '../../data/communityProjects';
-import PageNav from '../../components/PageNav.astro';
 import '../../styles/global.css';
 
 const iconModules = import.meta.glob<{ default: ImageMetadata }>(
@@ -14,250 +15,620 @@ function resolveIcon(iconFile?: string) {
   const entry = Object.entries(iconModules).find(([k]) => k.endsWith('/' + iconFile));
   return entry ? entry[1].default : undefined;
 }
-
 function slugify(title: string) {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
+
+const orderedDevTitles = [
+  'adomi-san-bot',
+  'FindMyFGC',
+  'NEST',
+  'FGC League Sheets',
+  'Melty Frame Data Bot',
+];
+
+const community = communityProjects.find((p) => p.title === 'Midweek Mashers');
+const devProjects = orderedDevTitles
+  .map((title) => projects.find((p) => p.title === title))
+  .filter((p): p is NonNullable<typeof p> => Boolean(p));
+
+const description =
+  "The work of Noah Lee — six years of cloud infrastructure engineering, plus community building in the fighting game scene. Two contexts, same instinct.";
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="The work of Noah Lee — software projects, community building, and event organization." />
-    <meta property="og:title" content="Work — Noah Lee" />
-    <meta property="og:description" content="The work of Noah Lee — software projects, community building, and event organization." />
-    <title>Work — Noah Lee</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <BaseHead title="Work — Noah Lee" description={description} />
   </head>
   <body>
     <PageNav />
-    <div class="page">
-      <main>
-        <!-- Software Projects -->
-        <section class="work-section">
-          <h1 class="section-label">Software Projects</h1>
 
-          <ul class="card-list">
-            {projects.map((p) => {
-              const icon = resolveIcon(p.iconFile);
-              return (
-              <li class="card">
-                <div class="card__header">
-                  <div class="card__title-group">
-                    {icon && (
-                      <div class="card__icon">
-                        <Image src={icon} alt="" width={32} height={32} class="card__icon-img" />
-                      </div>
-                    )}
-                    <a href={`/work/${slugify(p.title)}`} class="card__title">{p.title}</a>
+    <aside class="work-sidenav" aria-label="Work sections">
+      <div class="work-sidenav__group">
+        <span class="work-sidenav__label">Part one — Engineering</span>
+        {devProjects.map((p) => (
+          <a
+            href={`#${slugify(p.title)}`}
+            class="work-sidenav__link"
+            data-sidenav-link
+          >{p.title}</a>
+        ))}
+      </div>
+
+      <div class="work-sidenav__group">
+        <span class="work-sidenav__label">Part two — Community</span>
+        {community && (
+          <a
+            href={`#${community.slug}`}
+            class="work-sidenav__link"
+            data-sidenav-link
+          >{community.title}</a>
+        )}
+        <a
+          href="#fgc-in-detail"
+          class="work-sidenav__link"
+          data-sidenav-link
+        >FGC, in detail</a>
+      </div>
+    </aside>
+
+    <main class="work-page">
+      <header class="work-page__intro">
+        <span class="eyebrow">Selected work</span>
+        <h1 class="work-page__title">
+          Two overlapping contexts.
+          <em class="serif-italic">Same instinct.</em>
+        </h1>
+        <p class="work-page__lede">
+          I've spent years building in two overlapping contexts: professional cloud
+          infrastructure, and the fighting game community I'm part of. The projects
+          below come from both. In each case, the starting point was the same &mdash;
+          I understood the problem from the inside, and I built because nothing
+          adequate existed.
+        </p>
+      </header>
+
+      <!-- ── Part one — Engineering ───────────────────────────────── -->
+      <section class="work-section" aria-labelledby="engineering-heading">
+        <header class="work-section__header">
+          <span class="eyebrow eyebrow--rust">Part one</span>
+          <h2 class="work-section__title" id="engineering-heading">Engineering work</h2>
+          <p class="work-section__lede">
+            Tools and systems I built because nothing adequate existed &mdash;
+            shipped to real users, in prod.
+          </p>
+        </header>
+
+        {devProjects.map((p, i) => {
+          const icon = resolveIcon(p.iconFile);
+          const idx = String(i + 1).padStart(2, '0');
+          const projectId = slugify(p.title);
+          return (
+            <article class="entry" id={projectId}>
+              <div class="entry__head">
+                {icon && (
+                  <div class="entry__icon">
+                    <Image src={icon} alt="" width={48} height={48} class="entry__icon-img" />
                   </div>
-                  <div class="card__icons">
-                    {p.liveUrl && (
-                      <a
-                        href={p.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="card__icon-link"
-                        aria-label={`${p.title} live site`}
-                      >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                          <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                        </svg>
-                      </a>
-                    )}
+                )}
+                <div class="entry__title-group">
+                  <span class="entry__index">{idx}</span>
+                  <h3 class="entry__title">
+                    <a href={`/work/${projectId}`}>{p.title}</a>
+                  </h3>
+                </div>
+              </div>
+
+              <p class="entry__one-line">{p.oneLine}</p>
+
+              <div class="entry__why">
+                <span class="eyebrow eyebrow--rust">Why I built it</span>
+                <p class="entry__body">{p.whyBuilt}</p>
+              </div>
+
+              <div class="entry__changed">
+                <span class="eyebrow eyebrow--rust">What changed</span>
+                <p class="entry__body">{p.whatChanged}</p>
+              </div>
+
+              <div class="entry__meta">
+                <div class="entry__tags">
+                  {p.tags.map((t) => <span class="tag">{t}</span>)}
+                </div>
+                <div class="entry__links">
+                  {p.liveUrl && (
                     <a
-                      href={p.githubUrl}
+                      href={p.liveUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="card__icon-link"
-                      aria-label={`${p.title} on GitHub`}
+                      class="entry__link"
                     >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
-                        <path d="M9 18c-4.51 2-5-2-7-2"/>
+                      Live
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
                       </svg>
                     </a>
-                  </div>
+                  )}
+                  <a
+                    href={p.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="entry__link"
+                  >
+                    GitHub
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
+                      <path d="M9 18c-4.51 2-5-2-7-2"/>
+                    </svg>
+                  </a>
                 </div>
-                <p class="card__desc">{p.description}</p>
-                <div class="card__tags">
-                  {p.tags.map((t) => <span class="tag">{t}</span>)}
-                </div>
-              </li>
-              );
-            })}
-          </ul>
-        </section>
+              </div>
+            </article>
+          );
+        })}
+      </section>
 
-        <!-- Community & Events -->
-        <section class="work-section">
-          <h2 class="section-label">Community &amp; Events</h2>
+      <!-- ── Part two — Community ─────────────────────────────────── -->
+      <section class="work-section" aria-labelledby="community-heading">
+        <header class="work-section__header">
+          <span class="eyebrow eyebrow--rust">Part two</span>
+          <h2 class="work-section__title" id="community-heading">Community work</h2>
+          <p class="work-section__lede">
+            The scene I grew up in, and the structure I built to help it grow.
+          </p>
+        </header>
 
-          <ul class="card-list">
-            {communityProjects.map((p) => {
-              const icon = resolveIcon(p.iconFile);
-              return (
-              <li class="card">
-                <div class="card__header">
-                  <div class="card__title-group">
-                    {icon && (
-                      <div class="card__icon">
-                        <Image src={icon} alt="" width={32} height={32} class="card__icon-img" />
-                      </div>
-                    )}
-                    <a href={`/work/${p.slug}`} class="card__title">{p.title}</a>
+        {community && (
+          <article class="entry" id={community.slug}>
+            <div class="entry__head">
+              {(() => {
+                const icon = resolveIcon(community.iconFile);
+                return icon && (
+                  <div class="entry__icon">
+                    <Image src={icon} alt="" width={48} height={48} class="entry__icon-img" />
                   </div>
-                  <div class="card__icons">
-                    {p.liveUrl && (
-                      <a
-                        href={p.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="card__icon-link"
-                        aria-label={`${p.title} website`}
-                      >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                          <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                        </svg>
-                      </a>
-                    )}
-                  </div>
-                </div>
-                <p class="card__desc">{p.summary}</p>
-                <div class="card__tags">
-                  {p.tags.map((t) => <span class="tag">{t}</span>)}
-                </div>
-              </li>
-              );
-            })}
-          </ul>
-        </section>
-      </main>
-    </div>
+                );
+              })()}
+              <div class="entry__title-group">
+                <span class="entry__index">01</span>
+                <h3 class="entry__title">
+                  <a href={`/work/${community.slug}`}>{community.title}</a>
+                </h3>
+              </div>
+            </div>
+
+            <p class="entry__one-line">{community.oneLine}</p>
+
+            <div class="entry__why">
+              <span class="eyebrow eyebrow--rust">Why I built it</span>
+              <p class="entry__body">{community.whyBuilt}</p>
+            </div>
+
+            <div class="entry__changed">
+              <span class="eyebrow eyebrow--rust">What changed</span>
+              <p class="entry__body">{community.whatChanged}</p>
+            </div>
+
+            <div class="entry__meta">
+              <div class="entry__tags">
+                {community.tags.map((t) => <span class="tag">{t}</span>)}
+              </div>
+              <div class="entry__links">
+                <a href={`/work/${community.slug}`} class="entry__link">
+                  Deep dive
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                  </svg>
+                </a>
+                {community.liveUrl && (
+                  <a
+                    href={community.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="entry__link"
+                  >
+                    Visit
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                    </svg>
+                  </a>
+                )}
+              </div>
+            </div>
+          </article>
+        )}
+
+        <article class="entry entry--pointer" id="fgc-in-detail">
+          <div class="entry__head">
+            <div class="entry__title-group">
+              <span class="entry__index">02</span>
+              <h3 class="entry__title">
+                <a href="/fgc">FGC, in detail</a>
+              </h3>
+            </div>
+          </div>
+
+          <p class="entry__one-line">
+            Graphics, scenes, specific events &mdash; the wider picture of my
+            community work.
+          </p>
+
+          <p class="entry__body entry__body--pointer">
+            The Midweek Mashers story is one piece. The FGC page collects the
+            rest: the graphics I've made for streams and events, the specific
+            tournaments and series I've helped run, and the people who make
+            the scene worth showing up for.
+          </p>
+
+          <div class="entry__meta">
+            <div class="entry__tags">
+              <span class="tag">Graphics</span>
+              <span class="tag">Events</span>
+              <span class="tag">Scene</span>
+            </div>
+            <a href="/fgc" class="entry__link">
+              Explore the FGC page
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+              </svg>
+            </a>
+          </div>
+        </article>
+      </section>
+
+      <footer class="work-page__outro">
+        <p class="work-page__outro-text">
+          Looking for something specific, or want to talk about a project?
+          <a href="/#contact">Get in touch</a>.
+        </p>
+      </footer>
+    </main>
+
+    <script>
+      const links = document.querySelectorAll<HTMLAnchorElement>('[data-sidenav-link]');
+      const idToLink = new Map<string, HTMLAnchorElement>();
+      const targets: HTMLElement[] = [];
+
+      links.forEach((link) => {
+        const id = link.getAttribute('href')?.slice(1);
+        if (!id) return;
+        const target = document.getElementById(id);
+        if (target) {
+          idToLink.set(id, link);
+          targets.push(target);
+        }
+      });
+
+      function setActive(activeId: string) {
+        idToLink.forEach((link, id) => {
+          link.classList.toggle('is-active', id === activeId);
+        });
+      }
+
+      if (targets.length) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            const visible = entries
+              .filter((e) => e.isIntersecting)
+              .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+            if (visible) setActive(visible.target.id);
+          },
+          { rootMargin: '-25% 0px -55% 0px', threshold: [0, 0.25, 0.5, 0.75, 1] }
+        );
+        targets.forEach((t) => observer.observe(t));
+      }
+    </script>
   </body>
 </html>
 
 <style>
-  .page {
-    max-width: 640px;
+  .work-page {
+    max-width: 44rem;
     margin: 0 auto;
-    padding: calc(var(--nav-height) + 3rem) 2rem 2rem;
+    padding: calc(var(--nav-height) + 4rem) 2rem 4rem;
+    background: var(--color-paper);
   }
 
-  @media (max-width: 480px) {
-    .page { padding: calc(var(--nav-height) + 2rem) 1rem 1.5rem; }
-  }
-
-  .work-section {
+  /* ── Intro ─────────────────────────────────────────────────────── */
+  .work-page__intro {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.25rem;
     margin-bottom: 4rem;
   }
 
-  .work-section:last-child { margin-bottom: 0; }
-
-  .section-label {
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
+  .work-page__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    font-weight: 400;
   }
 
-  .card-list {
-    list-style: none;
+  .work-page__title .serif-italic {
+    color: var(--color-rust);
+    display: block;
+    font-size: 0.85em;
+    margin-top: 0.1em;
+  }
+
+  .work-page__lede {
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    line-height: 1.65;
+    color: var(--color-ink);
+    max-width: 36rem;
+  }
+
+  /* ── Section ──────────────────────────────────────────────────── */
+  .work-section {
+    margin-top: 4rem;
+  }
+
+  .work-section__header {
     display: flex;
     flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 3rem;
+    margin-bottom: 1rem;
+    border-top: 2px solid var(--color-ink);
+    scroll-margin-top: calc(var(--nav-height) + 1.5rem);
   }
 
-  .card {
-    padding: 1.75rem 0;
-    border-bottom: 1px solid var(--color-border);
+  .work-section__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    line-height: 1;
+    letter-spacing: 0;
+    color: var(--color-ink);
+    font-weight: 400;
   }
 
-  .card:first-child { padding-top: 0; }
-  .card:last-child  { border-bottom: none; }
+  .work-section__lede {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.0625rem;
+    line-height: 1.45;
+    color: var(--color-ink-muted);
+    max-width: 36rem;
+  }
 
-  .card__header {
+  /* ── Entry ─────────────────────────────────────────────────────── */
+  .entry {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 0.625rem;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 3.5rem 0;
+    border-top: 1px solid var(--color-rule);
+    scroll-margin-top: calc(var(--nav-height) + 1.5rem);
   }
 
-  .card__title-group {
+  .entry:first-of-type { border-top: none; padding-top: 2.5rem; }
+
+  .entry__head {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
   }
 
-  .card__icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 7px;
+  .entry__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
     overflow: hidden;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-rule);
     flex-shrink: 0;
   }
 
-  .card__icon-img {
+  .entry__icon-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
     display: block;
   }
 
-  .card__title {
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: var(--color-text);
-    line-height: 1.3;
-    opacity: 0.9;
-    transition: opacity 0.2s ease;
-  }
-
-  .card__title:hover { opacity: 1; }
-
-  .card__icons {
+  .entry__title-group {
     display: flex;
-    gap: 0.75rem;
-    flex-shrink: 0;
-    margin-top: 1px;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+    min-width: 0;
   }
 
-  .card__icon-link {
-    color: var(--color-text);
-    opacity: 0.35;
-    transition: opacity 0.2s ease;
+  .entry__index {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    color: var(--color-rust);
   }
 
-  .card__icon-link:hover { opacity: 1; }
+  .entry__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1;
+    letter-spacing: 0.005em;
+    color: var(--color-ink);
+    font-weight: 400;
+  }
 
-  .card__desc {
-    font-size: 0.8125rem;
+  .entry__title a {
+    color: inherit;
+    transition: color 0.2s ease;
+  }
+
+  .entry__title a:hover { color: var(--color-rust); }
+
+  .entry__one-line {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.25rem;
+    line-height: 1.4;
+    color: var(--color-ink);
+    max-width: 36rem;
+  }
+
+  .entry__why,
+  .entry__changed {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    max-width: 36rem;
+  }
+
+  .entry__body {
+    font-family: var(--font-body);
+    font-size: 1rem;
     line-height: 1.7;
-    color: var(--color-text-muted);
-    margin-bottom: 0.875rem;
+    color: var(--color-ink);
   }
 
-  .card__tags {
+  .entry__body--pointer {
+    color: var(--color-ink-muted);
+    max-width: 36rem;
+  }
+
+  .entry--pointer {
+    background: var(--color-paper-soft);
+    border: 1px solid var(--color-rule);
+    border-radius: 4px;
+    padding: 2.5rem 2rem;
+    margin-top: 1rem;
+  }
+
+  .entry--pointer + .entry,
+  .work-section .entry--pointer:first-of-type { border-top: none; }
+
+  .entry__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 0.5rem;
+  }
+
+  .entry__tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.375rem;
   }
 
-  .tag {
+  .entry__links {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  .entry__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    transition: color 0.2s ease;
+    padding: 0.5rem 0;
+  }
+
+  .entry__link:hover { color: var(--color-rust); }
+
+  /* ── Side nav (desktop only) ─────────────────────────────────── */
+  .work-sidenav {
+    position: fixed;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 13rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    z-index: 50;
+    max-height: 75vh;
+    overflow-y: auto;
+    padding: 0.5rem 0;
+  }
+
+  .work-sidenav__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .work-sidenav__label {
+    font-family: var(--font-mono);
     font-size: 0.6875rem;
-    font-family: monospace;
-    letter-spacing: 0.04em;
-    padding: 0.2em 0.6em;
-    background: #181818;
-    color: #666;
-    border-radius: 3px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-rust);
+    margin-bottom: 0.5rem;
+  }
+
+  .work-sidenav__link {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--color-ink-muted);
+    padding: 0.25rem 0 0.25rem 0.875rem;
+    border-left: 1px solid var(--color-rule);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .work-sidenav__link:hover {
+    color: var(--color-ink);
+    border-left-color: var(--color-ink-muted);
+  }
+
+  .work-sidenav__link.is-active {
+    color: var(--color-rust);
+    border-left-color: var(--color-rust);
+  }
+
+  /* ── Outro ─────────────────────────────────────────────────────── */
+  .work-page__outro {
+    margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .work-page__outro-text {
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--color-ink);
+  }
+
+  .work-page__outro-text a {
+    color: var(--color-rust);
+    border-bottom: 1px solid var(--color-rust);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .work-page__outro-text a:hover {
+    color: var(--color-ink);
+    border-bottom-color: var(--color-ink);
+  }
+
+  /* ── Mobile / narrow desktop ──────────────────────────────── */
+  @media (max-width: 1180px) {
+    .work-sidenav { display: none; }
+  }
+
+  @media (max-width: 640px) {
+    .work-page {
+      padding: calc(var(--nav-height) + 2rem) 1.5rem 3rem;
+    }
+    .work-page__intro { margin-bottom: 3rem; }
+    .work-section { margin-top: 3rem; }
+    .work-section__header { padding-top: 2rem; }
+    .entry { padding: 2.5rem 0; gap: 1.25rem; }
+    .entry--pointer { padding: 2rem 1.5rem; }
+    .entry__one-line { font-size: 1.125rem; }
+  }
+
+  @media (max-width: 480px) {
+    .work-page { padding: calc(var(--nav-height) + 1.5rem) 1.25rem 2.5rem; }
   }
 </style>

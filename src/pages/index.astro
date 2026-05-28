@@ -1,11 +1,13 @@
 ---
 import { Image } from 'astro:assets';
+import BaseHead from '../components/BaseHead.astro';
 import StickyNav from '../components/StickyNav.astro';
 import Hero from '../components/Hero.astro';
+import ContextStrip from '../components/ContextStrip.astro';
 import About from '../components/About.astro';
+import Photography from '../components/Photography.astro';
 import { projects } from '../data/projects';
 import { communityProjects } from '../data/communityProjects';
-import Photography from '../components/Photography.astro';
 import { getCollection } from 'astro:content';
 import '../styles/global.css';
 
@@ -18,143 +20,100 @@ function resolveIcon(iconFile?: string) {
   const entry = Object.entries(iconModules).find(([k]) => k.endsWith('/' + iconFile));
   return entry ? entry[1].default : undefined;
 }
+function slugify(title: string) {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
 
 const allPosts = await getCollection('writing', ({ data }) => !data.draft);
 const recentPosts = allPosts
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
+
+const featuredSoftware = projects.filter((p) =>
+  ['FindMyFGC', 'adomi-san-bot'].includes(p.title)
+);
+const featuredCommunity = communityProjects.slice(0, 1);
+
+const description =
+  'Noah Lee — backend engineer and community architect. Cloud infrastructure at scale, FGC tools, and the scene I grew from under 100 to 200+ players at majors.';
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Noah Lee — Community Builder, Platform Engineer, Backend Engineer" />
-    <meta property="og:title" content="Noah Lee" />
-    <meta property="og:description" content="Noah Lee — Community Builder, Platform Engineer, Backend Engineer" />
-    <title>Noah Lee</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <BaseHead title="Noah Lee — I build systems for people." description={description} />
   </head>
 
   <body>
     <StickyNav />
     <Hero />
-
+    <ContextStrip />
     <About />
 
-    <!-- ── Projects ──────────────────────────────────────────────────── -->
-    <section id="projects" class="content-section">
-      <div class="content-inner">
-        <h2 class="section-label">Projects</h2>
+    <!-- ── Selected work ─────────────────────────────────────────────── -->
+    <section id="work" class="section">
+      <div class="section__inner">
+        <header class="section__header">
+          <span class="eyebrow">Selected work</span>
+          <h2 class="section__heading">Things I've built and what changed.</h2>
+        </header>
 
-        <ul class="project-list">
-          {projects.slice(0, 2).map((p) => {
+        <ul class="teaser-list">
+          {featuredSoftware.map((p) => {
             const icon = resolveIcon(p.iconFile);
             return (
-            <li class="project">
-              <div class="project__header">
-                <div class="project__title-group">
-                  {icon && (
-                    <div class="project__icon">
-                      <Image src={icon} alt="" width={32} height={32} class="project__icon-img" />
-                    </div>
-                  )}
-                  <div class="project__title-row">
-                    <h3 class="project__title">{p.title}</h3>
-                    {p.liveUrl && (
-                      <a
-                        href={p.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="project__link"
-                        aria-label={`${p.title} live site`}
-                      >
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                          <path d="M15 3h6v6"/>
-                          <path d="M10 14 21 3"/>
-                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                        </svg>
-                      </a>
+              <li class="teaser">
+                <a href={`/work/${slugify(p.title)}`} class="teaser__link">
+                  <div class="teaser__head">
+                    {icon && (
+                      <div class="teaser__icon">
+                        <Image src={icon} alt="" width={40} height={40} class="teaser__icon-img" />
+                      </div>
                     )}
+                    <h3 class="teaser__title">{p.title}</h3>
                   </div>
-                </div>
-                <div class="project__links">
-                  <a
-                    href={p.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="project__link"
-                    aria-label={`${p.title} on GitHub`}
-                  >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
-                      <path d="M9 18c-4.51 2-5-2-7-2"/>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-              <p class="project__desc">{p.description}</p>
-              <div class="project__tags">
-                {p.tags.map((t) => <span class="tag">{t}</span>)}
-              </div>
-            </li>
-          );
+                  <p class="teaser__one-line">{p.oneLine}</p>
+                  <div class="teaser__tags">
+                    {p.tags.map((t) => <span class="tag">{t}</span>)}
+                  </div>
+                </a>
+              </li>
+            );
           })}
 
-          {communityProjects.slice(0, 1).map((p) => {
+          {featuredCommunity.map((p) => {
             const icon = resolveIcon(p.iconFile);
             return (
-            <li class="project">
-              <div class="project__header">
-                <div class="project__title-group">
-                  {icon && (
-                    <div class="project__icon">
-                      <Image src={icon} alt="" width={32} height={32} class="project__icon-img" />
-                    </div>
-                  )}
-                  <div class="project__title-row">
-                    <h3 class="project__title">{p.title}</h3>
-                    {p.liveUrl && (
-                      <a
-                        href={p.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="project__link"
-                        aria-label={`${p.title} website`}
-                      >
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                          <path d="M15 3h6v6"/>
-                          <path d="M10 14 21 3"/>
-                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                        </svg>
-                      </a>
+              <li class="teaser">
+                <a href={`/work/${p.slug}`} class="teaser__link">
+                  <div class="teaser__head">
+                    {icon && (
+                      <div class="teaser__icon">
+                        <Image src={icon} alt="" width={40} height={40} class="teaser__icon-img" />
+                      </div>
                     )}
+                    <h3 class="teaser__title">{p.title}</h3>
                   </div>
-                </div>
-                <div class="project__links">
-                  <span class="project__type-badge">Community</span>
-                </div>
-              </div>
-              <p class="project__desc">{p.summary}</p>
-              <div class="project__tags">
-                {p.tags.map((t) => <span class="tag">{t}</span>)}
-              </div>
-            </li>
-          );
+                  <p class="teaser__one-line">{p.oneLine}</p>
+                  <div class="teaser__tags">
+                    {p.tags.map((t) => <span class="tag">{t}</span>)}
+                  </div>
+                </a>
+              </li>
+            );
           })}
         </ul>
 
-        <div class="project-footer">
-          <a href="/work" class="section-more-link">
-            See all work
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <div class="section__footer">
+          <a href="/work" class="more-link">
+            All work
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
             </svg>
           </a>
-          <a href="/NoahLeeResume.pdf" target="_blank" rel="noopener noreferrer" class="resume-link">
-            View full resume
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <a href="/NoahLeeResume.pdf" target="_blank" rel="noopener noreferrer" class="more-link">
+            Full resume
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
             </svg>
           </a>
@@ -162,10 +121,13 @@ const recentPosts = allPosts
       </div>
     </section>
 
-    <!-- ── Writing ────────────────────────────────────────────────────── -->
-    <section id="writing" class="content-section">
-      <div class="content-inner">
-        <h2 class="section-label">Writing</h2>
+    <!-- ── Writing ───────────────────────────────────────────────────── -->
+    <section id="writing" class="section section--alt">
+      <div class="section__inner">
+        <header class="section__header">
+          <span class="eyebrow">Writing</span>
+          <h2 class="section__heading">Notes on development, growth, and mentality.</h2>
+        </header>
 
         <ul class="post-list">
           {recentPosts.map((post) => {
@@ -177,30 +139,70 @@ const recentPosts = allPosts
             });
             return (
               <li class="post-item">
-                <div class="post-item__row">
-                  <a href={`/blog/${post.slug}`} class="post-item__title">{post.data.title}</a>
-                  <time class="post-item__date" datetime={post.data.date.toISOString()}>{date}</time>
-                </div>
-                <p class="post-item__desc">{post.data.description}</p>
+                <a href={`/blog/${post.slug}`} class="post-item__link">
+                  <div class="post-item__row">
+                    <h3 class="post-item__title">{post.data.title}</h3>
+                    <time class="post-item__date" datetime={post.data.date.toISOString()}>{date}</time>
+                  </div>
+                  <p class="post-item__desc">{post.data.description}</p>
+                </a>
               </li>
             );
           })}
         </ul>
 
-        <a href="/blog" class="section-more-link">
-          See all writing
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-          </svg>
-        </a>
+        <div class="section__footer">
+          <a href="/blog" class="more-link">
+            All writing
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
       </div>
     </section>
 
     <Photography />
 
     <!-- ── Contact ───────────────────────────────────────────────────── -->
-    <footer class="contact">
-      <a href="mailto:i.knowa.lee@gmail.com" class="contact__email">i.knowa.lee@gmail.com</a>
+    <footer class="contact" id="contact">
+      <div class="contact__inner">
+        <span class="eyebrow contact__eyebrow">Get in touch</span>
+
+        <p class="contact__lede">
+          Open to <em class="serif-italic">freelance & full-time</em> work.
+        </p>
+
+        <div class="contact__email-row">
+          <a href="mailto:i.knowa.lee@gmail.com" class="contact__email">i.knowa.lee@gmail.com</a>
+          <button class="contact__copy" type="button" data-copy-email="i.knowa.lee@gmail.com" aria-label="Copy email to clipboard">
+            <span class="contact__copy-label">Copy</span>
+          </button>
+        </div>
+
+        <div class="contact__icons" role="list">
+          <a href="https://github.com/chzylee" target="_blank" rel="noopener noreferrer" class="contact__icon-link" aria-label="GitHub (personal)" title="GitHub" role="listitem">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
+              <path d="M9 18c-4.51 2-5-2-7-2"/>
+            </svg>
+          </a>
+          <a href="https://github.com/enpicie" target="_blank" rel="noopener noreferrer" class="contact__icon-link" aria-label="GitHub (enpicie org)" title="GitHub — enpicie" role="listitem">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
+              <path d="M9 18c-4.51 2-5-2-7-2"/>
+            </svg>
+            <span class="contact__icon-badge">org</span>
+          </a>
+          <a href="https://www.linkedin.com/in/noah-lee-892b11144/" target="_blank" rel="noopener noreferrer" class="contact__icon-link" aria-label="LinkedIn" title="LinkedIn" role="listitem">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+              <rect width="4" height="12" x="2" y="9"/>
+              <circle cx="4" cy="4" r="2"/>
+            </svg>
+          </a>
+        </div>
+      </div>
     </footer>
 
     <script>
@@ -211,169 +213,156 @@ const recentPosts = allPosts
 
 <style is:global>
   /* ── Shared section shell ─────────────────────────────────────────── */
-  .content-section {
-    padding: 5rem 2rem;
-    border-top: 1px solid var(--color-border);
+  .section {
+    padding: 6rem 2rem;
+    background: var(--color-paper);
     display: flex;
     justify-content: center;
   }
 
-  @media (max-width: 480px) {
-    .content-section {
-      padding: 3rem 1rem;
-    }
+  .section--alt {
+    background: var(--color-paper-soft);
   }
 
-  .content-inner {
-    max-width: 640px;
+  .section__inner {
+    max-width: 44rem;
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 2.5rem;
+    min-width: 0;
   }
 
-  .section-label {
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-text-muted);
+  .section__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
   }
 
-  /* ── Project icon bubble ─────────────────────────────────────────── */
-  .project__title-group {
+  .section__heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+    line-height: 1.05;
+    letter-spacing: -0.005em;
+    color: var(--color-ink);
+    font-weight: 400;
+  }
+
+  .section__footer {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding-top: 0.5rem;
   }
 
-  .project__icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 7px;
-    overflow: hidden;
-    border: 1px solid var(--color-border);
-    flex-shrink: 0;
+  .more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    transition: color 0.2s ease;
+    padding: 0.5rem 0;
   }
 
-  .project__icon-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-  }
+  .more-link:hover { color: var(--color-rust); }
 
-  /* ── Projects ─────────────────────────────────────────────────────── */
-  .project-list {
+  /* ── Teaser cards (selected work) ─────────────────────────────────── */
+  .teaser-list {
     list-style: none;
     display: flex;
     flex-direction: column;
   }
 
-  .project {
-    padding: 1.75rem 0;
-    border-bottom: 1px solid var(--color-border);
+  .teaser {
+    border-top: 1px solid var(--color-rule);
   }
 
-  .project:first-child { padding-top: 0; }
-  .project:last-child  { border-bottom: none; }
+  .teaser:last-child {
+    border-bottom: 1px solid var(--color-rule);
+  }
 
-  .project__header {
+  .teaser__link {
     display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 0.625rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 2rem 0;
+    color: var(--color-ink);
+    transition: color 0.2s ease;
   }
 
-  .project__title-row {
+  .teaser__link:hover { color: var(--color-rust); }
+
+  .teaser__head {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 1rem;
+    min-width: 0;
   }
 
-  .project__title {
-    font-size: 0.9375rem;
-    font-weight: 700;
-    color: var(--color-text);
-    line-height: 1.3;
-  }
-
-  .project__type-badge {
-    font-size: 0.6875rem;
-    font-family: monospace;
-    letter-spacing: 0.04em;
-    padding: 0.2em 0.6em;
-    background: #181818;
-    color: #666;
-    border-radius: 3px;
-    border: 1px solid var(--color-border);
-  }
-
-  .project__links {
-    display: flex;
-    gap: 0.75rem;
+  .teaser__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--color-rule);
     flex-shrink: 0;
-    margin-top: 1px;
   }
 
-  .project__link {
-    color: var(--color-text);
-    opacity: 0.35;
-    transition: opacity 0.2s ease;
+  .teaser__icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
-  .project__link:hover { opacity: 1; }
-
-  .project__desc {
-    font-size: 0.8125rem;
-    line-height: 1.7;
-    color: var(--color-text-muted);
-    margin-bottom: 0.875rem;
+  .teaser__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    line-height: 1;
+    letter-spacing: 0.005em;
+    color: inherit;
+    font-weight: 400;
   }
 
-  .project__tags {
+  .teaser__one-line {
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    color: var(--color-ink);
+    max-width: 36rem;
+  }
+
+  .teaser__link:hover .teaser__one-line { color: var(--color-ink); }
+
+  .teaser__tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.375rem;
   }
 
-  .project-footer {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
+  /* ── Tag chip ─────────────────────────────────────────────────────── */
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.25em 0.625em;
+    background: var(--color-paper-soft);
+    color: var(--color-ink-muted);
+    border: 1px solid var(--color-rule);
+    border-radius: 2px;
   }
 
-  .section-more-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.8125rem;
-    letter-spacing: 0.04em;
-    color: var(--color-text-muted);
-    transition: color 0.2s ease;
+  .section--alt .tag {
+    background: var(--color-paper);
   }
 
-  .section-more-link:hover {
-    color: var(--color-text);
-  }
-
-  .resume-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.8125rem;
-    letter-spacing: 0.04em;
-    color: var(--color-text-muted);
-    transition: color 0.2s ease;
-  }
-
-  .resume-link:hover {
-    color: var(--color-text);
-  }
-
-  /* ── Writing section ──────────────────────────────────────────────── */
+  /* ── Writing list ─────────────────────────────────────────────────── */
   .post-list {
     list-style: none;
     display: flex;
@@ -381,15 +370,23 @@ const recentPosts = allPosts
   }
 
   .post-item {
-    padding: 1.75rem 0;
-    border-bottom: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .post-item:last-child {
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .post-item__link {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    padding: 1.75rem 0;
+    color: var(--color-ink);
+    transition: color 0.2s ease;
   }
 
-  .post-item:first-child { padding-top: 0; }
-  .post-item:last-child  { border-bottom: none; }
+  .post-item__link:hover { color: var(--color-rust); }
 
   .post-item__row {
     display: flex;
@@ -400,55 +397,152 @@ const recentPosts = allPosts
   }
 
   .post-item__title {
-    font-size: 0.9375rem;
-    font-weight: 700;
-    color: var(--color-text);
-    line-height: 1.3;
-    transition: opacity 0.2s ease;
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2vw, 1.625rem);
+    line-height: 1.1;
+    letter-spacing: 0.005em;
+    color: inherit;
+    font-weight: 400;
   }
 
-  .post-item__title:hover { opacity: 0.75; }
-
   .post-item__date {
-    font-size: 0.75rem;
-    letter-spacing: 0.06em;
-    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
     white-space: nowrap;
     flex-shrink: 0;
   }
 
   .post-item__desc {
-    font-size: 0.8125rem;
-    line-height: 1.7;
-    color: var(--color-text-muted);
-  }
-
-  .tag {
-    font-size: 0.6875rem;
-    font-family: monospace;
-    letter-spacing: 0.04em;
-    padding: 0.2em 0.6em;
-    background: #181818;
-    color: #666;
-    border-radius: 3px;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
   }
 
   /* ── Contact footer ───────────────────────────────────────────────── */
   .contact {
-    padding: 3rem 2rem;
-    border-top: 1px solid var(--color-border);
+    background: var(--color-paper-soft);
+    color: var(--color-ink);
+    padding: 6rem 2rem;
     display: flex;
     justify-content: center;
   }
 
-  .contact__email {
-    font-size: 0.875rem;
-    letter-spacing: 0.04em;
-    color: var(--color-text-muted);
-    transition: color 0.2s ease;
+  .contact__inner {
+    max-width: 44rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: flex-start;
   }
 
-  .contact__email:hover {
-    color: var(--color-text);
+  .contact__eyebrow {
+    color: var(--color-rust);
+  }
+
+  .contact__lede {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.05;
+    color: var(--color-ink);
+    font-weight: 400;
+  }
+
+  .contact__lede .serif-italic {
+    color: var(--color-rust);
+    font-size: 0.95em;
+  }
+
+  .contact__email-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-top: 0.5rem;
+  }
+
+  .contact__email {
+    font-family: var(--font-body);
+    font-size: 1.25rem;
+    color: var(--color-ink);
+    border-bottom: 1px solid var(--color-rust);
+    padding-bottom: 0.125rem;
+    transition: color 0.2s ease;
+    word-break: break-all;
+  }
+
+  .contact__email:hover { color: var(--color-rust); }
+
+  .contact__copy {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.875rem;
+    border: 1px solid var(--color-rust);
+    color: var(--color-rust);
+    background: transparent;
+    transition: background 0.2s ease, color 0.2s ease;
+    min-height: 36px;
+  }
+
+  .contact__copy:hover {
+    background: var(--color-rust);
+    color: var(--color-paper);
+  }
+
+  .contact__copy[data-copied="true"] {
+    background: var(--color-rust);
+    color: var(--color-paper);
+  }
+
+  .contact__icons {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding-top: 1rem;
+  }
+
+  .contact__icon-link {
+    position: relative;
+    color: var(--color-ink-muted);
+    opacity: 0.75;
+    transition: opacity 0.2s ease, color 0.2s ease;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+  }
+
+  .contact__icon-link:hover {
+    color: var(--color-rust);
+    opacity: 1;
+  }
+
+  .contact__icon-badge {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.04em;
+    color: var(--color-context-muted);
+    text-transform: lowercase;
+    pointer-events: none;
+  }
+
+  @media (max-width: 640px) {
+    .section { padding: 4rem 1.5rem; }
+    .section__inner { gap: 2rem; }
+    .contact { padding: 4rem 1.5rem; }
+    .contact__email { font-size: 1.125rem; }
+  }
+
+  @media (max-width: 480px) {
+    .section { padding: 3.5rem 1.25rem; }
+    .contact { padding: 3.5rem 1.25rem; }
   }
 </style>

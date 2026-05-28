@@ -1,0 +1,184 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import PageNav from '../../components/PageNav.astro';
+import '../../styles/global.css';
+
+const description =
+  "The fighting game work of Noah Lee — graphics made for the scene, specific events and series, and the wider community work behind Midweek Mashers.";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title="FGC — Noah Lee" description={description} />
+  </head>
+  <body>
+    <PageNav />
+    <main class="fgc-page">
+      <header class="fgc-page__intro">
+        <span class="eyebrow">FGC</span>
+        <h1 class="fgc-page__title">
+          The scene,
+          <em class="serif-italic">in detail.</em>
+        </h1>
+        <p class="fgc-page__lede">
+          The work entries on <a href="/work">/work</a> tell the headline story.
+          This page is for the rest &mdash; the graphics I've made for streams
+          and events, the specific tournaments and series I've helped run, and
+          the people who make the scene worth showing up for.
+        </p>
+      </header>
+
+      <section class="fgc-section" aria-labelledby="placeholder-heading">
+        <header class="fgc-section__header">
+          <span class="eyebrow eyebrow--rust">In progress</span>
+          <h2 class="fgc-section__title" id="placeholder-heading">More coming soon.</h2>
+        </header>
+
+        <p class="fgc-section__body">
+          I'm pulling this page together. For now, the deepest cut is the
+          <a href="/work/midweek-mashers">Midweek Mashers</a> entry &mdash; the
+          weekly series I run and the foundation everything else builds on.
+        </p>
+      </section>
+
+      <footer class="fgc-page__outro">
+        <p class="fgc-page__outro-text">
+          Running a scene, building one, or thinking about it?
+          <a href="/#contact">Get in touch</a>.
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>
+
+<style>
+  .fgc-page {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: calc(var(--nav-height) + 4rem) 2rem 4rem;
+    background: var(--color-paper);
+  }
+
+  /* ── Intro ─────────────────────────────────────────────────────── */
+  .fgc-page__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 4rem;
+  }
+
+  .fgc-page__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    font-weight: 400;
+  }
+
+  .fgc-page__title .serif-italic {
+    color: var(--color-rust);
+    display: block;
+    font-size: 0.85em;
+    margin-top: 0.1em;
+  }
+
+  .fgc-page__lede {
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    line-height: 1.65;
+    color: var(--color-ink);
+    max-width: 36rem;
+  }
+
+  .fgc-page__lede a {
+    color: var(--color-rust);
+    border-bottom: 1px solid var(--color-rust);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .fgc-page__lede a:hover {
+    color: var(--color-ink);
+    border-bottom-color: var(--color-ink);
+  }
+
+  /* ── Section ──────────────────────────────────────────────────── */
+  .fgc-section {
+    margin-top: 3rem;
+    padding-top: 3rem;
+    border-top: 2px solid var(--color-ink);
+  }
+
+  .fgc-section__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .fgc-section__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    line-height: 1;
+    color: var(--color-ink);
+    font-weight: 400;
+  }
+
+  .fgc-section__body {
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-ink);
+    max-width: 36rem;
+  }
+
+  .fgc-section__body a {
+    color: var(--color-rust);
+    border-bottom: 1px solid var(--color-rust);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .fgc-section__body a:hover {
+    color: var(--color-ink);
+    border-bottom-color: var(--color-ink);
+  }
+
+  /* ── Outro ─────────────────────────────────────────────────────── */
+  .fgc-page__outro {
+    margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .fgc-page__outro-text {
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--color-ink);
+  }
+
+  .fgc-page__outro-text a {
+    color: var(--color-rust);
+    border-bottom: 1px solid var(--color-rust);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .fgc-page__outro-text a:hover {
+    color: var(--color-ink);
+    border-bottom-color: var(--color-ink);
+  }
+
+  /* ── Mobile ──────────────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .fgc-page {
+      padding: calc(var(--nav-height) + 2rem) 1.5rem 3rem;
+    }
+    .fgc-page__intro { margin-bottom: 3rem; }
+    .fgc-section { margin-top: 2rem; padding-top: 2rem; }
+  }
+
+  @media (max-width: 480px) {
+    .fgc-page { padding: calc(var(--nav-height) + 1.5rem) 1.25rem 2.5rem; }
+  }
+</style>

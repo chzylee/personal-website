@@ -1,16 +1,30 @@
 /* ─── Custom Properties ───────────────────────────────────────────────────── */
 
 :root {
-  --color-bg:           #0e0e0e;
-  --color-text:         #e8e8e8;
-  --color-text-muted:   #888888;
-  --color-border:       #2a2a2a;
-  --color-accent:       #e8e8e8;
+  /* Dark editorial palette */
+  --color-paper:        #0e0d0b;
+  --color-paper-soft:   #1a1815;
+  --color-ink:          #f2ede6;
+  --color-ink-muted:    #8a8480;
+  --color-rust:         #9b6dff;
+  --color-rule:         #2a2723;
 
-  --font-sans:          'Inter', system-ui, sans-serif;
-  --font-size-name:     clamp(3rem, 8vw, 6rem);
-  --font-size-subtitle: clamp(1.25rem, 2.5vw, 2rem);
-  --nav-height:         52px;
+  /* Slightly elevated surface, used for the context strip */
+  --color-context-bg:   #1a1815;
+  --color-context-ink:  #f2ede6;
+  --color-context-muted:#8a8480;
+
+  /* Typography */
+  --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --font-serif:   'DM Serif Display', Georgia, serif;
+  --font-body:    'Instrument Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:    'DM Mono', 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Hero scale */
+  --font-size-headline: clamp(3.5rem, 10vw, 8rem);
+  --font-size-sub:      clamp(1.0625rem, 1.6vw, 1.25rem);
+
+  --nav-height:         56px;
 }
 
 /* ─── Reset ───────────────────────────────────────────────────────────────── */
@@ -29,9 +43,10 @@ html {
 }
 
 body {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-sans);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
   line-height: 1.6;
 }
 
@@ -54,41 +69,42 @@ svg {
   flex-shrink: 0;
 }
 
-/* ─── Rotating subtitle @keyframes ───────────────────────────────────────── */
-/*
- * Timing constants (must match Hero.astro frontmatter):
- *   VISIBLE = 1.5s, FADE = 0.4s, SLOT = 1.9s, TOTAL = phrases × 1.9s
- *
- * For 6 phrases → TOTAL = 11.4s. Keyframe % = (seconds / 11.4) × 100:
- *   fade-in ends:    0.4 / 11.4 × 100 = 3.509%
- *   fade-out starts: 1.5 / 11.4 × 100 = 13.158%
- *   slot ends:       1.9 / 11.4 × 100 = 16.667%
- *
- * If you add/remove phrases, update both the percentages here AND the
- * VISIBLE/FADE/SLOT/TOTAL constants in Hero.astro.
- */
-@keyframes phrase-cycle {
-  0%, 100% { opacity: 0; }
-  3.509%   { opacity: 1; }
-  13.158%  { opacity: 1; }
-  16.667%  { opacity: 0; }
+/* ─── Shared editorial primitives ─────────────────────────────────────────── */
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.eyebrow--rust { color: var(--color-rust); }
+
+.serif-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
 }
 
 /* ─── Photo slideshow @keyframes ─────────────────────────────────────────── */
 /*
- * 11 photos × 5s per slot (4s visible + 1s fade) = 55s total cycle.
- * Keyframe % = (seconds / 55) × 100:
- *   fade-in ends:    1 / 55 = 1.818%
- *   fade-out starts: 4 / 55 = 7.273%
- *   slot ends:       5 / 55 = 9.091%
- *
- * If you add/remove photos from src/assets/photos/, update the total here
- * and in Hero.astro: PHOTO_TOTAL = count × 5, and update the animation
- * duration on .slideshow__photo to match.
+ * Used for any photo cycling on the homepage hero panel.
+ * If photo count changes, update PHOTO_TOTAL and the animation duration.
  */
 @keyframes photo-cycle {
   0%, 100%  { opacity: 0; }
   1.818%    { opacity: 1; }
   7.273%    { opacity: 1; }
   9.091%    { opacity: 0; }
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
