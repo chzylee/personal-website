@@ -17,7 +17,7 @@ export const projects: Project[] = [
     title: 'FindMyFGC',
     oneLine: 'Lets fighting-game players find real tournaments near them.',
     whyBuilt:
-      'The fighting game community mostly shares events through screenshots dropped in Discord. There was no central place for a player to ask "what is actually near me this weekend." I built the missing piece.',
+      "Finding fighting game events used to mean knowing someone in the scene. Search engines didn't always surface them, and announcements got buried in Discord and scattered across Twitter/X, where you'd never see them unless you already knew where to look. I built the missing piece so anyone can find tournaments without needing the inside track.",
     whatChanged:
       'Full-stack tournament finder used by players across regions. React on S3/CloudFront, Swift Vapor on EKS in a private VPC, Cloudflare DNS to ACM-validated HTTPS endpoints. Google Gemini API converts natural-language location input into coordinates. Infrastructure managed with Terraform and GitHub Actions.',
     tags: ['React', 'Swift', 'AWS', 'Terraform', 'Cloudflare'],
@@ -29,9 +29,9 @@ export const projects: Project[] = [
     title: 'adomi-san-bot',
     oneLine: 'Removes the manual grind from running online FGC tournaments.',
     whyBuilt:
-      'Running an online tournament is more manual work than it looks — check-ins, bracket management, score reporting, reminders, all error-prone. I built this after running these events myself and knowing exactly where things break.',
+      "Running an online tournament requires operational overhead disjoint between Discord and start.gg. Check-ins, event visibility, score reporting, reminders: fragmented, slow, error-prone operations. I built Adomin to take the strain out of running events, so the work doesn't drain the bandwidth to actually show up for the community.",
     whatChanged:
-      'Organizers run events in roughly half the time with less room for error. Serverless on Lambda and SQS — quick responses return immediately while heavy ops dispatch to worker Lambdas asynchronously. Used across Midweek Melting and adjacent series. Onboarded a collaborator and mentored them through the architecture decisions.',
+      'Events run smoother for everyone: organizers have less to manually track, players can focus more on playing. New TOs have launched their own series on Adomin, broadening the Melty Blood online scene. Serverless on Lambda and SQS — quick responses return immediately while heavy ops dispatch to worker Lambdas asynchronously. Used across Midweek Melting and adjacent series. Mentored new developers through the architecture decisions.',
     tags: ['Python', 'AWS', 'Discord', 'Terraform'],
     githubUrl: 'https://github.com/enpicie/adomi-san-bot',
     iconFile: 'adomin.jpg',
@@ -40,7 +40,7 @@ export const projects: Project[] = [
     title: 'NEST',
     oneLine: 'A single source of truth for first-time tournament organizers.',
     whyBuilt:
-      'Anyone trying to run their first netplay event has to reverse-engineer it from scratch — OBS scenes, Discord templates, bot config, the works. I collected the playbook in one place so the next person does not have to start over.',
+      'Anyone trying to run their first netplay event has to piece it together from scratch: OBS scenes, Discord templates, bot config, the works. I packaged my organizer workflow into a kit so any new TO can get started fast.',
     whatChanged:
       'Used by Midweek Melting and other Melty Blood netplay events. Lowers the activation energy for new TOs. Distributed as a Jekyll site on GitHub Pages so it stays free to host and easy to contribute to.',
     tags: ['Jekyll', 'GitHub Pages'],

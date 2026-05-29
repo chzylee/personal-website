@@ -77,15 +77,12 @@ const description =
       <header class="work-page__intro">
         <span class="eyebrow">Selected work</span>
         <h1 class="work-page__title">
-          Two overlapping contexts.
+          Two contexts.
           <em class="serif-italic">Same instinct.</em>
         </h1>
         <p class="work-page__lede">
-          I've spent years building in two overlapping contexts: professional cloud
-          infrastructure, and the fighting game community I'm part of. The projects
-          below come from both. In each case, the starting point was the same &mdash;
-          I understood the problem from the inside, and I built because nothing
-          adequate existed.
+          I bring the same engineering instinct to two distinct contexts:
+          cloud-native systems at scale, and the FGC community I'm part of.
         </p>
       </header>
 
@@ -95,14 +92,12 @@ const description =
           <span class="eyebrow eyebrow--rust">Part one</span>
           <h2 class="work-section__title" id="engineering-heading">Engineering work</h2>
           <p class="work-section__lede">
-            Tools and systems I built because nothing adequate existed &mdash;
-            shipped to real users, in prod.
+            Systems I built and shipped.
           </p>
         </header>
 
-        {devProjects.map((p, i) => {
+        {devProjects.map((p) => {
           const icon = resolveIcon(p.iconFile);
-          const idx = String(i + 1).padStart(2, '0');
           const projectId = slugify(p.title);
           return (
             <article class="entry" id={projectId}>
@@ -112,12 +107,9 @@ const description =
                     <Image src={icon} alt="" width={48} height={48} class="entry__icon-img" />
                   </div>
                 )}
-                <div class="entry__title-group">
-                  <span class="entry__index">{idx}</span>
-                  <h3 class="entry__title">
-                    <a href={`/work/${projectId}`}>{p.title}</a>
-                  </h3>
-                </div>
+                <h3 class="entry__title">
+                  <a href={`/work/${projectId}`}>{p.title}</a>
+                </h3>
               </div>
 
               <p class="entry__one-line">{p.oneLine}</p>
@@ -190,12 +182,9 @@ const description =
                   </div>
                 );
               })()}
-              <div class="entry__title-group">
-                <span class="entry__index">01</span>
-                <h3 class="entry__title">
-                  <a href={`/work/${community.slug}`}>{community.title}</a>
-                </h3>
-              </div>
+              <h3 class="entry__title">
+                <a href={`/work/${community.slug}`}>{community.title}</a>
+              </h3>
             </div>
 
             <p class="entry__one-line">{community.oneLine}</p>
@@ -241,12 +230,9 @@ const description =
 
         <article class="entry entry--pointer" id="fgc-in-detail">
           <div class="entry__head">
-            <div class="entry__title-group">
-              <span class="entry__index">02</span>
-              <h3 class="entry__title">
-                <a href="/fgc">FGC, in detail</a>
-              </h3>
-            </div>
+            <h3 class="entry__title">
+              <a href="/fgc">FGC, in detail</a>
+            </h3>
           </div>
 
           <p class="entry__one-line">
@@ -418,7 +404,7 @@ const description =
     height: 48px;
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid var(--color-rule);
+    border: 2px solid var(--color-rule);
     flex-shrink: 0;
   }
 
@@ -427,21 +413,6 @@ const description =
     height: 100%;
     object-fit: cover;
     display: block;
-  }
-
-  .entry__title-group {
-    display: flex;
-    align-items: baseline;
-    gap: 1rem;
-    flex-wrap: wrap;
-    min-width: 0;
-  }
-
-  .entry__index {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    letter-spacing: 0.12em;
-    color: var(--color-rust);
   }
 
   .entry__title {

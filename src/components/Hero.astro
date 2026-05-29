@@ -29,14 +29,14 @@ const totalSeconds = photos.length * 8;
     <span class="eyebrow hero__eyebrow">Engineer &amp; community architect</span>
 
     <h1 class="hero__headline">
-      <span class="hero__headline-display">I build systems for</span>
-      <span class="hero__headline-serif">people.</span>
+      <span class="hero__headline-display">I build systems</span>
+      <span class="hero__headline-display">for <em class="hero__headline-serif">people.</em></span>
     </h1>
 
     <p class="hero__sub">
-      Backend engineer, <strong>7 seven years on AWS</strong>, small teams to large. Lately: shipping
-      full-stack apps end-to-end and running events in the Melty Blood community as
-      it's grown from ~60 to 200+ players.
+      Full-stack engineer with <strong>7 years on AWS</strong>, small teams to large, shipping
+      full-stack apps end-to-end. I also design the events and build the tools behind
+      the Melty Blood scene that's grown from ~60 to 200+ players at majors.
     </p>
 
     <div class="hero__cta-row">
@@ -125,6 +125,7 @@ const totalSeconds = photos.length * 8;
   .hero__eyebrow {
     color: var(--color-rust);
     font-size: 0.875rem;
+    font-weight: 500;
     text-shadow:
       0 2px 16px rgba(0, 0, 0, 0.9),
       0 0 40px rgba(0, 0, 0, 0.7);
@@ -149,15 +150,12 @@ const totalSeconds = photos.length * 8;
   }
 
   .hero__headline-serif {
-    display: block;
     font-family: var(--font-serif);
     font-style: italic;
     color: var(--color-rust);
-    font-size: 0.95em;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    margin-top: 0.05em;
+    letter-spacing: 0;
     font-weight: 400;
+    margin-left: 0.25em;
     text-shadow:
       0 4px 32px rgba(0, 0, 0, 0.85),
       0 2px 12px rgba(0, 0, 0, 0.7);
@@ -192,6 +190,7 @@ const totalSeconds = photos.length * 8;
     gap: 0.5rem;
     font-family: var(--font-mono);
     font-size: 0.8125rem;
+    font-weight: 500;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     padding: 0.875rem 1.5rem;
