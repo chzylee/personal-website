@@ -52,9 +52,9 @@ export const projects: Project[] = [
     title: 'FGC League Sheets',
     oneLine: 'Multi-week competitive leagues without a programmer.',
     whyBuilt:
-      'League organizers were maintaining brackets and standings in spreadsheets by hand. I built a Sheets extension so non-technical TOs can run real long-term leagues without code — distribute players, rank by win rate, manage roster changes.',
+      'Long-term league formats are abstract and require significant manual effort to maintain, but have helped the Melty community grow tremendously. I built a Google Sheets extension to let organizers maintain a comfortable interface to manage everything while automating the core workflow to reduce room for error and alleviate organizer strain.',
     whatChanged:
-      'Distributed as a viewable, copyable Sheet with in-file documentation so non-technical users get started without a setup guide. Partnered directly with end users to find real edge cases and shape an intuitive workflow.',
+      'Distributed as a viewable, copyable Sheet with in-file documentation so non-technical users get started without a setup guide. Partnered directly with end users to find real edge cases and shape an intuitive workflow. Melty\'s DMF Duel League has supported dozens of players and expanded to facilitate both beginner and advanced leagues.',
     tags: ['TypeScript', 'Apps Script', 'Clasp'],
     githubUrl: 'https://github.com/enpicie/fgc-league-sheets',
     iconFile: 'fgc-league-sheets logo.png',
