@@ -1,9 +1,15 @@
 ---
+import { Image } from 'astro:assets';
 import BaseHead from '../../components/BaseHead.astro';
 import PageNav from '../../components/PageNav.astro';
 import { projects, type Project } from '../../data/projects';
 import { communityProjects, type CommunityProject } from '../../data/communityProjects';
 import '../../styles/global.css';
+
+const iconModules = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/project-icons/**/*',
+  { eager: true }
+);
 
 export function getStaticPaths() {
   function slugify(title: string) {
@@ -34,6 +40,11 @@ type Props =
 const { type, project } = Astro.props;
 const pageTitle = `${project.title} — Noah Lee`;
 const pageDescription = project.oneLine;
+
+const iconEntry = project.iconFile
+  ? Object.entries(iconModules).find(([k]) => k.endsWith('/' + project.iconFile))
+  : undefined;
+const icon = iconEntry ? iconEntry[1].default : undefined;
 ---
 
 <!doctype html>
@@ -52,7 +63,14 @@ const pageDescription = project.oneLine;
       </a>
 
       <header class="detail__header">
-        <h1 class="detail__title">{project.title}</h1>
+        <div class="detail__head">
+          {icon && (
+            <div class="detail__icon">
+              <Image src={icon} alt="" width={64} height={64} class="detail__icon-img" />
+            </div>
+          )}
+          <h1 class="detail__title">{project.title}</h1>
+        </div>
         <p class="detail__one-line">{project.oneLine}</p>
       </header>
 
@@ -147,6 +165,28 @@ const pageDescription = project.oneLine;
     display: flex;
     flex-direction: column;
     gap: 0.875rem;
+  }
+
+  .detail__head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .detail__icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--color-rule);
+    flex-shrink: 0;
+  }
+
+  .detail__icon-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   .detail__title {
