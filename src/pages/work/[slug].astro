@@ -15,10 +15,14 @@ export function getStaticPaths() {
     props: { type: 'software' as const, project: p },
   }));
 
-  const communityPaths = communityProjects.map((p) => ({
-    params: { slug: p.slug },
-    props: { type: 'community' as const, project: p },
-  }));
+  // Exclude slugs that have their own static page under work/.
+  const staticPages = new Set(['midweek-mashers']);
+  const communityPaths = communityProjects
+    .filter((p) => !staticPages.has(p.slug))
+    .map((p) => ({
+      params: { slug: p.slug },
+      props: { type: 'community' as const, project: p },
+    }));
 
   return [...softwarePaths, ...communityPaths];
 }

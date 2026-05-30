@@ -3,9 +3,9 @@ export interface CommunityProject {
   title: string;
   /** Short card line — leads with outcome. */
   oneLine: string;
-  /** First-person felt experience of why this needed to exist. */
+  /** First-person felt experience of why this needed to exist. Used on the /work index card. */
   whyBuilt: string;
-  /** Outcome and proof — concrete numbers where they exist. */
+  /** Outcome and proof — concrete numbers where they exist. Used on the /work index card. */
   whatChanged: string;
   tags: string[];
   liveUrl?: string;

@@ -1,0 +1,198 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import PageNav from '../components/PageNav.astro';
+import FeatureSections from '../components/FeatureSections.astro';
+import type { ShowcaseItem } from '../data/types';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  eyebrow: string;
+  headline: string;
+  /** Optional serif-italic line rendered below the headline in purple. */
+  headlineEmphasis?: string;
+  items: ShowcaseItem[];
+  /** Renders a ← back link in the top-left. */
+  backHref?: string;
+  backLabel?: string;
+}
+
+const {
+  title,
+  description,
+  eyebrow,
+  headline,
+  headlineEmphasis,
+  items,
+  backHref,
+  backLabel = 'Back',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body>
+    <PageNav />
+    <main class="fp">
+      {backHref && (
+        <a href={backHref} class="fp__back">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
+          </svg>
+          {backLabel}
+        </a>
+      )}
+
+      <header class="fp__intro">
+        <span class="eyebrow fp__eyebrow">{eyebrow}</span>
+        <div class="fp__intro-grid">
+          <h1 class="fp__title">
+            {headline}
+            {headlineEmphasis && <em class="fp__title-em serif-italic">{headlineEmphasis}</em>}
+          </h1>
+          <div class="fp__lede">
+            <slot name="lede" />
+          </div>
+        </div>
+      </header>
+
+      <section class="fp__features" aria-label="Work">
+        <FeatureSections items={items} />
+      </section>
+
+      <footer class="fp__outro">
+        <slot name="outro" />
+      </footer>
+    </main>
+  </body>
+</html>
+
+<style>
+  .fp {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: calc(var(--nav-height) + 4rem) 2rem 4rem;
+    background: var(--color-paper);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Back link ─────────────────────────────────────────────────── */
+  .fp__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    transition: color 0.2s ease;
+    padding: 0.5rem 0;
+    margin-bottom: 1.5rem;
+    align-self: flex-start;
+  }
+
+  .fp__back:hover { color: var(--color-rust); }
+
+  /* ── Intro ─────────────────────────────────────────────────────── */
+  .fp__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-bottom: 3rem;
+    border-bottom: 2px solid var(--color-ink);
+  }
+
+  .fp__eyebrow {
+    /* Inherits global .eyebrow styles; sits above the grid */
+  }
+
+  .fp__intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3.5rem;
+    align-items: start;
+    min-width: 0;
+  }
+
+  .fp__title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    font-weight: 400;
+  }
+
+  .fp__title-em {
+    color: var(--color-rust);
+    display: block;
+    font-size: 0.85em;
+    margin-top: 0.1em;
+  }
+
+  .fp__lede {
+    min-width: 0;
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    line-height: 1.65;
+    color: var(--color-ink);
+  }
+
+  .fp__lede :global(a) {
+    color: var(--color-rust);
+    border-bottom: 1px solid var(--color-rust);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .fp__lede :global(a:hover) {
+    color: var(--color-ink);
+    border-bottom-color: var(--color-ink);
+  }
+
+  /* ── Outro ─────────────────────────────────────────────────────── */
+  .fp__outro {
+    margin-top: 0;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-rule);
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    color: var(--color-ink);
+  }
+
+  .fp__outro :global(a) {
+    color: var(--color-rust);
+    border-bottom: 1px solid var(--color-rust);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .fp__outro :global(a:hover) {
+    color: var(--color-ink);
+    border-bottom-color: var(--color-ink);
+  }
+
+  /* ── Mobile ────────────────────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .fp__intro-grid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .fp {
+      padding: calc(var(--nav-height) + 2rem) 1.5rem 3rem;
+    }
+    .fp__intro { margin-bottom: 2rem; padding-bottom: 2rem; }
+  }
+
+  @media (max-width: 480px) {
+    .fp { padding: calc(var(--nav-height) + 1.5rem) 1.25rem 2.5rem; }
+  }
+</style>
