@@ -11,7 +11,7 @@ interface Props {
 const { items, autoplayMs = 5000 } = Astro.props;
 
 const imageModules = import.meta.glob<{ default: ImageMetadata }>(
-  '../assets/event-graphics/*.{png,jpg,jpeg,webp,avif}',
+  '../assets/feature-graphics/*.{png,jpg,jpeg,webp,avif}',
   { eager: true }
 );
 
@@ -104,6 +104,13 @@ function slidesFor(item: ShowcaseItem) {
                 </div>
               )}
             </div>
+          )}
+          {feature.photoCredit && (
+            <p class="feature__photo-credit">
+              <a href={feature.photoCredit.url} target="_blank" rel="noopener noreferrer">
+                {feature.photoCredit.label}
+              </a>
+            </p>
           )}
         </div>
 
@@ -500,6 +507,24 @@ function slidesFor(item: ShowcaseItem) {
   .carousel__dot[data-active] .carousel__dot-mark {
     background: var(--color-rust);
     transform: scale(1.25);
+  }
+
+  /* ── Photo credit ─────────────────────────────────────────────── */
+  .feature__photo-credit {
+    margin-top: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    color: var(--color-ink-muted);
+  }
+
+  .feature__photo-credit a {
+    color: inherit;
+    transition: color 0.2s ease;
+  }
+
+  .feature__photo-credit a:hover {
+    color: var(--color-rust);
   }
 
   /* ── Text ──────────────────────────────────────────────────────── */

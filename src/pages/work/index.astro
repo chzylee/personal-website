@@ -71,6 +71,8 @@ const description =
           data-sidenav-link
         >FGC, in detail</a>
       </div>
+
+      <a href="/#contact" class="work-sidenav__cta">Contact me</a>
     </aside>
 
     <main class="work-page">
@@ -80,9 +82,13 @@ const description =
           Two contexts.
           <em class="serif-italic">Same instinct.</em>
         </h1>
+        <ol class="instinct-flow" aria-label="The instinct, in three steps">
+          <li class="instinct-flow__step">Understand the person</li>
+          <li class="instinct-flow__step">Find the friction</li>
+          <li class="instinct-flow__step">Build what removes it</li>
+        </ol>
         <p class="work-page__lede">
-          I bring the same engineering instinct to two distinct contexts:
-          cloud-native systems at scale, and the FGC community I'm part of.
+          Leveraging professional software engineering expertise to build systems for people around me. Always working on something new.
         </p>
       </header>
 
@@ -210,19 +216,6 @@ const description =
                     <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
                   </svg>
                 </a>
-                {community.liveUrl && (
-                  <a
-                    href={community.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="entry__link"
-                  >
-                    Visit
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                    </svg>
-                  </a>
-                )}
               </div>
             </div>
           </article>
@@ -236,25 +229,22 @@ const description =
           </div>
 
           <p class="entry__one-line">
-            Graphics, scenes, specific events &mdash; the wider picture of my
-            community work.
+            Commentary, special events, connecting with different scenes.
           </p>
 
           <p class="entry__body entry__body--pointer">
-            The Midweek Mashers story is one piece. The FGC page collects the
-            rest: the graphics I've made for streams and events, the specific
-            tournaments and series I've helped run, and the people who make
-            the scene worth showing up for.
+            Beyond Midweek Mashers, I am involved in supporting the FGC in different capacities. I work at various events, commentate anime games, craft unofficial side events, and get to know my community across regions.
           </p>
 
           <div class="entry__meta">
             <div class="entry__tags">
-              <span class="tag">Graphics</span>
+              <span class="tag">Commentary</span>
               <span class="tag">Events</span>
-              <span class="tag">Scene</span>
+              <span class="tag">Graphics</span>
+              <span class="tag">Travel</span>
             </div>
             <a href="/fgc" class="entry__link">
-              Explore the FGC page
+              Full Details
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
               </svg>
@@ -266,7 +256,7 @@ const description =
       <footer class="work-page__outro">
         <p class="work-page__outro-text">
           Looking for something specific, or want to talk about a project?
-          <a href="/#contact">Get in touch</a>.
+          <a href="/#contact"><em class="serif-italic">Get in touch</em></a>.
         </p>
       </footer>
     </main>
@@ -338,6 +328,34 @@ const description =
     display: block;
     font-size: 0.85em;
     margin-top: 0.1em;
+  }
+
+  /* ── Instinct flow ─────────────────────────────────────────────── */
+  .instinct-flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.625rem 1rem;
+    list-style: none;
+    padding: 0;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+
+  .instinct-flow__step {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  .instinct-flow__step + .instinct-flow__step::before {
+    content: "\2192";
+    color: var(--color-rust);
+    font-size: 1rem;
   }
 
   .work-page__lede {
@@ -548,6 +566,20 @@ const description =
     margin-bottom: 0.5rem;
   }
 
+  .work-sidenav__cta {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    margin-top: 0.5rem;
+    transition: color 0.2s ease;
+  }
+
+  .work-sidenav__cta:hover {
+    color: var(--color-rust);
+  }
+
   .work-sidenav__link {
     font-family: var(--font-body);
     font-size: 0.8125rem;
@@ -586,6 +618,7 @@ const description =
     color: var(--color-rust);
     border-bottom: 1px solid var(--color-rust);
     transition: color 0.2s ease, border-color 0.2s ease;
+    padding: 0 0.25rem;
   }
 
   .work-page__outro-text a:hover {
@@ -603,6 +636,7 @@ const description =
       padding: calc(var(--nav-height) + 2rem) 1.5rem 3rem;
     }
     .work-page__intro { margin-bottom: 3rem; }
+    .instinct-flow { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
     .work-section { margin-top: 3rem; }
     .work-section__header { padding-top: 2rem; }
     .entry { padding: 2.5rem 0; gap: 1.25rem; }

@@ -22,7 +22,6 @@ export const communityProjects: CommunityProject[] = [
     whatChanged:
       'Offline major attendance went from roughly 80 to 200+ players. Newcomers have a clear path in. Other organizers have started their own events using the same simple workflow. The scene reads as somewhere people want to be.',
     tags: ['Community', 'Event Organization', 'Discord', 'Streaming', 'Mentorship'],
-    liveUrl: 'https://www.start.gg/hub/midweek-melting-1',
     iconFile: 'midweek-logo.png',
   },
 ];

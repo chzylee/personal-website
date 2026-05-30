@@ -25,6 +25,8 @@ export interface ShowcaseItem {
   imageFile?: string;
   /** Alt text for the graphic(s). */
   imageAlt?: string;
+  /** Visible photo credit rendered below the image. */
+  photoCredit?: { label: string; url: string };
   /** Optional outbound link — bracket, results, VOD, etc. */
   link?: { label: string; url: string };
 }
