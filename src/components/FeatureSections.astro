@@ -36,7 +36,7 @@ function slidesFor(item: ShowcaseItem) {
     const flip = i % 2 === 1;
     const isCarousel = slides.length > 1;
     return (
-      <section class="feature" data-flip={flip ? '' : undefined}>
+      <section class="feature reveal" data-flip={flip ? '' : undefined}>
         <div class="feature__media">
           {slides.length === 0 ? (
             <div class="feature__placeholder" aria-hidden="true">

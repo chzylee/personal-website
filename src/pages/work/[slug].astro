@@ -62,7 +62,7 @@ const icon = iconEntry ? iconEntry[1].default : undefined;
         All work
       </a>
 
-      <header class="detail__header">
+      <header class="detail__header reveal">
         <div class="detail__head">
           {icon && (
             <div class="detail__icon">
@@ -131,6 +131,10 @@ const icon = iconEntry ? iconEntry[1].default : undefined;
         <p class="detail__body">{project.whatChanged}</p>
       </section>
     </main>
+
+    <script>
+      import '../../scripts/reveal.ts';
+    </script>
   </body>
 </html>
 

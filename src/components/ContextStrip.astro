@@ -17,7 +17,7 @@ const cards = [
 
 <section class="value-section" aria-label="How I work">
   <div class="value-section__inner">
-    <header class="value-section__header">
+    <header class="value-section__header reveal">
       <span class="eyebrow">How I work</span>
       <h2 class="value-section__heading">
         From <em class="serif-italic">inside</em> the problem, out.
@@ -26,7 +26,7 @@ const cards = [
 
     <div class="value-section__cards">
       {cards.map((card, i) => (
-        <article class="value-card">
+        <article class="value-card reveal" style={`--reveal-delay: ${i * 100}ms`}>
           <span class="value-card__index">{String(i + 1).padStart(2, '0')}</span>
           <h3 class="value-card__label">{card.label}</h3>
           <p class="value-card__body">{card.body}</p>

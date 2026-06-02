@@ -15,6 +15,11 @@ const { title, description } = Astro.props;
 <title>{title}</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
+<!-- Arm reveal animations before paint so content never flashes in then out -->
+<script is:inline>
+  document.documentElement.classList.add('reveal-ready');
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link

@@ -42,7 +42,7 @@ const date = post.data.date.toLocaleDateString('en-US', {
       </a>
 
       <article class="post">
-        <header class="post__header">
+        <header class="post__header reveal">
           <time class="post__date" datetime={post.data.date.toISOString()}>{date}</time>
           <h1 class="post__title">{post.data.title}</h1>
           <p class="post__desc">{post.data.description}</p>
@@ -53,6 +53,10 @@ const date = post.data.date.toLocaleDateString('en-US', {
         </div>
       </article>
     </main>
+
+    <script>
+      import '../../scripts/reveal.ts';
+    </script>
   </body>
 </html>
 

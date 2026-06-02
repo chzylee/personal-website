@@ -19,13 +19,13 @@ const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueO
   <body>
     <PageNav />
     <main class="page">
-      <header class="page__header">
+      <header class="page__header reveal">
         <span class="eyebrow">Writing</span>
         <h1 class="page__title">Notes from the work.</h1>
       </header>
 
       <ul class="post-list">
-        {posts.map((post) => {
+        {posts.map((post, i) => {
           const date = post.data.date.toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
@@ -33,7 +33,7 @@ const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueO
             timeZone: 'UTC',
           });
           return (
-            <li class="post-item">
+            <li class="post-item reveal" style={`--reveal-delay: ${i * 80}ms`}>
               <a href={`/blog/${post.slug}`} class="post-item__link">
                 <div class="post-item__row">
                   <h2 class="post-item__title">{post.data.title}</h2>
@@ -46,6 +46,10 @@ const posts = allPosts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueO
         })}
       </ul>
     </main>
+
+    <script>
+      import '../../scripts/reveal.ts';
+    </script>
   </body>
 </html>
 

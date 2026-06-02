@@ -76,7 +76,7 @@ const description =
     </aside>
 
     <main class="work-page">
-      <header class="work-page__intro">
+      <header class="work-page__intro reveal">
         <span class="eyebrow">Selected work</span>
         <h1 class="work-page__title">
           Two contexts.
@@ -94,7 +94,7 @@ const description =
 
       <!-- ── Part one — Engineering ───────────────────────────────── -->
       <section class="work-section" aria-labelledby="engineering-heading">
-        <header class="work-section__header">
+        <header class="work-section__header reveal">
           <span class="eyebrow eyebrow--rust">Part one</span>
           <h2 class="work-section__title" id="engineering-heading">Engineering work</h2>
           <p class="work-section__lede">
@@ -102,11 +102,11 @@ const description =
           </p>
         </header>
 
-        {devProjects.map((p) => {
+        {devProjects.map((p, i) => {
           const icon = resolveIcon(p.iconFile);
           const projectId = slugify(p.title);
           return (
-            <article class="entry" id={projectId}>
+            <article class="entry reveal" style={`--reveal-delay: ${i * 70}ms`} id={projectId}>
               <div class="entry__head">
                 {icon && (
                   <div class="entry__icon">
@@ -169,7 +169,7 @@ const description =
 
       <!-- ── Part two — Community ─────────────────────────────────── -->
       <section class="work-section" aria-labelledby="community-heading">
-        <header class="work-section__header">
+        <header class="work-section__header reveal">
           <span class="eyebrow eyebrow--rust">Part two</span>
           <h2 class="work-section__title" id="community-heading">Community work</h2>
           <p class="work-section__lede">
@@ -178,7 +178,7 @@ const description =
         </header>
 
         {community && (
-          <article class="entry" id={community.slug}>
+          <article class="entry reveal" id={community.slug}>
             <div class="entry__head">
               {(() => {
                 const icon = resolveIcon(community.iconFile);
@@ -221,7 +221,7 @@ const description =
           </article>
         )}
 
-        <article class="entry entry--pointer" id="fgc-in-detail">
+        <article class="entry entry--pointer reveal" style="--reveal-delay: 70ms" id="fgc-in-detail">
           <div class="entry__head">
             <h3 class="entry__title">
               <a href="/fgc">FGC, in detail</a>
@@ -262,6 +262,8 @@ const description =
     </main>
 
     <script>
+      import '../../scripts/reveal.ts';
+
       const links = document.querySelectorAll<HTMLAnchorElement>('[data-sidenav-link]');
       const idToLink = new Map<string, HTMLAnchorElement>();
       const targets: HTMLElement[] = [];

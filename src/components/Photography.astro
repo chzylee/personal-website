@@ -17,7 +17,7 @@ const allPhotos     = [...galleryPhotos, ...slidePhotos];
 
 <section id="photography" class="photography">
   <div class="photography__inner">
-    <header class="photography__header">
+    <header class="photography__header reveal">
       <span class="eyebrow">Photography</span>
       <h2 class="photography__heading">A practice of paying attention.</h2>
     </header>
@@ -25,7 +25,8 @@ const allPhotos     = [...galleryPhotos, ...slidePhotos];
     <div class="gallery" role="list">
       {allPhotos.map((src, i) => (
         <button
-          class="gallery__item"
+          class="gallery__item reveal"
+          style={`--reveal-delay: ${(i % 3) * 80}ms`}
           data-index={i}
           aria-label={`Open photo ${i + 1} of ${allPhotos.length}`}
           role="listitem"
