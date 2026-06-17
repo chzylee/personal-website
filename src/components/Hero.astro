@@ -394,7 +394,14 @@ const reelLabel =
   @media (min-width: 1024px) {
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 26rem;
+      /* Content-sized tracks + justify-content:center keeps the column cluster
+         together and centered on ultra-wide viewports, instead of a greedy 1fr
+         flinging the content and CRT to opposite walls with a dead band between.
+         The hero stays full-bleed (so the lattice/bloom still cover the viewport
+         and track the cursor everywhere); only the cluster is centered. The left
+         track shrinks below 40rem on narrow desktops, so no overflow. */
+      grid-template-columns: minmax(0, 40rem) 26rem;
+      justify-content: center;
       align-items: center;
       gap: 3.5rem;
       padding: calc(var(--nav-height) + 4rem) 4rem 5rem;
@@ -409,7 +416,7 @@ const reelLabel =
   }
 
   @media (min-width: 1280px) {
-    .hero { grid-template-columns: minmax(0, 1fr) 28rem; padding-inline: 5rem; }
+    .hero { grid-template-columns: minmax(0, 40rem) 28rem; padding-inline: 5rem; }
   }
 
   /* ── Mobile ── */
@@ -681,6 +688,19 @@ const reelLabel =
       });
 
       measure();
+
+      // The hero grid centers its column cluster, so the CRT (and the hint
+      // anchored to it) settle into final position only after late layout shifts
+      // (web fonts, CRT content). Re-measure then, or the hint's captured center
+      // goes stale and it reveals when the cursor-light is nowhere near it.
+      const remeasure = () => {
+        measure();
+        if (reduceMq.matches || !onscreen) render(0, false);
+      };
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(remeasure);
+      }
+      window.addEventListener('load', remeasure);
 
       if (reduceMq.matches) {
         render(0, false); // single static frame, no loop
