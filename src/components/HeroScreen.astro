@@ -1,0 +1,551 @@
+---
+// A retro CRT / arcade "screen" that runs a slideshow of career achievements.
+// Navigable by the on-screen arrows, the keyboard (← →), and a game controller
+// (Gamepad API) as an easter egg, including fight-stick POV-hat axes (e.g. a
+// HORI stick reports direction on axis 9, not the d-pad buttons). Decorative
+// chrome is aria-hidden; slide content is exposed to AT via an aria-live region.
+// Honors prefers-reduced-motion (no auto-advance/flicker; manual nav still works).
+import { achievements } from '../data/achievements';
+
+const total = achievements.length;
+const totalLabel = String(total).padStart(2, '0');
+---
+
+<section
+  class="crt"
+  role="group"
+  aria-roledescription="carousel"
+  aria-label="Career achievements"
+>
+  <div class="crt__bezel">
+    <div class="crt__screen">
+      <div class="crt__topbar" aria-hidden="true">
+        <span class="crt__frame">
+          <svg class="crt__trophy" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
+            <path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+          </svg>
+          ACHIEVEMENTS
+        </span>
+        <span class="crt__stagenum"><span data-stage-current>01</span> / {totalLabel}</span>
+      </div>
+
+      <div class="crt__stage">
+        {achievements.map((a, i) => (
+          <article
+            class={`crt__slide${i === 0 ? ' is-active' : ''}`}
+            data-slide={i}
+            data-label={`${a.figure} ${a.title}. ${a.context}`}
+            aria-hidden={i !== 0 ? 'true' : 'false'}
+          >
+            <span class="crt__cat">{a.tag}</span>
+            <span class="crt__figure">{a.figure}</span>
+            <span class="crt__title">{a.title}</span>
+            <span class="crt__context">{a.context}</span>
+          </article>
+        ))}
+      </div>
+
+      <div class="crt__hud" aria-hidden="true">
+        <span class="crt__p1">P1</span>
+        <span class="crt__player">NOAH</span>
+      </div>
+
+      <div class="crt__scanlines" aria-hidden="true"></div>
+      <div class="crt__vignette" aria-hidden="true"></div>
+      <div class="crt__glass" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <div class="crt__controls">
+    <button class="crt__btn" type="button" data-prev aria-label="Previous achievement">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+    </button>
+
+    <div class="crt__dots" role="tablist" aria-label="Achievements">
+      {achievements.map((_, i) => (
+        <button
+          class={`crt__dot${i === 0 ? ' is-active' : ''}`}
+          type="button"
+          data-dot={i}
+          role="tab"
+          aria-selected={i === 0 ? 'true' : 'false'}
+          aria-label={`Achievement ${i + 1} of ${total}`}
+        ></button>
+      ))}
+    </div>
+
+    <button class="crt__btn" type="button" data-next aria-label="Next achievement">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+    </button>
+
+    <span class="crt__hint" aria-hidden="true">
+      <span class="crt__keys">&larr; &rarr;</span>
+      <svg class="crt__pad" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/>
+        <line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/>
+        <rect x="2" y="6" width="20" height="12" rx="6"/>
+      </svg>
+    </span>
+  </div>
+
+  <p class="crt__live" aria-live="polite" aria-atomic="true"></p>
+</section>
+
+<style>
+  .crt {
+    /* Strong ease-out for the small UI moves (Emil: built-in eases are weak). */
+    --crt-ease: cubic-bezier(0.23, 1, 0.32, 1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* ── Cabinet bezel ── */
+  .crt__bezel {
+    padding: 0.85rem;
+    border-radius: 16px;
+    background:
+      linear-gradient(
+        160deg,
+        color-mix(in srgb, var(--color-paper-soft) 88%, var(--color-ink) 5%),
+        var(--color-paper)
+      );
+    border: 1px solid var(--color-rule);
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--color-ink) 8%, transparent),
+      inset 0 0 0 1px color-mix(in srgb, var(--color-paper) 60%, transparent),
+      0 24px 60px -28px color-mix(in srgb, var(--color-rust) 40%, transparent);
+  }
+
+  /* ── Screen ── */
+  .crt__screen {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 9px;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 0.4rem;
+    padding: 0.85rem 1rem;
+    background:
+      radial-gradient(
+        130% 120% at 50% 0%,
+        color-mix(in srgb, var(--color-rust) 7%, var(--color-paper)),
+        var(--color-paper) 70%
+      );
+    box-shadow:
+      inset 0 0 50px color-mix(in srgb, var(--color-paper) 92%, transparent),
+      inset 0 0 0 1px color-mix(in srgb, var(--color-rust) 12%, transparent);
+    animation: crt-flicker 6s steps(60) infinite;
+  }
+
+  @keyframes crt-flicker {
+    0%, 100% { opacity: 1; }
+    47%      { opacity: 0.99; }
+    48%      { opacity: 0.96; }
+    49%      { opacity: 1; }
+    72%      { opacity: 0.985; }
+  }
+
+  /* Scanlines + vignette + screen-glass highlight, all non-interactive overlays */
+  .crt__scanlines,
+  .crt__vignette,
+  .crt__glass {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    border-radius: 9px;
+  }
+
+  .crt__scanlines {
+    background: repeating-linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-paper) 70%, transparent) 0 1px,
+      transparent 1px 3px
+    );
+    opacity: 0.5;
+    mix-blend-mode: multiply;
+  }
+
+  .crt__vignette {
+    background: radial-gradient(
+      120% 100% at 50% 45%,
+      transparent 55%,
+      color-mix(in srgb, var(--color-paper) 85%, transparent) 100%
+    );
+  }
+
+  .crt__glass {
+    background: linear-gradient(
+      125deg,
+      color-mix(in srgb, var(--color-ink) 6%, transparent) 0%,
+      transparent 28%
+    );
+  }
+
+  /* ── Top bar (achievement framing) ── */
+  .crt__topbar {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+  }
+
+  .crt__frame {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-rust);
+  }
+
+  .crt__trophy { color: var(--color-rust); }
+
+  .crt__stagenum { color: var(--color-ink-muted); }
+  .crt__stagenum [data-stage-current] { color: var(--color-ink); }
+
+  /* ── Slides ── */
+  .crt__stage {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+  }
+
+  /* Crossfade with a touch of blur (Emil: blur bridges a crossfade so the eye
+     reads one channel-change, not two overlapping states). */
+  .crt__slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.3rem;
+    opacity: 0;
+    filter: blur(4px);
+    transition: opacity 0.4s ease, filter 0.4s ease;
+  }
+
+  .crt__slide.is-active {
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  .crt__cat {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-rust);
+  }
+
+  .crt__cat::before {
+    content: "";
+    width: 14px;
+    height: 1px;
+    background: var(--color-rust);
+  }
+
+  .crt__figure {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 3.4vw, 3.5rem);
+    line-height: 0.9;
+    color: var(--color-ink);
+    text-shadow: 0 0 20px color-mix(in srgb, var(--color-rust) 30%, transparent);
+  }
+
+  .crt__title {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    line-height: 1.02;
+    letter-spacing: 0.01em;
+    color: var(--color-ink);
+  }
+
+  .crt__context {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+    color: var(--color-ink-muted);
+  }
+
+  /* ── Bottom HUD: P1 nameplate (lights when a controller connects) ── */
+  .crt__hud {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+  }
+
+  .crt__p1 {
+    color: var(--color-ink-muted);
+    border: 1px solid var(--color-rule);
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .crt__player { color: var(--color-ink-muted); }
+
+  .crt.is-pad .crt__p1 {
+    background: var(--color-rust);
+    border-color: var(--color-rust);
+    color: var(--color-paper);
+  }
+  .crt.is-pad .crt__player { color: var(--color-ink); }
+
+  /* ── Controls ── */
+  .crt__controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .crt__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--color-rule);
+    border-radius: 8px;
+    color: var(--color-ink);
+    background: var(--color-paper-soft);
+    transition: color 0.2s ease, border-color 0.2s ease, transform 0.12s var(--crt-ease);
+  }
+
+  .crt__btn:active { transform: scale(0.94); }
+  .crt__btn:focus-visible { outline: 2px solid var(--color-rust); outline-offset: 2px; }
+
+  .crt__dots {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-right: auto;
+  }
+
+  .crt__dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1px solid var(--color-ink-muted);
+    background: transparent;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.25s var(--crt-ease);
+  }
+
+  .crt__dot.is-active {
+    background: var(--color-rust);
+    border-color: var(--color-rust);
+    transform: scale(1.15);
+  }
+  .crt__dot:focus-visible { outline: 2px solid var(--color-rust); outline-offset: 2px; }
+
+  .crt__hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    color: var(--color-ink-muted);
+  }
+
+  .crt__pad {
+    color: var(--color-ink-muted);
+    transition: color 0.2s ease;
+  }
+
+  .crt.is-pad .crt__pad { color: var(--color-rust); }
+
+  /* Hover states only where a real hover pointer exists (Emil: touch fires
+     phantom hovers on tap). */
+  @media (hover: hover) and (pointer: fine) {
+    .crt__btn:hover { color: var(--color-rust); border-color: var(--color-rust); }
+    .crt__dot:hover { border-color: var(--color-rust); }
+  }
+
+  /* Visually-hidden live region for screen readers */
+  .crt__live {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
+
+<script>
+  // The CRT can render twice on the page: in the hero (desktop) and as a section
+  // below the hero (mobile), with CSS showing exactly one at a time. Wire each
+  // .crt instance independently, and let global keyboard/gamepad drive whichever
+  // one is currently in view (the hidden one is display:none, so never intersects).
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  type Crt = {
+    prev: () => void;
+    next: () => void;
+    inView: () => boolean;
+    setPad: (on: boolean) => void;
+  };
+
+  const initCrt = (root: HTMLElement): Crt | null => {
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('.crt__slide'));
+    const dots = Array.from(root.querySelectorAll<HTMLElement>('.crt__dot'));
+    const stageNum = root.querySelector<HTMLElement>('[data-stage-current]');
+    const live = root.querySelector<HTMLElement>('.crt__live');
+    const prevBtn = root.querySelector<HTMLButtonElement>('[data-prev]');
+    const nextBtn = root.querySelector<HTMLButtonElement>('[data-next]');
+    const total = slides.length;
+    if (total === 0) return null;
+
+    let idx = 0;
+    let timer = 0;
+    let inView = true;
+
+    const pad2 = (n: number) => String(n + 1).padStart(2, '0');
+
+    const go = (n: number) => {
+      const target = ((n % total) + total) % total;
+      if (target === idx) return;
+      slides[idx].classList.remove('is-active');
+      slides[idx].setAttribute('aria-hidden', 'true');
+      dots[idx].classList.remove('is-active');
+      dots[idx].setAttribute('aria-selected', 'false');
+      idx = target;
+      slides[idx].classList.add('is-active');
+      slides[idx].setAttribute('aria-hidden', 'false');
+      dots[idx].classList.add('is-active');
+      dots[idx].setAttribute('aria-selected', 'true');
+      if (stageNum) stageNum.textContent = pad2(idx);
+      if (live) live.textContent = `Achievement ${idx + 1} of ${total}: ${slides[idx].dataset.label ?? ''}`;
+      restart();
+    };
+
+    const next = () => go(idx + 1);
+    const prev = () => go(idx - 1);
+
+    const restart = () => {
+      if (reduce.matches) return;
+      window.clearInterval(timer);
+      if (inView) timer = window.setInterval(next, 5000);
+    };
+    const halt = () => window.clearInterval(timer);
+
+    prevBtn?.addEventListener('click', prev);
+    nextBtn?.addEventListener('click', next);
+    dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
+
+    root.addEventListener('pointerenter', halt);
+    root.addEventListener('pointerleave', restart);
+    root.addEventListener('focusin', halt);
+    root.addEventListener('focusout', restart);
+
+    const io = new IntersectionObserver(
+      ([e]) => {
+        inView = e.isIntersecting;
+        if (inView) restart();
+        else halt();
+      },
+      { threshold: 0.25 }
+    );
+    io.observe(root);
+
+    restart();
+
+    return {
+      prev,
+      next,
+      inView: () => inView,
+      setPad: (on: boolean) => root.classList.toggle('is-pad', on),
+    };
+  };
+
+  const instances = Array.from(document.querySelectorAll<HTMLElement>('.crt'))
+    .map(initCrt)
+    .filter((c): c is Crt => c !== null);
+
+  if (instances.length) {
+    // Drive whichever instance is currently visible.
+    const active = () => instances.find((c) => c.inView()) ?? instances[0];
+
+    // Keyboard: ← / → (these keys don't scroll the page).
+    window.addEventListener('keydown', (e) => {
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      if (e.key === 'ArrowLeft') active().prev();
+      else if (e.key === 'ArrowRight') active().next();
+    });
+
+    // ── Gamepad easter egg ──
+    // Reads three direction sources: standard d-pad buttons (14/15), the left
+    // analog stick (axis 0), and POV-hat axes. Fight sticks (e.g. HORI) encode
+    // the stick as a hat on a high axis (axis 9) whose neutral sits OUTSIDE
+    // [-1, 1] (~1.286), with 8 directions at -1, -0.71, -0.43, -0.14, 0.14,
+    // 0.43, 0.71, 1.0. We auto-detect a hat by catching that out-of-range
+    // neutral, then decode only those axes (so analog triggers, which rest at
+    // -1, can never be mistaken for a direction).
+    let padRAF = 0;
+    const held = { left: false, right: false };
+    const hatAxes = new Set<number>();
+    const setPad = (on: boolean) => instances.forEach((c) => c.setPad(on));
+
+    const pollPad = () => {
+      const pads = navigator.getGamepads ? navigator.getGamepads() : [];
+      let left = false, right = false;
+      for (const gp of pads) {
+        if (!gp) continue;
+        if (gp.buttons[14]?.pressed) left = true;
+        if (gp.buttons[15]?.pressed) right = true;
+        const ax0 = gp.axes[0] ?? 0;
+        if (ax0 < -0.55) left = true;
+        if (ax0 > 0.55) right = true;
+        for (let a = 0; a < gp.axes.length; a++) {
+          const v = gp.axes[a];
+          if (v == null || !Number.isFinite(v)) continue;
+          if (v > 1.1) { hatAxes.add(a); continue; } // out-of-range neutral => it's a hat
+          if (!hatAxes.has(a)) continue;             // only decode confirmed hats
+          if (v > -0.95 && v < -0.05) right = true;   // E / NE / SE
+          else if (v > 0.30 && v < 1.05) left = true; // W / NW / SW
+        }
+      }
+      if (left && !held.left) active().prev();
+      if (right && !held.right) active().next();
+      held.left = left;
+      held.right = right;
+      padRAF = requestAnimationFrame(pollPad);
+    };
+
+    window.addEventListener('gamepadconnected', () => {
+      setPad(true);
+      if (!padRAF) padRAF = requestAnimationFrame(pollPad);
+    });
+    window.addEventListener('gamepaddisconnected', () => {
+      const pads = navigator.getGamepads ? navigator.getGamepads() : [];
+      if (!Array.from(pads).some(Boolean)) {
+        setPad(false);
+        if (padRAF) { cancelAnimationFrame(padRAF); padRAF = 0; }
+      }
+    });
+  }
+</script>

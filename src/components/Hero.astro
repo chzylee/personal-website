@@ -1,45 +1,76 @@
 ---
+// The hero leads with a rotating "reel" of practices Noah brings to a team.
+// Each line: a serif-italic purple verb (the brand collision) + Bebas display rest.
+// Items stack in one grid cell so the headline height never jumps between swaps.
+//
+// On desktop, the right column holds a retro CRT "screen" (HeroScreen) that runs
+// a slideshow of career highlights, navigable by buttons / arrow keys / a game
+// controller. Behind everything sits a toned-down interactive "lattice": a faint
+// canvas dot grid that gathers a little light toward the cursor and slowly
+// auto-roams, plus a soft purple bloom, purely as ambient texture. Both honor
+// prefers-reduced-motion. See the "Interactive lattice" + "Hero CRT screen"
+// overrides in CLAUDE.md.
 import { Image } from 'astro:assets';
+import photo from '../assets/photo.jpg';
+import HeroScreen from './HeroScreen.astro';
 
-const photoModules = import.meta.glob<{ default: ImageMetadata }>(
-  '../assets/photos/*.{jpg,jpeg,png,webp}',
-  { eager: true }
-);
-const photos = Object.values(photoModules).map((m) => m.default).slice(0, 5);
-const totalSeconds = photos.length * 8;
+const reel = [
+  { verb: 'Securing', rest: ' the path to production.' },
+  { verb: 'Getting', rest: ' separate teams to ship together.' },
+  { verb: 'Training', rest: ' engineers for ownership.' },
+  { verb: 'Engineering', rest: ' trustworthy AI workflows.' },
+  { verb: 'Designing', rest: ' directly with customers.' },
+];
+
+const reelLabel =
+  'What I bring to a team: securing the path to production; getting separate teams to ship together; ' +
+  'training engineers to own their work; engineering trustworthy AI workflows; designing directly with customers.';
 ---
 
 <section class="hero">
-  <div class="hero__bg" aria-hidden="true">
-    {photos.map((photo, i) => (
-      <Image
-        src={photo}
-        alt=""
-        width={1920}
-        height={1280}
-        class="hero__photo"
-        loading={i === 0 ? 'eager' : 'lazy'}
-        style={`animation-duration:${totalSeconds}s;animation-delay:${i * 8}s`}
-      />
-    ))}
-    <div class="hero__scrim"></div>
-  </div>
+  <div class="hero__bloom" aria-hidden="true"></div>
+  <canvas class="hero__lattice" aria-hidden="true"></canvas>
 
   <div class="hero__content">
-    <span class="eyebrow hero__eyebrow reveal" style="--reveal-delay: 80ms">Engineer &amp; community architect</span>
+    <div class="hero__identity reveal" style="--reveal-delay: 80ms">
+      <Image
+        src={photo}
+        alt="Noah Lee"
+        width={128}
+        height={128}
+        loading="eager"
+        class="hero__avatar"
+      />
+      <p class="hero__name">Noah Lee</p>
+      <ul class="hero__roles">
+        <li>Full-Stack Engineer</li>
+        <li>Forward-Deployed</li>
+      </ul>
+    </div>
 
-    <h1 class="hero__headline reveal" style="--reveal-delay: 160ms">
-      <span class="hero__headline-display">I build systems</span>
-      <span class="hero__headline-display">for <em class="hero__headline-serif">people.</em></span>
+    <h1 class="hero__headline reveal" style="--reveal-delay: 160ms" aria-label={reelLabel}>
+      <span class="hero__reel">
+        {reel.map((item, i) => (
+          <span class={`hero__reel-item${i === 0 ? ' is-active' : ''}`} aria-hidden="true">
+            <em class="hero__reel-verb">{item.verb}</em><br />{item.rest}
+          </span>
+        ))}
+      </span>
     </h1>
 
     <p class="hero__sub reveal" style="--reveal-delay: 280ms">
-      Full-stack engineer with <strong>7 years on AWS</strong>, small teams to large, shipping
-      full-stack apps end-to-end. I also design the events and build the tools behind
-      the Melty Blood scene that's grown from ~60 to 200+ players at majors.
+      Full-stack from frontend to infrastructure, with AI in the loop.<br />
+      <strong>I build products and platforms with a disciplined AI workflow.</strong>
     </p>
 
-    <div class="hero__cta-row reveal" style="--reveal-delay: 400ms">
+    <div class="hero__status reveal" style="--reveal-delay: 360ms">
+      <span class="hero__status-dot" aria-hidden="true"></span>
+      <span class="hero__status-text">
+        <strong>Open to work</strong> · full-stack &amp; solutions roles · Chicago, remote-open
+      </span>
+    </div>
+
+    <div class="hero__cta-row reveal" style="--reveal-delay: 440ms">
       <a href="#contact" class="hero__cta hero__cta--primary">Get in touch</a>
       <a href="#work" class="hero__cta hero__cta--secondary">
         See the work
@@ -49,116 +80,169 @@ const totalSeconds = photos.length * 8;
       </a>
     </div>
   </div>
+
+  <div class="hero__screen reveal" style="--reveal-delay: 520ms">
+    <p class="hero__controller-hint" aria-hidden="true">Plug in your controller</p>
+    <HeroScreen />
+  </div>
 </section>
 
 <style>
   .hero {
     position: relative;
+    overflow: hidden;
+    isolation: isolate;
     width: 100%;
     min-height: 100dvh;
     background: var(--color-paper);
-    overflow: hidden;
     display: flex;
-    align-items: center;
-    padding: calc(var(--nav-height) + 3rem) 2.5rem 5rem 4rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2.5rem;
+    padding: calc(var(--nav-height) + 3rem) 1.5rem 3rem;
   }
 
-  /* ── Full-bleed photo background ── */
-  .hero__bg {
+  /* ── Interactive lattice backdrop (toned-down ambient texture) ── */
+  .hero__lattice {
     position: absolute;
     inset: 0;
     z-index: 0;
-    overflow: hidden;
-  }
-
-  @keyframes hero-slide {
-    0%     { opacity: 0; transform: scale(1.04); }
-    3.75%  { opacity: 1; }
-    16.25% { opacity: 1; transform: scale(1); }
-    20%    { opacity: 0; transform: scale(1); }
-    100%   { opacity: 0; }
-  }
-
-  .hero__photo {
-    position: absolute;
-    inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: center;
-    filter: contrast(0.92) saturate(0.85) brightness(0.85);
-    opacity: 0;
-    animation: hero-slide linear infinite;
-    animation-fill-mode: both;
-  }
-
-  .hero__scrim {
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(
-        to right,
-        rgba(14, 13, 11, 0.85) 0%,
-        rgba(14, 13, 11, 0.55) 50%,
-        rgba(14, 13, 11, 0.35) 100%
-      ),
-      linear-gradient(
-        to bottom,
-        rgba(14, 13, 11, 0.4) 0%,
-        rgba(14, 13, 11, 0.15) 30%,
-        rgba(14, 13, 11, 0.55) 100%
-      );
     pointer-events: none;
   }
 
-  /* ── Content overlay ── */
+  /* Soft purple light pool that tracks the eased focus point. color-mix keeps
+     the accent on the --color-rust token rather than a hardcoded value. */
+  .hero__bloom {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 28rem;
+    height: 28rem;
+    margin: -14rem 0 0 -14rem;
+    z-index: 0;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--color-rust) 10%, transparent),
+      transparent 68%
+    );
+    filter: blur(30px);
+    pointer-events: none;
+    will-change: transform;
+  }
+
   .hero__content {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
-    max-width: 42rem;
+    gap: 1.5rem;
+    max-width: 48rem;
     min-width: 0;
   }
 
-  .hero__eyebrow {
-    color: var(--color-rust);
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-shadow:
-      0 2px 16px rgba(0, 0, 0, 0.9),
-      0 0 40px rgba(0, 0, 0, 0.7);
+  /* ── Identity block: face + big name + role labels, so "who is this" is instant.
+     The name is short, so it's set large for impact, but capped under the reel's
+     scale so the value-prop headline stays the biggest moment. Role labels stack
+     vertically to the right of the name, divided by a hairline (an editorial
+     nameplate, not floating corner text). ── */
+  .hero__identity {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    min-width: 0;
   }
 
-  /* ── Headline (cinematic shadow) ── */
+  .hero__avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+    border: 2px solid var(--color-rule);
+    flex-shrink: 0;
+  }
+
+  .hero__name {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 4vw, 3.25rem);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: var(--color-ink);
+  }
+
+  .hero__roles {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding-left: 1.25rem;
+    border-left: 1px solid var(--color-rule);
+  }
+
+  .hero__roles li {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.5;
+    color: var(--color-ink-muted);
+  }
+
+  /* The first role is the headline credential; tint it the accent. */
+  .hero__roles li:first-child {
+    color: var(--color-rust);
+  }
+
+  /* ── Rotating headline reel ── */
   .hero__headline {
     font-family: var(--font-display);
-    font-size: var(--font-size-headline);
-    line-height: 0.95;
-    letter-spacing: -0.005em;
+    font-size: clamp(2.75rem, 6vw, 5.25rem);
+    line-height: 1.0;
+    letter-spacing: 0;
     color: var(--color-ink);
     text-transform: none;
-    text-shadow:
-      0 4px 32px rgba(0, 0, 0, 0.9),
-      0 2px 12px rgba(0, 0, 0, 0.75),
-      0 0 80px rgba(0, 0, 0, 0.5);
+    text-wrap: balance;
   }
 
-  .hero__headline-display {
-    display: block;
+  /* All items share one grid cell, so the box is as tall as the tallest line
+     and swapping never reflows the page. */
+  .hero__reel {
+    display: grid;
   }
 
-  .hero__headline-serif {
+  .hero__reel-item {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transform: translateY(0.4em);
+    transition:
+      opacity 0.5s ease,
+      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+
+  .hero__reel-item.is-active {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Item exits upward — opposite of the enter-from-below entrance */
+  .hero__reel-item.is-exiting {
+    opacity: 0;
+    transform: translateY(-0.35em);
+  }
+
+  .hero__reel-verb {
     font-family: var(--font-serif);
     font-style: italic;
-    color: var(--color-rust);
-    letter-spacing: 0;
     font-weight: 400;
-    margin-left: 0.25em;
-    text-shadow:
-      0 4px 32px rgba(0, 0, 0, 0.85),
-      0 2px 12px rgba(0, 0, 0, 0.7);
+    color: var(--color-rust);
+    /* serif descenders (Getting / Engineering / Designing) need a hair of room */
+    padding-bottom: 0.04em;
   }
 
   /* ── Subtext ── */
@@ -166,14 +250,65 @@ const totalSeconds = photos.length * 8;
     font-family: var(--font-body);
     font-size: var(--font-size-sub);
     line-height: 1.55;
-    color: var(--color-ink);
+    color: var(--color-ink-muted);
     max-width: 36rem;
-    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.85);
   }
 
   .hero__sub strong {
     font-weight: 600;
     color: var(--color-ink);
+  }
+
+  /* ── Open-to-work status pill ── */
+  .hero__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    align-self: flex-start;
+    max-width: 100%;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
+    color: var(--color-ink);
+    background: color-mix(in srgb, var(--color-paper-soft) 78%, transparent);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid var(--color-rule);
+    border-radius: 999px;
+    padding: 0.5rem 0.9375rem;
+  }
+
+  .hero__status-text {
+    min-width: 0;
+  }
+
+  .hero__status strong {
+    color: var(--color-rust);
+    font-weight: 600;
+  }
+
+  .hero__status-dot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-rust);
+    flex-shrink: 0;
+  }
+
+  .hero__status-dot::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--color-rust);
+    animation: status-pulse 2.4s ease-out infinite;
+  }
+
+  @keyframes status-pulse {
+    0%        { transform: scale(1); opacity: 0.5; }
+    70%, 100% { transform: scale(3); opacity: 0; }
   }
 
   /* ── CTAs ── */
@@ -182,6 +317,7 @@ const totalSeconds = photos.length * 8;
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
+    padding-top: 0.25rem;
   }
 
   .hero__cta {
@@ -194,10 +330,15 @@ const totalSeconds = photos.length * 8;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     padding: 0.875rem 1.5rem;
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
     min-height: 44px;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .hero__cta:active { transform: scale(0.97); }
+
+  .hero__cta:focus-visible {
+    outline: 2px solid var(--color-rust);
+    outline-offset: 3px;
   }
 
   .hero__cta--primary {
@@ -214,8 +355,8 @@ const totalSeconds = photos.length * 8;
 
   .hero__cta--secondary {
     color: var(--color-ink);
-    border: 1px solid var(--color-ink);
-    background: rgba(14, 13, 11, 0.35);
+    border: 1px solid var(--color-rule);
+    background: transparent;
   }
 
   .hero__cta--secondary:hover {
@@ -223,25 +364,68 @@ const totalSeconds = photos.length * 8;
     border-color: var(--color-rust);
   }
 
-  /* ── Mobile (≤ 768px) ── */
+  /* ── CRT screen slot (desktop only; mobile keeps the hero lean) ── */
+  .hero__screen {
+    position: relative;
+    z-index: 2;
+    display: none;
+    width: 100%;
+  }
+
+  /* Hidden "plug in your controller" hint above the CRT. Invisible at rest; the
+     lattice script raises its opacity as the cursor-light passes near it, so you
+     only find it by dragging across the grid. */
+  .hero__controller-hint {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-rust);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* ── Desktop: split into content (left) + screen (right) ── */
+  @media (min-width: 1024px) {
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 26rem;
+      align-items: center;
+      gap: 3.5rem;
+      padding: calc(var(--nav-height) + 4rem) 4rem 5rem;
+    }
+
+    .hero__content {
+      max-width: 40rem;
+      gap: 1.75rem;
+    }
+
+    .hero__screen { display: block; }
+  }
+
+  @media (min-width: 1280px) {
+    .hero { grid-template-columns: minmax(0, 1fr) 28rem; padding-inline: 5rem; }
+  }
+
+  /* ── Mobile ── */
   @media (max-width: 768px) {
     .hero {
-      min-height: 90dvh;
-      padding: calc(var(--nav-height) + 2rem) 1.5rem 3rem;
-      align-items: flex-end;
+      min-height: 92dvh;
+      padding: calc(var(--nav-height) + 3rem) 1.5rem 3rem;
     }
 
-    .hero__scrim {
-      background:
-        linear-gradient(
-          to bottom,
-          rgba(14, 13, 11, 0.55) 0%,
-          rgba(14, 13, 11, 0.4) 30%,
-          rgba(14, 13, 11, 0.85) 100%
-        );
-    }
+    .hero__content { gap: 1.25rem; }
 
-    .hero__content { gap: 1.5rem; }
+    .hero__roles {
+      flex-basis: 100%;
+      padding-left: 0;
+      border-left: none;
+    }
 
     .hero__sub {
       font-size: 1rem;
@@ -250,16 +434,272 @@ const totalSeconds = photos.length * 8;
   }
 
   @media (max-width: 480px) {
-    .hero { padding: calc(var(--nav-height) + 1.5rem) 1.25rem 2.5rem; }
+    .hero { padding: calc(var(--nav-height) + 2.5rem) 1.25rem 2.5rem; }
+    .hero__avatar { width: 56px; height: 56px; }
+    .hero__name { font-size: 2.25rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero__photo {
-      animation: none;
-      opacity: 0;
-    }
-    .hero__photo:first-of-type {
-      opacity: 1;
+    .hero__reel-item {
+      transition: none;
     }
   }
 </style>
+
+<script>
+  // ── Rotating headline reel ──
+  // Progressive enhancement: item 0 is already `.is-active` in the HTML, so
+  // without JS (or under reduced motion) the hero shows a complete first line.
+  // First swap fires at ~1.2s (inside the 5-second scan window) so the signature
+  // motion proves itself before a recruiter scrolls; then a steady cadence.
+  const reel = document.querySelector<HTMLElement>('.hero__reel');
+  const reelReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (reel && !reelReduce.matches) {
+    const items = Array.from(reel.querySelectorAll<HTMLElement>('.hero__reel-item'));
+    if (items.length > 1) {
+      let i = 0;
+      const advance = () => {
+        const current = items[i];
+        i = (i + 1) % items.length;
+        const next = items[i];
+        current.classList.add('is-exiting');
+        current.classList.remove('is-active');
+        next.classList.add('is-active');
+        setTimeout(() => current.classList.remove('is-exiting'), 750);
+      };
+      window.setTimeout(() => {
+        advance();
+        window.setInterval(advance, 3200);
+      }, 1200);
+    }
+  }
+
+  // ── Interactive lattice backdrop (toned-down ambient texture) ──
+  const hero = document.querySelector<HTMLElement>('.hero');
+  const canvas = document.querySelector<HTMLCanvasElement>('.hero__lattice');
+  const bloom = document.querySelector<HTMLElement>('.hero__bloom');
+  const hint = document.querySelector<HTMLElement>('.hero__controller-hint');
+  const reduceMq = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  // Read brand colors from the CSS tokens so the canvas stays single-sourced.
+  const readRGB = (name: string, fallback: [number, number, number]): [number, number, number] => {
+    const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const m = /^#?([0-9a-fA-F]{6})$/.exec(v);
+    if (!m) return fallback;
+    const n = parseInt(m[1], 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  };
+
+  if (hero && canvas) {
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      const PURPLE = readRGB('--color-rust', [155, 109, 255]);
+      const BASE = readRGB('--color-ink-muted', [138, 132, 128]);
+      const BASE_RGB = `${BASE[0]},${BASE[1]},${BASE[2]}`;
+      const PURPLE_RGB = `${PURPLE[0]},${PURPLE[1]},${PURPLE[2]}`;
+
+      let dpr = 1, W = 0, H = 0, gap = 46, cols = 0;
+      let xs = new Float32Array(0);
+      let ys = new Float32Array(0);
+      let ease = new Float32Array(0);
+      let dx = new Float32Array(0);
+      let dy = new Float32Array(0);
+
+      const tgt = { x: 0, y: 0 };
+      const eye = { x: 0, y: 0 };
+      let pointerActive = false;
+      let lastMove = -1e9;
+      let raf = 0;
+      let onscreen = true;
+      let inited = false;
+      let hintCx = -1, hintCy = -1; // hint center in CSS px, relative to the hero
+
+      const measure = () => {
+        const r = hero.getBoundingClientRect();
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = Math.max(1, Math.round(r.width * dpr));
+        H = Math.max(1, Math.round(r.height * dpr));
+        canvas.width = W;
+        canvas.height = H;
+        gap = (r.width < 640 ? 34 : 46) * dpr;
+        cols = Math.max(1, Math.floor(W / gap));
+        const rows = Math.max(1, Math.floor(H / gap));
+        const mx = (W - (cols - 1) * gap) / 2;
+        const my = (H - (rows - 1) * gap) / 2;
+        const n = cols * rows;
+        xs = new Float32Array(n);
+        ys = new Float32Array(n);
+        ease = new Float32Array(n);
+        dx = new Float32Array(n);
+        dy = new Float32Array(n);
+        let k = 0;
+        for (let rr = 0; rr < rows; rr++) {
+          for (let c = 0; c < cols; c++) {
+            xs[k] = mx + c * gap;
+            ys[k] = my + rr * gap;
+            k++;
+          }
+        }
+        if (!inited) {
+          eye.x = tgt.x = W * 0.32;
+          eye.y = tgt.y = H * 0.52;
+          inited = true;
+        }
+
+        // Locate the hidden "plug in your controller" hint so the render loop can
+        // reveal it by proximity. Skipped when it's display:none (mobile).
+        if (hint && hint.offsetParent !== null) {
+          const hr = hint.getBoundingClientRect();
+          hintCx = hr.left - r.left + hr.width / 2;
+          hintCy = hr.top - r.top + hr.height / 2;
+        } else {
+          hintCx = -1;
+        }
+      };
+
+      const render = (time: number, animate: boolean) => {
+        if (animate && (!pointerActive || time - lastMove > 2600)) {
+          pointerActive = false;
+          const t = time * 0.00014;
+          tgt.x = W * (0.40 + 0.26 * Math.cos(t));
+          tgt.y = H * (0.48 + 0.30 * Math.sin(t * 1.25));
+        }
+        if (animate) {
+          eye.x += (tgt.x - eye.x) * 0.05;
+          eye.y += (tgt.y - eye.y) * 0.05;
+        } else {
+          eye.x = tgt.x;
+          eye.y = tgt.y;
+        }
+
+        const R = (W / dpr < 640 ? 150 : 220) * dpr;
+        const R2 = R * R;
+        const base = 1.3 * dpr;
+        const n = xs.length;
+
+        ctx.clearRect(0, 0, W, H);
+
+        // Nodes: faint grid everywhere, a little gather + glow inside the spotlight.
+        for (let i = 0; i < n; i++) {
+          const ox = xs[i] - eye.x;
+          const oy = ys[i] - eye.y;
+          const d2 = ox * ox + oy * oy;
+          if (d2 < R2) {
+            const d = Math.sqrt(d2) || 0.0001;
+            const e = 1 - d / R;
+            const ee = e * e;
+            ease[i] = ee;
+            const pull = (ee * 4 * dpr) / d;
+            const X = xs[i] - ox * pull;
+            const Y = ys[i] - oy * pull;
+            dx[i] = X;
+            dy[i] = Y;
+            const a = 0.05 + ee * 0.42;
+            const cr = (BASE[0] + (PURPLE[0] - BASE[0]) * ee) | 0;
+            const cg = (BASE[1] + (PURPLE[1] - BASE[1]) * ee) | 0;
+            const cb = (BASE[2] + (PURPLE[2] - BASE[2]) * ee) | 0;
+            const s = base + ee * 1.6 * dpr;
+            ctx.fillStyle = `rgba(${cr},${cg},${cb},${a})`;
+            ctx.fillRect(X - s / 2, Y - s / 2, s, s);
+          } else {
+            ease[i] = 0;
+            dx[i] = xs[i];
+            dy[i] = ys[i];
+            ctx.fillStyle = `rgba(${BASE_RGB},0.05)`;
+            ctx.fillRect(xs[i] - base / 2, ys[i] - base / 2, base, base);
+          }
+        }
+
+        // Links: only between lit neighbours, faint, so the lattice softly "wires up".
+        ctx.lineWidth = dpr;
+        for (let i = 0; i < n; i++) {
+          const ei = ease[i];
+          if (ei <= 0) continue;
+          if (i % cols < cols - 1) {
+            const j = i + 1;
+            if (ease[j] > 0) {
+              ctx.strokeStyle = `rgba(${PURPLE_RGB},${Math.min(ei, ease[j]) * 0.32})`;
+              ctx.beginPath();
+              ctx.moveTo(dx[i], dy[i]);
+              ctx.lineTo(dx[j], dy[j]);
+              ctx.stroke();
+            }
+          }
+          const k = i + cols;
+          if (k < n && ease[k] > 0) {
+            ctx.strokeStyle = `rgba(${PURPLE_RGB},${Math.min(ei, ease[k]) * 0.32})`;
+            ctx.beginPath();
+            ctx.moveTo(dx[i], dy[i]);
+            ctx.lineTo(dx[k], dy[k]);
+            ctx.stroke();
+          }
+        }
+
+        if (bloom) {
+          bloom.style.transform = `translate(${eye.x / dpr}px, ${eye.y / dpr}px)`;
+        }
+
+        // Reveal the controller hint as the cursor-light nears it.
+        if (hint && hintCx >= 0) {
+          const hd = Math.hypot(eye.x / dpr - hintCx, eye.y / dpr - hintCy);
+          hint.style.opacity = Math.max(0, Math.min(1, 1.15 - hd / 170)).toFixed(3);
+        }
+
+        if (animate) raf = requestAnimationFrame((t) => render(t, true));
+      };
+
+      const start = () => {
+        if (!raf) raf = requestAnimationFrame((t) => render(t, true));
+      };
+      const stop = () => {
+        if (raf) {
+          cancelAnimationFrame(raf);
+          raf = 0;
+        }
+      };
+
+      hero.addEventListener('pointermove', (e) => {
+        if (e.pointerType === 'touch') return; // let the idle auto-roam handle touch
+        const r = hero.getBoundingClientRect();
+        tgt.x = (e.clientX - r.left) * dpr;
+        tgt.y = (e.clientY - r.top) * dpr;
+        pointerActive = true;
+        lastMove = performance.now();
+      });
+      hero.addEventListener('pointerleave', () => {
+        pointerActive = false;
+      });
+
+      let resizeT = 0;
+      window.addEventListener('resize', () => {
+        window.clearTimeout(resizeT);
+        resizeT = window.setTimeout(() => {
+          measure();
+          if (reduceMq.matches || !onscreen) render(0, false);
+        }, 150);
+      });
+
+      measure();
+
+      if (reduceMq.matches) {
+        render(0, false); // single static frame, no loop
+      } else {
+        render(0, false); // paint once immediately so it's there before rAF settles
+        const io = new IntersectionObserver(
+          (entries) => {
+            onscreen = entries[0].isIntersecting;
+            if (onscreen && !document.hidden) start();
+            else stop();
+          },
+          { threshold: 0 }
+        );
+        io.observe(hero);
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) stop();
+          else if (onscreen) start();
+        });
+      }
+    }
+  }
+</script>

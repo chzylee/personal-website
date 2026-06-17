@@ -18,7 +18,7 @@ Asking Claude or ChatGPT or any AI how it would prompt itself is a powerful stra
 Some basic rules you can give Claude for Python for example:
 - Import modules as aliases rather than importing individual functions. This keeps calls readable.
 - Always use f-strings instead of string concatenation when putting variables in strings.
-- User a `name` prefix with any `print` call where the `name` matches the module's domain and is consistent within a file.
+- Use a `name` prefix with any `print` call where the `name` matches the module's domain and is consistent within a file.
 
 **Each above example can be applied to any Python project to improve your code's readability**, helping you maintain and add to it in the future (you're welcome 👍). With Claude Code, you can add these to a Claude.md so Claude always obeys these for any code outputs. Even manual edits get easier when you build with these rules and tools.
 
@@ -38,4 +38,4 @@ If you can train AI to operate with the same assumptions as you, your build qual
 
 **The end goal is to train your AI helper to become the best worker for you that it can possibly be.** You can treat it like a human that can work really fast but is totally new to your workflow and needs to know how you think before it works at its best.
 
-*I am currently working on a project to help unlock further potential in AI development for everyone,* especially vibecoders and newer developers. Optimizing AI usage is about reframing how you think to get the most out of its capabilities, and there is so much more to explore.
+Optimizing AI usage is about reframing how you think to get the most out of its capabilities. My own rule: heavy use, zero faith — every generated line gets reviewed like a junior engineer's PR. The speed is real; the judgment is what makes the work yours.

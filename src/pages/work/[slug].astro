@@ -38,7 +38,7 @@ type Props =
   | { type: 'community'; project: CommunityProject };
 
 const { type, project } = Astro.props;
-const pageTitle = `${project.title} — Noah Lee`;
+const pageTitle = `${project.title} · Noah Lee`;
 const pageDescription = project.oneLine;
 
 const iconEntry = project.iconFile

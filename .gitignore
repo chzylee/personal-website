@@ -142,6 +142,9 @@ vite.config.ts.timestamp-*
 .claude/
 .astro/
 
+# Local-only working notes (e.g. HERO-DIRECTIONS.local.md)
+*.local.md
+
 # wrangler files
 .wrangler
 .dev.vars*

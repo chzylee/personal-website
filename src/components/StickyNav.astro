@@ -19,13 +19,14 @@ import photo from '../assets/photo.jpg';
   <nav class="sticky-nav__links" aria-label="Page sections">
     <a href="/work" class="sticky-nav__link">Work</a>
     <a href="/blog" class="sticky-nav__link">Writing</a>
-    <a href="#photography" class="sticky-nav__link">Photography</a>
+    <a href="#photography" class="sticky-nav__link sticky-nav__link--photo">Photography</a>
     <a
       href="/NoahLeeResume.pdf"
       target="_blank"
       rel="noopener noreferrer"
       class="sticky-nav__link"
     >Resume</a>
+    <a href="#contact" class="sticky-nav__link sticky-nav__link--contact">Contact</a>
   </nav>
 </header>
 
@@ -92,12 +93,26 @@ import photo from '../assets/photo.jpg';
 
   .sticky-nav__link:hover { color: var(--color-rust); }
 
+  .sticky-nav__link--contact {
+    color: var(--color-rust);
+    border: 1px solid var(--color-rust);
+    padding: 0.375rem 0.75rem;
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+
+  .sticky-nav__link--contact:hover {
+    color: var(--color-paper);
+    background: var(--color-rust);
+  }
+
   @media (max-width: 640px) {
     .sticky-nav {
       gap: 1rem;
       padding: 0 1rem;
     }
-    .sticky-nav__links { gap: 1rem; }
+    .sticky-nav__links { gap: 0.875rem; }
     .sticky-nav__link { font-size: 0.6875rem; letter-spacing: 0.06em; }
+    /* Photography is reachable by scrolling; Contact matters more on mobile */
+    .sticky-nav__link--photo { display: none; }
   }
 </style>

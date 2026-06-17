@@ -5,7 +5,7 @@ export const fgcWork: ShowcaseItem[] = [
     label: 'Commentary',
     title: '[ Analysis and storytelling ]',
     meta: '[ Netplay · Locals · Majors ]',
-    body: 'First stepped into commentary to fill in at Chicago locals in 2022. Since then, I\'ve commenentated offline for various games including BBCF and GBVSR with a focus on GGST and MBAACC. You can find me on Top 8 commentary when Melty is on the main stage, and I commentate my own netplay events as well. I play and follow each game as I focus on elaborating decision rationale and following player storylines.',
+    body: 'First stepped into commentary to fill in at Chicago locals in 2022. Since then, I\'ve commentated offline for various games including BBCF and GBVSR with a focus on GGST and MBAACC. You can find me on Top 8 commentary when Melty is on the main stage, and I commentate my own netplay events as well. I play and follow each game as I focus on elaborating decision rationale and following player storylines.',
     imageFile: 'commentary.jpg',
     imageAlt: 'Photo by @GoonPNW on Twitter/X of Noah Lee (enpicie) commentating Melty Blood at Climax of Night F (2025) with Sikanto (AKA Galva)',
     photoCredit: { label: 'CoN 2025 photo by @GoonPNW', url: 'https://x.com/GoonPNW' },

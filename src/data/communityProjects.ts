@@ -16,11 +16,11 @@ export const communityProjects: CommunityProject[] = [
   {
     slug: 'midweek-mashers',
     title: 'Midweek Mashers',
-    oneLine: 'Grew Melty Blood scene from a small community to seeing 200+ players at majors.',
+    oneLine: 'Grew a niche, insular Melty Blood scene into a sustained community newcomers can break into.',
     whyBuilt:
-      "The scene was small, talented, and culturally rough. Melty is hard to pick up when veterans have years on you, and the community didn't always make it easy for the people who tried. The problem wasn't logistics. A hard game plus a hard culture meant the scene struggled to grow, retain, and motivate players, and that capped what events could ever be. I started a various online event series engineered around format, schedule, and rules that pushed for a healthier culture, and I built Adomin to streamline operational work so organizers had more bandwidth to focus on their communities.",
+      "The scene was small, talented, and culturally rough. Melty is hard to pick up when veterans have years on you, and the community didn't always make it easy for the people who tried. The problem wasn't logistics. A hard game plus a hard culture meant the scene struggled to grow, retain, and motivate players, and that capped what events could ever be. I started a various online event series engineered around format, schedule, and rules that pushed for a healthier culture, and I built Adomi-san to streamline operational work so organizers had more bandwidth to focus on their communities.",
     whatChanged:
-      'Offline major attendance went from roughly 80 to 200+ players. Newcomers have a clear path in. Other organizers have started their own events using the same simple workflow. The scene reads as somewhere people want to be.',
+      'The scene grew from small and insular into something sustained: average turnout at the weekly online events climbed from 20-25 to 35, and four new event series launched on the same tools and workflow. Newcomers have a clear path in. The scene reads as somewhere people want to be.',
     tags: ['Community', 'Event Organization', 'Discord', 'Streaming', 'Mentorship'],
     iconFile: 'midweek-logo.png',
   },

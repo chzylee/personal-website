@@ -1,5 +1,5 @@
 ---
-title: "Conquering Fear of Being Percieved"
+title: "Conquering Fear of Being Perceived"
 date: 2026-05-28
 draft: false
 description: "Be confident in creating content and showing who you are despite how others may judge you."

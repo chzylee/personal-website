@@ -33,20 +33,20 @@ const devProjects = orderedDevTitles
   .filter((p): p is NonNullable<typeof p> => Boolean(p));
 
 const description =
-  "The work of Noah Lee — six years of cloud infrastructure engineering, plus community building in the fighting game scene. Two contexts, same instinct.";
+  "The work of Noah Lee: seven years of full-stack and cloud engineering, plus community building in the fighting game scene. Two contexts, same instinct.";
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title="Work — Noah Lee" description={description} />
+    <BaseHead title="Work · Noah Lee" description={description} />
   </head>
   <body>
     <PageNav />
 
     <aside class="work-sidenav" aria-label="Work sections">
       <div class="work-sidenav__group">
-        <span class="work-sidenav__label">Part one — Engineering</span>
+        <span class="work-sidenav__label">Part one: Engineering</span>
         {devProjects.map((p) => (
           <a
             href={`#${slugify(p.title)}`}
@@ -57,7 +57,7 @@ const description =
       </div>
 
       <div class="work-sidenav__group">
-        <span class="work-sidenav__label">Part two — Community</span>
+        <span class="work-sidenav__label">Part two: Community</span>
         {community && (
           <a
             href={`#${community.slug}`}
@@ -88,7 +88,7 @@ const description =
           <li class="instinct-flow__step">Build what removes it</li>
         </ol>
         <p class="work-page__lede">
-          Leveraging professional software engineering expertise to build systems for people around me. Always working on something new.
+          Everything here started as a real person's problem: mine, an organizer's, a team's. The engineering follows from there.
         </p>
       </header>
 

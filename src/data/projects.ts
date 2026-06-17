@@ -29,9 +29,9 @@ export const projects: Project[] = [
     title: 'adomi-san-bot',
     oneLine: 'Removes the manual grind from running online FGC tournaments.',
     whyBuilt:
-      "Running an online tournament requires operational overhead disjoint between Discord and start.gg. Check-ins, event visibility, score reporting, reminders: fragmented, slow, error-prone operations. I built Adomin to take the strain out of running events, so the work doesn't drain the bandwidth to actually show up for the community.",
+      "Running an online tournament requires operational overhead disjoint between Discord and start.gg. Check-ins, event visibility, score reporting, reminders: fragmented, slow, error-prone operations. I built Adomi-san to take the strain out of running events, so the work doesn't drain the bandwidth to actually show up for the community.",
     whatChanged:
-      'Events run smoother for everyone: organizers have less to manually track, players can focus more on playing. New TOs have launched their own series on Adomin, broadening the Melty Blood online scene. Serverless on Lambda and SQS — quick responses return immediately while heavy ops dispatch to worker Lambdas asynchronously. Used across Midweek Melting and adjacent series. Mentored new developers through the architecture decisions.',
+      'Four new event series have launched on Adomi-san, and average turnout at my weekly events has grown from 20-25 players to 35. Organizers track less by hand; players focus on playing. Serverless on Lambda and SQS: quick responses return immediately while heavy ops dispatch to worker Lambdas asynchronously. Used across Midweek Melting and adjacent series. Mentored a new developer through the architecture decisions.',
     tags: ['Python', 'AWS', 'Discord', 'Terraform'],
     githubUrl: 'https://github.com/enpicie/adomi-san-bot',
     iconFile: 'adomin.jpg',
@@ -52,9 +52,9 @@ export const projects: Project[] = [
     title: 'FGC League Sheets',
     oneLine: 'Multi-week competitive leagues without a programmer.',
     whyBuilt:
-      'Long-term league formats are abstract and require significant manual effort to maintain, but have helped the Melty community grow tremendously. I built a Google Sheets extension to let organizers maintain a comfortable interface to manage everything while automating the core workflow to reduce room for error and alleviate organizer strain.',
+      'Long-term league formats are abstract and require significant manual effort to maintain, but they have helped the Melty community grow. I built a Google Sheets extension to let organizers maintain a comfortable interface to manage everything while automating the core workflow to reduce room for error and alleviate organizer strain.',
     whatChanged:
-      'Distributed as a viewable, copyable Sheet with in-file documentation so non-technical users get started without a setup guide. Partnered directly with end users to find real edge cases and shape an intuitive workflow. Melty\'s DMF Duel League has supported dozens of players and expanded to facilitate both beginner and advanced leagues.',
+      'Shipped a full working extension in two days, driven by an upfront design and data-model plan with AI-assisted tooling, and I reviewed every generated line. Distributed as a viewable, copyable Sheet with in-file documentation so non-technical users get started without a setup guide. Partnered directly with end users to find real edge cases and shape an intuitive workflow. Melty\'s DMF Duel League has supported dozens of players and expanded to facilitate both beginner and advanced leagues.',
     tags: ['TypeScript', 'Apps Script', 'Clasp'],
     githubUrl: 'https://github.com/enpicie/fgc-league-sheets',
     iconFile: 'fgc-league-sheets logo.png',
