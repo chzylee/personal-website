@@ -5,11 +5,12 @@
 //
 // On desktop, the right column holds a retro CRT "screen" (HeroScreen) that runs
 // a slideshow of career highlights, navigable by buttons / arrow keys / a game
-// controller. Behind everything sits a toned-down interactive "lattice": a faint
-// canvas dot grid that gathers a little light toward the cursor and slowly
-// auto-roams, plus a soft purple bloom, purely as ambient texture. Both honor
-// prefers-reduced-motion. See the "Interactive lattice" + "Hero CRT screen"
-// overrides in CLAUDE.md.
+// controller. Behind everything sits a self-animating "constellation": a canvas
+// dot grid lit by a few soft energy centers that roam on their own paths (so the
+// field is alive even when the cursor is still), with the cursor as the primary,
+// strongest center on top, plus a faint per-node twinkle and a soft purple bloom.
+// Honors prefers-reduced-motion. See the "Interactive lattice" + "Hero CRT
+// screen" overrides in CLAUDE.md.
 import { Image } from 'astro:assets';
 import photo from '../assets/photo.jpg';
 import HeroScreen from './HeroScreen.astro';
@@ -66,7 +67,7 @@ const reelLabel =
     <div class="hero__status reveal" style="--reveal-delay: 360ms">
       <span class="hero__status-dot" aria-hidden="true"></span>
       <span class="hero__status-text">
-        <strong>Open to work</strong> · full-stack &amp; solutions roles · Chicago, remote-open
+        <strong>Open to work</strong> · engineering &amp; solutions roles · Chicago, remote-open
       </span>
     </div>
 
@@ -503,7 +504,6 @@ const reelLabel =
     if (ctx) {
       const PURPLE = readRGB('--color-rust', [155, 109, 255]);
       const BASE = readRGB('--color-ink-muted', [138, 132, 128]);
-      const BASE_RGB = `${BASE[0]},${BASE[1]},${BASE[2]}`;
       const PURPLE_RGB = `${PURPLE[0]},${PURPLE[1]},${PURPLE[2]}`;
 
       let dpr = 1, W = 0, H = 0, gap = 46, cols = 0;
@@ -512,6 +512,7 @@ const reelLabel =
       let ease = new Float32Array(0);
       let dx = new Float32Array(0);
       let dy = new Float32Array(0);
+      let phase = new Float32Array(0); // per-node twinkle offset (golden-angle scatter)
 
       const tgt = { x: 0, y: 0 };
       const eye = { x: 0, y: 0 };
@@ -540,11 +541,13 @@ const reelLabel =
         ease = new Float32Array(n);
         dx = new Float32Array(n);
         dy = new Float32Array(n);
+        phase = new Float32Array(n);
         let k = 0;
         for (let rr = 0; rr < rows; rr++) {
           for (let c = 0; c < cols; c++) {
             xs[k] = mx + c * gap;
             ys[k] = my + rr * gap;
+            phase[k] = (k * 2.399963) % 6.283185; // golden-angle scatter, deterministic
             k++;
           }
         }
@@ -580,42 +583,71 @@ const reelLabel =
           eye.y = tgt.y;
         }
 
-        const R = (W / dpr < 640 ? 150 : 220) * dpr;
-        const R2 = R * R;
+        const small = W / dpr < 640;
+        const Rc = (small ? 150 : 220) * dpr; // cursor / primary spotlight
+        const Ra = (small ? 118 : 176) * dpr; // ambient roaming centers
         const base = 1.3 * dpr;
         const n = xs.length;
 
+        // Ambient "constellation" centers roam on their own Lissajous paths every
+        // frame, independent of the cursor, so the field stays alive at rest. The
+        // cursor (eye) is the primary, strongest center on top of them.
+        const at = time * 0.0002;
+        const a1x = W * (0.62 + 0.26 * Math.cos(at * 0.70 + 1.3));
+        const a1y = H * (0.34 + 0.32 * Math.sin(at * 0.90 + 0.5));
+        const a2x = W * (0.30 + 0.30 * Math.cos(at * 1.05 + 4.2));
+        const a2y = H * (0.64 + 0.26 * Math.sin(at * 0.80 + 2.1));
+
+        // [center] = cursor, ambient-1, ambient-2
+        const cx = [eye.x, a1x, a2x];
+        const cy = [eye.y, a1y, a2y];
+        const cR = [Rc, Ra, Ra];
+        const cPull = [4.0, 2.6, 2.6];
+        const cGlow = [1.0, 0.78, 0.78];
+        const NC = 3;
+
+        // Slow global twinkle so even the dark field between centers shimmers
+        // faintly rather than reading as flat black.
+        const tw = time * 0.0011;
+
         ctx.clearRect(0, 0, W, H);
 
-        // Nodes: faint grid everywhere, a little gather + glow inside the spotlight.
+        // Nodes: faint twinkling grid everywhere, gathered + lit toward purple
+        // inside any center's reach (contributions from all centers accumulate).
         for (let i = 0; i < n; i++) {
-          const ox = xs[i] - eye.x;
-          const oy = ys[i] - eye.y;
-          const d2 = ox * ox + oy * oy;
-          if (d2 < R2) {
-            const d = Math.sqrt(d2) || 0.0001;
-            const e = 1 - d / R;
-            const ee = e * e;
-            ease[i] = ee;
-            const pull = (ee * 4 * dpr) / d;
-            const X = xs[i] - ox * pull;
-            const Y = ys[i] - oy * pull;
-            dx[i] = X;
-            dy[i] = Y;
-            const a = 0.05 + ee * 0.42;
-            const cr = (BASE[0] + (PURPLE[0] - BASE[0]) * ee) | 0;
-            const cg = (BASE[1] + (PURPLE[1] - BASE[1]) * ee) | 0;
-            const cb = (BASE[2] + (PURPLE[2] - BASE[2]) * ee) | 0;
-            const s = base + ee * 1.6 * dpr;
-            ctx.fillStyle = `rgba(${cr},${cg},${cb},${a})`;
-            ctx.fillRect(X - s / 2, Y - s / 2, s, s);
-          } else {
-            ease[i] = 0;
-            dx[i] = xs[i];
-            dy[i] = ys[i];
-            ctx.fillStyle = `rgba(${BASE_RGB},0.05)`;
-            ctx.fillRect(xs[i] - base / 2, ys[i] - base / 2, base, base);
+          let lit = 0;
+          let mx2 = 0;
+          let my2 = 0;
+          for (let c = 0; c < NC; c++) {
+            const ox = xs[i] - cx[c];
+            const oy = ys[i] - cy[c];
+            const R = cR[c];
+            const d2 = ox * ox + oy * oy;
+            if (d2 < R * R) {
+              const d = Math.sqrt(d2) || 0.0001;
+              const e = 1 - d / R;
+              const ee = e * e;
+              lit += ee * cGlow[c];
+              const pull = (ee * cPull[c] * dpr) / d;
+              mx2 -= ox * pull;
+              my2 -= oy * pull;
+            }
           }
+          if (lit > 1) lit = 1;
+          ease[i] = lit;
+          const X = xs[i] + mx2;
+          const Y = ys[i] + my2;
+          dx[i] = X;
+          dy[i] = Y;
+
+          const shimmer = 0.5 + 0.5 * Math.sin(tw + phase[i]);
+          const a = 0.06 + 0.03 * shimmer + lit * 0.42;
+          const cr = (BASE[0] + (PURPLE[0] - BASE[0]) * lit) | 0;
+          const cg = (BASE[1] + (PURPLE[1] - BASE[1]) * lit) | 0;
+          const cb = (BASE[2] + (PURPLE[2] - BASE[2]) * lit) | 0;
+          const s = base + lit * 1.6 * dpr;
+          ctx.fillStyle = `rgba(${cr},${cg},${cb},${a})`;
+          ctx.fillRect(X - s / 2, Y - s / 2, s, s);
         }
 
         // Links: only between lit neighbours, faint, so the lattice softly "wires up".
