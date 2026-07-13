@@ -1,9 +1,9 @@
 # Build Status — redesign/2-elements (Attempt 2: elements fair game)
 
-STATUS: IN-PROGRESS
+STATUS: DONE
 LOCK: PRIMARY · fable · 2026-07-13T05:10:26Z
 RUN-COUNT: 1
-RESUME POINTER: Items 1-8 done and pushed (Fable worker, run 1). Element repurpose: the CRT HeroScreen is now a two-channel reel (ACHIEVEMENTS + NOW BUILDING via a channel field per slide in achievements.ts; frame label/icon switch with the active slide). Build + check green; browser QA at 375x667 and 1280x800 passed (no horizontal scroll, hero CTA in fold, channel toggle verified). Remaining: item 9, open the PR and set STATUS: DONE.
+RESUME POINTER: ATTEMPT 2 COMPLETE (Fable worker, run 1). All checklist items done; PR #4 open (https://github.com/chzylee/personal-website/pull/4), build + check green, browser QA passed. Element repurpose: the CRT HeroScreen is now a two-channel reel (ACHIEVEMENTS + NOW BUILDING via a channel field per slide in achievements.ts; frame label/icon switch with the active slide). Nothing left to do on this branch; next tick should move to attempt 3.
 
 ## Attempt
 Attempt 2 of 3 — `redesign/2-elements`. Latitude (runbook §4): keep tokens/type/aesthetic, but signature elements (CRT HeroScreen, constellation lattice, TV/event-reel scaffolding) MAY be repurposed, moved, or replaced if it serves the applied-AI pivot better (e.g. the CRT could carry systems instead of only FGC achievements). Justify each element change in CLAUDE.md + PR notes. Nothing beyond the honesty guardrails and CLAUDE.md voice/accessibility/mobile-strict rules is invariant here.
@@ -19,7 +19,7 @@ Branch is off clean `main` (attempts never build on each other). The TV/event-re
 - [x] 6. Update CLAUDE.md on this branch to match every change (including any element repurposing this attempt makes, with justification). (Two-channel CRT justified under Project-Specific Overrides.)
 - [x] 7. Build passes: `npm run build` (astro build) + `npm run check` (astro check). (0 errors, 0 warnings.)
 - [x] 8. Self-review vs CLAUDE.md Enforcement Rules + §2 honesty guardrails. (Em-dash + hex grep clean; explicit align-items/min-width added to new flex CSS; browser QA at 375x667: no horizontal scroll, hero CTA in fold; two-channel toggle + aria-live verified; softened one intro line that overstated daily use.)
-- [ ] 9. Open PR titled exactly "Site redesign — attempt 2 (elements fair game)". Set STATUS: DONE. Never merge.
+- [x] 9. Open PR titled exactly "Site redesign — attempt 2 (elements fair game)". Set STATUS: DONE. Never merge. (PR #4: https://github.com/chzylee/personal-website/pull/4, opened by the Fable worker, run 1. NOT merged.)
 
 ## Honesty guardrails (HARD — see runbook §2)
 Ongoing efforts not finished products; no trend claims; vocabulary ceiling (experiment/log/instrument/in-progress/building — never study results/findings/proven method/productivity scores); no invented metrics; NO em-dashes in visible copy. Verified applied-AI facts are ONLY those in runbook §1; invent nothing beyond it.
