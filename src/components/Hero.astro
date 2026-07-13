@@ -32,6 +32,28 @@ const reelLabel =
   <div class="hero__bloom" aria-hidden="true"></div>
   <canvas class="hero__lattice" aria-hidden="true"></canvas>
 
+  <!-- Full-hero TV backdrop. Powered on by the toggle below: the constellation
+       fades out and a muted event reel plays behind the content with a CRT
+       power-on flash + scanlines. Shows a "NO SIGNAL" test card until a real
+       reel is dropped at /video/event-reel.{webm,mp4} (the video's `playing`
+       event flips it to .is-live; an `error` keeps the test card). -->
+  <div class="hero__tv" aria-hidden="true">
+    <div class="hero__tv-crt">
+      <video class="hero__tv-video" muted loop playsinline preload="none">
+        <source src="/video/event-reel.webm" type="video/webm" />
+        <source src="/video/event-reel.mp4" type="video/mp4" />
+      </video>
+      <div class="hero__tv-nosignal">
+        <span class="hero__tv-nosignal-label">No signal</span>
+        <span class="hero__tv-nosignal-sub">Insert tape</span>
+      </div>
+      <div class="hero__tv-scanlines"></div>
+      <div class="hero__tv-vignette"></div>
+    </div>
+    <div class="hero__tv-scrim"></div>
+    <div class="hero__tv-flash"></div>
+  </div>
+
   <div class="hero__content">
     <div class="hero__identity reveal" style="--reveal-delay: 80ms">
       <Image
@@ -80,6 +102,14 @@ const reelLabel =
         </svg>
       </a>
     </div>
+
+    <button class="hero__tv-toggle reveal" style="--reveal-delay: 560ms" type="button" aria-pressed="false">
+      <span class="hero__tv-toggle-icon" aria-hidden="true">
+        <svg class="hero__tv-toggle-play" width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="hero__tv-toggle-stop" width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/></svg>
+      </span>
+      <span class="hero__tv-toggle-label">Roll the event reel</span>
+    </button>
   </div>
 
   <div class="hero__screen reveal" style="--reveal-delay: 520ms">
@@ -133,6 +163,222 @@ const reelLabel =
     filter: blur(30px);
     pointer-events: none;
     will-change: transform;
+  }
+
+  /* ── TV backdrop (event reel) ── */
+  /* Full-hero layer that powers on behind the content. Hidden until .is-tv-on. */
+  .hero__tv {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+  }
+
+  .hero.is-tv-on .hero__tv {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease;
+  }
+
+  /* When the TV is on, the constellation steps back so the reel reads cleanly. */
+  .hero__lattice,
+  .hero__bloom {
+    transition: opacity 0.5s ease;
+  }
+  .hero.is-tv-on .hero__lattice,
+  .hero.is-tv-on .hero__bloom {
+    opacity: 0;
+  }
+
+  /* The CRT wrapper is the power-on transform target (collapse-line reveal). */
+  .hero__tv-crt {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    transform-origin: center;
+  }
+
+  .hero.is-tv-on .hero__tv-crt {
+    animation: tv-power-on 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .hero__tv-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  /* Real reel present + playing => show it and hide the test card. */
+  .hero__tv.is-live .hero__tv-video { opacity: 1; }
+  .hero__tv.is-live .hero__tv-nosignal { opacity: 0; }
+
+  /* "NO SIGNAL" test card placeholder, shown until a real reel is dropped in. */
+  .hero__tv-nosignal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    transition: opacity 0.4s ease;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        color-mix(in srgb, var(--color-ink) 4%, transparent) 0 2px,
+        transparent 2px 4px
+      ),
+      color-mix(in srgb, var(--color-paper-soft) 70%, var(--color-paper));
+  }
+
+  .hero__tv-nosignal-label {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+
+  .hero__tv-nosignal-sub {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--color-rust);
+  }
+
+  /* CRT overlays: scanlines + vignette (non-interactive). */
+  .hero__tv-scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-paper) 55%, transparent) 0 1px,
+      transparent 1px 3px
+    );
+    opacity: 0.45;
+    mix-blend-mode: multiply;
+  }
+
+  .hero__tv-vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      120% 100% at 50% 45%,
+      transparent 52%,
+      color-mix(in srgb, var(--color-paper) 90%, transparent) 100%
+    );
+  }
+
+  /* Legibility scrim: darker on the left/bottom where the hero text sits. */
+  .hero__tv-scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--color-paper) 88%, transparent),
+        color-mix(in srgb, var(--color-paper) 42%, transparent) 62%,
+        color-mix(in srgb, var(--color-paper) 64%, transparent)
+      ),
+      linear-gradient(
+        0deg,
+        color-mix(in srgb, var(--color-paper) 82%, transparent),
+        transparent 42%
+      );
+  }
+
+  /* Bright flash that fires once as the tube "warms up". */
+  .hero__tv-flash {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: var(--color-ink);
+  }
+
+  .hero.is-tv-on .hero__tv-flash {
+    animation: tv-flash 0.7s ease-out both;
+  }
+
+  @keyframes tv-power-on {
+    0%   { transform: scaleY(0.006); filter: brightness(4.5) saturate(0.4); }
+    9%   { transform: scaleY(0.006); filter: brightness(4.5) saturate(0.4); }
+    42%  { transform: scaleY(1);     filter: brightness(2.2) saturate(0.7); }
+    72%  { transform: scaleY(1);     filter: brightness(1.05); }
+    100% { transform: scaleY(1);     filter: brightness(1) saturate(1); }
+  }
+
+  @keyframes tv-flash {
+    0%   { opacity: 0; }
+    6%   { opacity: 0.8; }
+    30%  { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  /* ── TV power toggle ── */
+  .hero__tv-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    background: transparent;
+    border: none;
+    padding: 0.5rem 0;
+    min-height: 44px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+
+  .hero__tv-toggle:focus-visible {
+    outline: 2px solid var(--color-rust);
+    outline-offset: 3px;
+  }
+
+  .hero__tv-toggle[aria-pressed="true"] { color: var(--color-rust); }
+
+  .hero__tv-toggle-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--color-rule);
+    border-radius: 4px;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .hero__tv-toggle[aria-pressed="true"] .hero__tv-toggle-icon {
+    border-color: var(--color-rust);
+  }
+
+  .hero__tv-toggle-stop { display: none; }
+  .hero__tv-toggle[aria-pressed="true"] .hero__tv-toggle-play { display: none; }
+  .hero__tv-toggle[aria-pressed="true"] .hero__tv-toggle-stop { display: inline; }
+
+  @media (hover: hover) and (pointer: fine) {
+    .hero__tv-toggle:hover { color: var(--color-rust); }
+    .hero__tv-toggle:hover .hero__tv-toggle-icon { border-color: var(--color-rust); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero.is-tv-on .hero__tv-crt,
+    .hero.is-tv-on .hero__tv-flash { animation: none; }
   }
 
   .hero__content {
@@ -488,6 +734,10 @@ const reelLabel =
   const canvas = document.querySelector<HTMLCanvasElement>('.hero__lattice');
   const bloom = document.querySelector<HTMLElement>('.hero__bloom');
   const hint = document.querySelector<HTMLElement>('.hero__controller-hint');
+  const tvToggle = document.querySelector<HTMLButtonElement>('.hero__tv-toggle');
+  const tvLayer = document.querySelector<HTMLElement>('.hero__tv');
+  const tvVideo = document.querySelector<HTMLVideoElement>('.hero__tv-video');
+  const tvLabel = document.querySelector<HTMLElement>('.hero__tv-toggle-label');
   const reduceMq = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   // Read brand colors from the CSS tokens so the canvas stays single-sourced.
@@ -516,11 +766,22 @@ const reelLabel =
 
       const tgt = { x: 0, y: 0 };
       const eye = { x: 0, y: 0 };
+
+      // Two ambient light centers that slowly WANDER to random targets (re-picking
+      // a new one on arrival), so something feels alive and unpredictable on screen,
+      // independent of the cursor. Positions are fractions of W/H, so they survive a
+      // resize without reinitialising.
+      const roamers = [
+        { fx: 0.6, fy: 0.3, tx: 0.2 + Math.random() * 0.6, ty: 0.2 + Math.random() * 0.55 },
+        { fx: 0.3, fy: 0.62, tx: 0.2 + Math.random() * 0.6, ty: 0.2 + Math.random() * 0.55 },
+      ];
+
       let pointerActive = false;
       let lastMove = -1e9;
       let raf = 0;
       let onscreen = true;
       let inited = false;
+      let tvOn = false; // event-reel backdrop active => pause the constellation
       let hintCx = -1, hintCy = -1; // hint center in CSS px, relative to the hero
 
       const measure = () => {
@@ -589,14 +850,22 @@ const reelLabel =
         const base = 1.3 * dpr;
         const n = xs.length;
 
-        // Ambient "constellation" centers roam on their own Lissajous paths every
-        // frame, independent of the cursor, so the field stays alive at rest. The
-        // cursor (eye) is the primary, strongest center on top of them.
-        const at = time * 0.0002;
-        const a1x = W * (0.62 + 0.26 * Math.cos(at * 0.70 + 1.3));
-        const a1y = H * (0.34 + 0.32 * Math.sin(at * 0.90 + 0.5));
-        const a2x = W * (0.30 + 0.30 * Math.cos(at * 1.05 + 4.2));
-        const a2y = H * (0.64 + 0.26 * Math.sin(at * 0.80 + 2.1));
+        // Ambient "constellation" centers wander toward random targets (re-picking
+        // on arrival), independent of the cursor, so the field stays alive and
+        // unpredictable at rest. The cursor (eye) is the primary center on top.
+        if (animate) {
+          for (let c = 0; c < roamers.length; c++) {
+            const rm = roamers[c];
+            rm.fx += (rm.tx - rm.fx) * 0.01; // slow lerp => calm, organic drift
+            rm.fy += (rm.ty - rm.fy) * 0.01;
+            if (Math.abs(rm.tx - rm.fx) < 0.012 && Math.abs(rm.ty - rm.fy) < 0.012) {
+              rm.tx = 0.14 + Math.random() * 0.72;
+              rm.ty = 0.16 + Math.random() * 0.64;
+            }
+          }
+        }
+        const a1x = W * roamers[0].fx, a1y = H * roamers[0].fy;
+        const a2x = W * roamers[1].fx, a2y = H * roamers[1].fy;
 
         // [center] = cursor, ambient-1, ambient-2
         const cx = [eye.x, a1x, a2x];
@@ -734,6 +1003,58 @@ const reelLabel =
       }
       window.addEventListener('load', remeasure);
 
+      // ── TV backdrop (event reel) ──
+      // The power toggle fades the constellation out (stops its rAF) and plays a
+      // muted reel as the hero backdrop, with a CRT power-on flash + scanlines. A
+      // "NO SIGNAL" test card shows until a real reel exists at
+      // /video/event-reel.{webm,mp4}; the video's `playing` event flips it live,
+      // an `error` keeps the test card. The reel pauses off-screen / when hidden.
+      const initTV = () => {
+        if (!tvToggle || !tvLayer || !tvVideo) return;
+        let loaded = false;
+        const playVid = () => {
+          const p = tvVideo.play();
+          if (p && typeof p.catch === 'function') p.catch(() => {});
+        };
+        tvVideo.addEventListener('playing', () => tvLayer.classList.add('is-live'));
+        tvVideo.addEventListener('error', () => tvLayer.classList.remove('is-live'));
+
+        const powerOn = () => {
+          tvOn = true;
+          hero.classList.add('is-tv-on');
+          tvToggle.setAttribute('aria-pressed', 'true');
+          if (tvLabel) tvLabel.textContent = 'Turn off the TV';
+          stop(); // pause the constellation while the reel plays
+          if (!loaded) { tvVideo.load(); loaded = true; }
+          playVid();
+        };
+        const powerOff = () => {
+          tvOn = false;
+          hero.classList.remove('is-tv-on');
+          tvToggle.setAttribute('aria-pressed', 'false');
+          if (tvLabel) tvLabel.textContent = 'Roll the event reel';
+          tvVideo.pause();
+          if (onscreen && !document.hidden && !reduceMq.matches) start();
+        };
+        tvToggle.addEventListener('click', () => (tvOn ? powerOff() : powerOn()));
+
+        // Pause the reel when the hero scrolls out of view or the tab is hidden.
+        new IntersectionObserver(
+          ([e]) => {
+            if (!tvOn) return;
+            if (e.isIntersecting && !document.hidden) playVid();
+            else tvVideo.pause();
+          },
+          { threshold: 0 }
+        ).observe(hero);
+        document.addEventListener('visibilitychange', () => {
+          if (!tvOn) return;
+          if (document.hidden) tvVideo.pause();
+          else playVid();
+        });
+      };
+      initTV();
+
       if (reduceMq.matches) {
         render(0, false); // single static frame, no loop
       } else {
@@ -741,7 +1062,7 @@ const reelLabel =
         const io = new IntersectionObserver(
           (entries) => {
             onscreen = entries[0].isIntersecting;
-            if (onscreen && !document.hidden) start();
+            if (onscreen && !document.hidden && !tvOn) start();
             else stop();
           },
           { threshold: 0 }
@@ -749,7 +1070,7 @@ const reelLabel =
         io.observe(hero);
         document.addEventListener('visibilitychange', () => {
           if (document.hidden) stop();
-          else if (onscreen) start();
+          else if (onscreen && !tvOn) start();
         });
       }
     }
