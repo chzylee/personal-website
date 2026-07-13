@@ -3,7 +3,6 @@ import { Image } from 'astro:assets';
 import BaseHead from '../components/BaseHead.astro';
 import StickyNav from '../components/StickyNav.astro';
 import Hero from '../components/Hero.astro';
-import HeroScreen from '../components/HeroScreen.astro';
 import About from '../components/About.astro';
 import Photography from '../components/Photography.astro';
 import { projects } from '../data/projects';
@@ -35,29 +34,81 @@ const featuredSoftware = projects.filter((p) =>
 const featuredCommunity = communityProjects.slice(0, 1);
 
 const description =
-  'Noah Lee: full-stack / forward-deployed engineer (AWS, ex-United Airlines). Seven years shipping software end-to-end, including a 16,000+ vulnerability cross-team remediation, an AWS Lambda pipeline handling 300K+ Kafka messages a day, and FGC tools other organizers now run their own tournament series on. Open to work. Chicago, remote-open.';
+  'Noah Lee: full-stack engineer (AWS, ex-United Airlines) building applied AI. Seven years shipping software end-to-end, including a 16,000+ vulnerability cross-team remediation and an AWS Lambda pipeline handling 300K+ Kafka messages a day. Current work is applied-AI systems that keep a human accountable for what ships (Ship Pipeline, ts-pmo, /ratify), framed as open experiments in progress. Open to software and applied-AI roles. Chicago, remote-open.';
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title="Noah Lee: Full-Stack / Forward-Deployed Engineer" description={description} />
+    <BaseHead title="Noah Lee: Full-Stack Engineer, Building Applied AI" description={description} />
   </head>
 
   <body>
     <StickyNav />
     <Hero />
+    <About />
 
-    <!-- Achievements: the hero's CRT relocates here on mobile, where the hero's
-         right-column TV is hidden. Exactly one .crt instance is visible per
-         viewport (see HeroScreen's multi-instance script). -->
-    <section class="hero-achievements" aria-label="Career achievements">
-      <div class="hero-achievements__inner">
-        <HeroScreen />
+    <!-- ── What I'm building now ─────────────────────────────────────────
+         The substantive read of the applied-AI direction. The hero's build-log
+         panel is the compact live tease (desktop) and is hidden on mobile, so
+         this section carries the systems on every viewport. All copy obeys the
+         applied-AI honesty rules in CLAUDE.md: in-progress, "as of"-dated, no
+         trend claims, no invented metrics, vocabulary ceiling respected. -->
+    <section id="now" class="now">
+      <div class="now__inner">
+        <header class="now__header reveal">
+          <h2 class="now__heading">What I'm building now.</h2>
+          <p class="now__stamp">In progress · as of July 2026</p>
+        </header>
+
+        <p class="now__intro reveal" style="--reveal-delay: 100ms">
+          My track record is software engineering. My current work is applied AI:
+          <strong>keeping a human accountable for what an AI actually ships.</strong>
+          These are open experiments, not products. I run them on my own work and
+          keep them honest by instrumenting them.
+        </p>
+
+        <ul class="now__list reveal" style="--reveal-delay: 160ms">
+          <li class="now__item">
+            <div class="now__item-head">
+              <h3 class="now__item-name">Ship Pipeline</h3>
+              <span class="now__item-status">building · 2 builds</span>
+            </div>
+            <p class="now__item-desc">
+              An LLM-assisted development system: an idea moves through a staged
+              ladder, and every deliverable is paired with a verifier so nothing
+              advances unchecked. Run so far on two builds, Runway and Rotato.
+            </p>
+          </li>
+          <li class="now__item">
+            <div class="now__item-head">
+              <h3 class="now__item-name">ts-pmo</h3>
+              <span class="now__item-status">v0 live</span>
+            </div>
+            <p class="now__item-desc">
+              Long-term project ops: effort → work-stream → task, tracked against
+              both behavioral and outcome accountability. Daily work is captured
+              through a debrief step into a Work Log.
+            </p>
+          </li>
+        </ul>
+
+        <p class="now__ratify reveal" style="--reveal-delay: 220ms">
+          The through-line across both is <span class="now__route">/ratify</span>,
+          a prediction-before-reveal ownership protocol: you state what you expect
+          an AI change to be before you see it, then log whether you predicted it,
+          were surprised, or had no opinion. The surprise rate becomes a
+          comprehension signal, so the record shows a human stayed accountable
+          rather than rubber-stamping. It is the protocol, the instrument, and a
+          demo you can run on someone.
+        </p>
+
+        <p class="now__pointer reveal" style="--reveal-delay: 280ms">
+          A fuller case study and a <span class="now__route">/ledger</span> view
+          of the ratification log are in progress.
+        </p>
       </div>
     </section>
-
-    <About />
 
     <!-- ── Selected work ─────────────────────────────────────────────── -->
     <section id="work" class="section">
@@ -177,7 +228,7 @@ const description =
     <footer class="contact" id="contact">
       <div class="contact__inner">
         <p class="contact__lede reveal">
-          Open to <em class="serif-italic">full-stack, solutions & forward-deployed</em> roles.
+          Open to <em class="serif-italic">software & applied-AI</em> roles.
         </p>
 
         <p class="contact__status reveal" style="--reveal-delay: 120ms">
@@ -232,26 +283,135 @@ const description =
 </html>
 
 <style is:global>
-  /* ── Achievements relocation: the hero CRT shows here only on mobile (where the
-     hero's right-column TV is hidden). Desktop keeps the CRT in the hero. ── */
-  .hero-achievements { display: none; }
+  /* ── What I'm building now (applied-AI systems, honest + in-progress) ── */
+  .now {
+    padding: 6rem 2rem;
+    background: var(--color-paper-soft);
+    display: flex;
+    justify-content: center;
+    scroll-margin-top: var(--nav-height);
+  }
 
-  @media (max-width: 1023px) {
-    .hero-achievements {
-      display: flex;
-      justify-content: center;
-      background: var(--color-paper);
-      padding: 1.5rem 1.5rem 4rem;
-    }
-    .hero-achievements__inner {
-      width: 100%;
-      max-width: 26rem;
-      min-width: 0;
-    }
+  .now__inner {
+    max-width: 44rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-width: 0;
+  }
+
+  .now__header {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+  }
+
+  .now__heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+    line-height: 1.05;
+    letter-spacing: -0.005em;
+    color: var(--color-ink);
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  .now__stamp {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+
+  .now__intro,
+  .now__ratify,
+  .now__pointer {
+    font-family: var(--font-body);
+    line-height: 1.7;
+    color: var(--color-ink);
+    max-width: 40rem;
+  }
+
+  .now__intro { font-size: 1.0625rem; }
+
+  .now__intro strong { font-weight: 600; }
+
+  .now__ratify {
+    font-size: 1rem;
+    color: var(--color-ink-muted);
+  }
+
+  .now__pointer {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+  }
+
+  .now__route { color: var(--color-rust); }
+
+  .now__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    margin: 0.5rem 0;
+  }
+
+  .now__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--color-rule);
+    min-width: 0;
+  }
+
+  .now__item:last-child {
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .now__item-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    min-width: 0;
+  }
+
+  .now__item-name {
+    font-family: var(--font-mono);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--color-ink);
+  }
+
+  .now__item-status {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-rust);
+  }
+
+  .now__item-desc {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.65;
+    color: var(--color-ink-muted);
+    max-width: 40rem;
+  }
+
+  @media (max-width: 640px) {
+    .now { padding: 4rem 1.5rem; }
   }
 
   @media (max-width: 480px) {
-    .hero-achievements { padding: 1rem 1.25rem 3.5rem; }
+    .now { padding: 3.5rem 1.25rem; }
   }
 
   /* ── Shared section shell ─────────────────────────────────────────── */
