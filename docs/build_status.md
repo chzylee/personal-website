@@ -1,9 +1,9 @@
 # Build Status — redesign/3-open (Attempt 3: open reinvention)
 
-STATUS: IN-PROGRESS
-LOCK: FALLBACK · opus · 2026-07-13T06:02Z
+STATUS: DONE
+LOCK: RELEASED · opus · 2026-07-13T06:02Z
 RUN-COUNT: 1
-RESUME POINTER: Items 1-8 complete. Reinvention landed + self-reviewed + mobile-strict fix (stat strip ordered below CTA on mobile). Build + check pass (0 errors). Only item 9 (open PR) remains.
+RESUME POINTER: COMPLETE. All 9 checklist items done. PR #5 open (base main, head redesign/3-open): "Site redesign — attempt 3 (open reinvention)". https://github.com/chzylee/personal-website/pull/5 . NEVER MERGE. Nothing left to do on this attempt.
 
 ## Attempt
 Attempt 3 of 3 — `redesign/3-open`. Latitude (runbook §4, "open reinvention"): MAY rethink the visual identity itself — new layouts, components, routes, restructured IA; the design language may flex. INVARIANT even here: the §2 honesty guardrails, CLAUDE.md VOICE + ACCESSIBILITY rules, mobile-strict hero/nav/contact at 375px, and a passing build. This is the freest of the three attempts; use the latitude deliberately, and justify the reinvention in CLAUDE.md + the PR notes.
@@ -19,7 +19,7 @@ Branch is off clean `main` (attempts never build on each other). Attempts 1 (`re
 - [x] 6. Update CLAUDE.md on this branch to match every change (including the visual/IA reinvention this attempt makes, with justification).
 - [x] 7. Build passes: `npm run build` (astro build) + `npm run check` (astro check).
 - [x] 8. Self-review vs CLAUDE.md Enforcement Rules + §2 honesty guardrails. em-dash grep: clean in all changed visible copy (remaining hits are pre-existing blog content + code comments). hex grep: clean (box-shadow switched to color-mix on --color-paper). min-width:0 on text flex children. Mobile-strict at 375px: build-log panel is display:none on mobile; hero stat strip moved below CTA via `order` so headline/subtext/pill/primary-CTA stay above the fold at 375x667; no fixed-width overflow. a11y: build-log is a real <aside aria-label>, status pill dot aria-hidden, reduced-motion honored (lattice single frame). NOTE: /design-review not run as a live headless pass, to honor the standing "user runs dev / don't start the dev server" preference; visual 375px fold confirmed by static layout analysis. Noah should sanity-check the fold locally.
-- [ ] 9. Open PR titled exactly "Site redesign — attempt 3 (open reinvention)". Set STATUS: DONE. Never merge.
+- [x] 9. Open PR titled exactly "Site redesign — attempt 3 (open reinvention)". Set STATUS: DONE. Never merge. → PR #5.
 
 ## Honesty guardrails (HARD — see runbook §2)
 Ongoing efforts not finished products; no trend claims; vocabulary ceiling (experiment/log/instrument/in-progress/building — never study results/findings/proven method/productivity scores); no invented metrics; NO em-dashes in visible copy. Verified applied-AI facts are ONLY those in runbook §1; invent nothing beyond it.
