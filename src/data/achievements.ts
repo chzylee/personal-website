@@ -26,10 +26,10 @@ export const achievements: Achievement[] = [
     context: 'Independent problem-solvers, not task-takers',
   },
   {
-    tag: 'AI, done responsibly',
+    tag: 'AI, done accountably',
     figure: 'Accountable',
-    title: 'AI accelerates, I stay in the loop',
-    context: 'Automation shipped with reduced risk',
+    title: 'AI accelerates, I own what ships',
+    context: 'Ship Pipeline and /ratify, in progress',
   },
   {
     tag: 'Community built',

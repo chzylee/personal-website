@@ -4,21 +4,30 @@
 
 This site exists to communicate one statement and back it with proof:
 
-> **I ship and secure what teams actually need, from inside the workflow out.**
+> **My existing experience is SWE. My current work is applied AI. I'm moving toward applied AI while still a SWE.**
 
-The spine is an engineer whose throughline is connecting technical depth to the people who need it. The homepage leads with **full-stack / forward-deployed engineering** (AWS, ex-United Airlines, security at scale) because the primary audience is hiring. The FGC / community work is *proof of the same instinct*, not a co-headline. The unusual range (cloud + security + community architecture) is still the differentiator, demonstrated through both technical and human systems.
+The spine (repositioned 2026-07): the **SWE track record leads** (full-stack, AWS, ex-United Airlines, security at scale) because the primary audience is hiring, and **applied AI is the threaded current direction**: a subtitle present throughout the content, never the loud headline. The applied-AI work is surfaced honestly as living, in-progress systems (Ship Pipeline, ts-pmo), with **/ratify** (a prediction-before-reveal ownership protocol) as the through-line idea: keeping human ownership and accountability of work that AI did. The FGC / community work is *proof of the same instinct*, not a co-headline, and stays exactly as it is.
 
-**Active job search.** Noah is doing outreach now. The homepage must let a recruiter grasp his level AND how to reach him in ~5 seconds. An explicit **Open to work** state (roles + location + remote-open) is part of the design, not an afterthought.
+**Active job search.** Noah is doing outreach now. The homepage must let a recruiter grasp his level AND how to reach him in ~5 seconds. An explicit **Open to work** state (roles + location + remote-open) is part of the design, not an afterthought. Open-to-work roles honestly span both tracks: software engineering AND applied-AI roles.
 
 **Audiences (in priority order):**
-1. Software recruiters and hiring managers (full-stack / solutions / forward-deployed roles)
+1. Software recruiters and hiring managers (full-stack / solutions / applied-AI roles)
 2. Freelance clients / small business owners
 3. FGC tournament organization staff (e.g., EVO-tier)
 
 **What the site must not feel like:** a template, a generic dark-mode dev portfolio, generic SaaS slop, a résumé printed to HTML.
 **What it must feel like:** an editorial piece by someone with a point of view.
 
-> **Note:** the older site message was *"I build systems for people."* The current homepage leads with the engineering-first framing above; the community work moved to a proof point. Keep this section as the source of truth if the rendered copy and this doc ever disagree.
+> **Note:** older site messages were *"I build systems for people"* and later *"I ship and secure what teams actually need, from inside the workflow out."* The current homepage leads with the SWE-track-record-plus-applied-AI framing above. Keep this section as the source of truth if the rendered copy and this doc ever disagree.
+
+### Applied-AI honesty rules (HARD, always active)
+
+The applied-AI systems are open experiments, not products. All copy about them must obey:
+- **Ongoing efforts, not finished products.** Version-stamped, "as of"-dated, or explicitly in progress. Never imply completion, a shipped product, or customers for the AI work.
+- **No trend claims.** Currently 2 builds / 7 ratification-log items, below the owner's own threshold (needs at least 5 builds / 100 items). Nothing "improves", "rises", or "bends the right way". Any figure is "early telemetry of an open experiment".
+- **Vocabulary ceiling.** Use: experiment, log, instrument, in progress, building. Never: study results, findings, proven method, productivity/throughput scores.
+- **No invented metrics.** The verified facts: Ship Pipeline (LLM-assisted dev system, staged ladder, every deliverable paired with a verifier, run on 2 builds: Runway and Rotato, ongoing); ts-pmo (long-term project ops, effort → work-stream → task tracking with behavioral and outcome accountability, v0 live, daily work captured via a debrief step into a Work Log); /ratify (state your expectation about an AI change before the reveal, log predicted / surprised / no-opinion, surprise rate as a comprehension signal). Nothing beyond these.
+- **A `/ledger` route is planned but its data infra does not exist.** Soft forward pointer only: no route, no numbers, no dates promised.
 
 ---
 
@@ -69,7 +78,7 @@ All values are custom properties in `src/styles/global.css`. Never hardcode hex 
 | `--font-mono` | `'DM Mono', monospace` | Labels, tags, stats, eyebrows |
 
 **Rules:**
-- The hero headline is the only place where display + serif italic + purple accent collide on the same line. This collision is the visual identity — preserve it exactly there, do not replicate it elsewhere. The headline is now a **rotating reel** (`Hero.astro`): each line is a practice Noah brings to a team, where the **leading gerund verb is the serif-italic purple accent** (`*Securing*` the path to production · `*Getting*` separate teams to ship together · `*Training*` engineers for ownership · `*Engineering*` trustworthy AI workflows · `*Designing*` directly with customers) and the rest is Bebas display. The verb-as-accent gives the collision a stable position while the line swaps. The reel content is value/practice (conversation starters); the hard numbers live in the proof cards below.
+- The hero headline is the only place where display + serif italic + purple accent collide on the same line. This collision is the visual identity — preserve it exactly there, do not replicate it elsewhere. The headline is now a **rotating reel** (`Hero.astro`): each line is a practice Noah brings to a team, where the **leading gerund verb is the serif-italic purple accent** (`*Securing*` the path to production · `*Getting*` separate teams to ship together · `*Training*` engineers for ownership · `*Owning*` every change AI writes · `*Designing*` directly with customers) and the rest is Bebas display. The `Owning` line is the applied-AI through-line (human ownership of AI work) threaded into the signature motion. The verb-as-accent gives the collision a stable position while the line swaps. The reel content is value/practice (conversation starters); the hard numbers live in the proof cards below.
 - Italic serif is reserved for short, intentional phrases (the reel verbs, `The same instinct`, `not`). Never for entire paragraphs. The reel verbs carry descenders (`Getting`, `Engineering`, `Designing`); the reel reserves `padding-bottom` so they don't clip at `line-height: 1.0`.
 - Body copy is `1rem / 1.7`. Reading line length stays at 65–75ch (`max-width: 36rem` for prose).
 - Eyebrow labels: `--font-mono`, `0.75rem`, letter-spacing `0.16em`, uppercase, muted color. The shared `.eyebrow` class in `global.css` codifies this.
@@ -106,7 +115,7 @@ When in doubt, take the larger step. The aesthetic depends on generous whitespac
 
 | Route | Purpose | Layout Mode |
 |---|---|---|
-| `/` | Hero + value cards + about teaser + selected work + recent writing + photography + contact | Marketing |
+| `/` | Hero + achievements CRT + about + "what I'm building now" systems block + selected work + recent writing + photography + contact | Marketing |
 | `/work` | Two-section narrative: Part one (Community work) + Part two (Engineering work) | Reading |
 | `/work/[slug]` | Deep case study per project | Reading |
 | `/fgc` | Extended FGC work — graphics, specific events, scene context. Currently a placeholder; Noah builds this out over time | Reading |
@@ -118,13 +127,14 @@ When in doubt, take the larger step. The aesthetic depends on generous whitespac
 
 ### Homepage section order
 
-1. **Hero** — text hero on `--color-paper` over an **interactive lattice backdrop** (no photo / no slideshow; the slideshow was cut for feeling weak). Left-aligned, vertically centered, generous whitespace. Stack, in order: **identity block** (circular face avatar + a large **Noah Lee** name with the role labels `Full-Stack Engineer` / `Solutions Engineering` stacked vertically to its right (positioning leans on ownership + customer-facing "solutions" work, the differentiator, rather than a specialist "cloud/security" label; the security and cloud wins still show up as proof), divided by a hairline, as an editorial nameplate; the name is set large because it is short but capped via `clamp()` UNDER the reel's scale so the value-prop headline stays the biggest moment; reuses `src/assets/photo.jpg`, the nav avatar, enlarged; United lives in the subtext and proof, not here), **rotating proof reel as the H1** (see below), one-line subtext (tenure + scope), **Open-to-work status pill** (pulsing dot + roles + location), CTA row (`Get in touch` primary, `See the work` secondary). The reel is the headline; the **identity block answers "who is this" in under a second** (face + name + role) and is the fixed literal anchor, so clarity never depends on the animation. It leads the stack deliberately: the name was previously only in the small nav wordmark, which read as a "who am I looking at" gap. On desktop the right column holds a **CRT achievements screen** (`HeroScreen.astro`, see Project-Specific Overrides) that fills what used to be dead right-side space; a **toned-down lattice** sits behind everything as ambient texture. On mobile the screen is hidden and the hero is the type stack alone.
-2. **Achievements (mobile relocation of the hero CRT)** — there is no separate desktop proof section. On desktop the hero's CRT screen carries the achievement figures. On mobile (`< 1024px`), where the hero's right-column TV is hidden, the same `HeroScreen` CRT renders as a `.hero-achievements` section between the hero and About (a second `.crt` instance; the component's script wires every instance and drives whichever is in view, so exactly one is visible per viewport). Single source of truth: `src/data/achievements.ts`. A former `ContextStrip` proof-cards section lived in this slot ("Let me show my work" + three figure cards) but was **removed as redundant** with the CRT (the same figures appeared twice, back to back); recover it from git history if ever needed.
-3. **About** — quiet synthesis on paper background: display lede (with the serif-italic collision) + three short body paragraphs. No eyebrow.
-4. **Selected work** — 3 teaser cards, link to /work
-5. **Recent writing** — 3 most recent posts, list format
-6. **Photography** — 3-column grid + lightbox (preserved)
-7. **Contact** — real CTA: lede (`Open to … roles`), availability/location line, email at full size + copy button, Résumé + LinkedIn pill links, social icons. No eyebrow.
+1. **Hero** — text hero on `--color-paper` over an **interactive lattice backdrop** (no photo / no slideshow; the slideshow was cut for feeling weak). Left-aligned, vertically centered, generous whitespace. Stack, in order: **identity block** (circular face avatar + a large **Noah Lee** name with the role labels `Full-Stack Engineer` / `Building Applied AI` stacked vertically to its right (the first label is the proven identity and carries the accent; the second is the threaded current direction, phrased as an activity in progress rather than a claimed specialist title), divided by a hairline, as an editorial nameplate; the name is set large because it is short but capped via `clamp()` UNDER the reel's scale so the value-prop headline stays the biggest moment; reuses `src/assets/photo.jpg`, the nav avatar, enlarged; United lives in the subtext and proof, not here), **rotating proof reel as the H1** (see below), two-line subtext (line 1: the 7-year SWE track record: AWS, security at scale, ex-United; line 2, bolded: current work is applied AI systems that keep a human accountable for what ships), **Open-to-work status pill** (pulsing dot + `software & applied-AI roles` + location), CTA row (`Get in touch` primary, `See the work` secondary). The reel is the headline; the **identity block answers "who is this" in under a second** (face + name + role) and is the fixed literal anchor, so clarity never depends on the animation. It leads the stack deliberately: the name was previously only in the small nav wordmark, which read as a "who am I looking at" gap. On desktop the right column holds a **CRT achievements screen** (`HeroScreen.astro`, see Project-Specific Overrides) that fills what used to be dead right-side space; a **toned-down lattice** sits behind everything as ambient texture. On mobile the screen is hidden and the hero is the type stack alone.
+2. **Achievements (mobile relocation of the hero CRT)** — there is no separate desktop proof section. On desktop the hero's CRT screen carries the achievement figures. On mobile (`< 1024px`), where the hero's right-column TV is hidden, the same `HeroScreen` CRT renders as a `.hero-achievements` section between the hero and About (a second `.crt` instance; the component's script wires every instance and drives whichever is in view, so exactly one is visible per viewport). Single source of truth: `src/data/achievements.ts` (its AI slide names Ship Pipeline and /ratify, framed in progress). A former `ContextStrip` proof-cards section lived in this slot ("Let me show my work" + three figure cards) but was **removed as redundant** with the CRT (the same figures appeared twice, back to back); recover it from git history if ever needed.
+3. **About** — quiet synthesis on paper background: display lede (with the serif-italic collision) + three short body paragraphs. The final paragraph states the ownership standard for AI-assisted work and bridges to the systems block below. No eyebrow.
+4. **What I'm building now** — compact systems block on `--color-paper-soft` (`#now`, `.now` in `index.astro`): display heading + a mono `In progress · as of <month year>` stamp (keep this date current when editing), a short intro (track record = SWE, current work = applied AI, both open experiments), a two-item hairline list naming **Ship Pipeline** and **ts-pmo** with one-line honest descriptions, a through-line paragraph on **/ratify** (mono accent on the protocol name), and a muted soft pointer to a future case study (no route, no dates). All copy governed by the Applied-AI honesty rules above. No eyebrow (the heading carries it).
+5. **Selected work** — 3 teaser cards, link to /work
+6. **Recent writing** — 3 most recent posts, list format
+7. **Photography** — 3-column grid + lightbox (preserved)
+8. **Contact** — real CTA: lede (`Open to software engineering & applied-AI roles`), availability/location line, email at full size + copy button, Résumé + LinkedIn pill links, social icons. No eyebrow.
 
 ### When a section adds a second pane
 

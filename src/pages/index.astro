@@ -35,13 +35,13 @@ const featuredSoftware = projects.filter((p) =>
 const featuredCommunity = communityProjects.slice(0, 1);
 
 const description =
-  'Noah Lee: full-stack / forward-deployed engineer (AWS, ex-United Airlines). Seven years shipping software end-to-end, including a 16,000+ vulnerability cross-team remediation, an AWS Lambda pipeline handling 300K+ Kafka messages a day, and FGC tools other organizers now run their own tournament series on. Open to work. Chicago, remote-open.';
+  'Noah Lee: full-stack engineer (AWS, ex-United Airlines, security at scale). Seven years shipping software end-to-end, including a 16,000+ vulnerability cross-team remediation, an AWS Lambda pipeline handling 300K+ Kafka messages a day, and FGC tools other organizers now run their own tournament series on. Current work: applied AI systems (Ship Pipeline, ts-pmo) built to keep a human accountable for what AI ships. Open to software engineering and applied-AI roles. Chicago, remote-open.';
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title="Noah Lee: Full-Stack / Forward-Deployed Engineer" description={description} />
+    <BaseHead title="Noah Lee: Full-Stack Engineer, Building Applied AI Systems" description={description} />
   </head>
 
   <body>
@@ -58,6 +58,53 @@ const description =
     </section>
 
     <About />
+
+    <!-- ── What I'm building now ─────────────────────────────────────── -->
+    <section id="now" class="section section--alt now">
+      <div class="section__inner">
+        <header class="section__header reveal">
+          <h2 class="section__heading">What I'm building now.</h2>
+          <p class="now__stamp">In progress · as of July 2026</p>
+        </header>
+
+        <p class="now__intro reveal" style="--reveal-delay: 80ms">
+          My track record is software engineering. My current work is applied AI: systems that
+          keep human ownership of work AI did. Both are in daily use, and both are open
+          experiments in progress, not products.
+        </p>
+
+        <ul class="now-list">
+          <li class="now-item reveal" style="--reveal-delay: 120ms">
+            <h3 class="now-item__title">Ship Pipeline</h3>
+            <p class="now-item__desc">
+              An LLM-assisted software development system. An idea moves through a staged ladder,
+              and every deliverable is paired with a verifier. Run on 2 builds so far (Runway and
+              Rotato), ongoing.
+            </p>
+          </li>
+          <li class="now-item reveal" style="--reveal-delay: 200ms">
+            <h3 class="now-item__title">ts-pmo</h3>
+            <p class="now-item__desc">
+              Long-term project ops: effort, work-stream, and task tracking that holds me to both
+              behavior and outcomes. v0 is live; each day's work lands in a Work Log through a
+              debrief step.
+            </p>
+          </li>
+        </ul>
+
+        <p class="now__thread reveal" style="--reveal-delay: 240ms">
+          The through-line is <span class="now__protocol">/ratify</span>, a prediction-before-reveal
+          protocol: before I see what the AI changed, I state what I expect, then log whether I
+          predicted it, was surprised, or had no opinion. The surprise rate tells me how well I
+          still understand my own systems. Ownership, instrumented.
+        </p>
+
+        <p class="now__pointer reveal" style="--reveal-delay: 280ms">
+          A full case study comes once the logs are deep enough to mean something. Until then, any
+          number from this work is early telemetry of an open experiment.
+        </p>
+      </div>
+    </section>
 
     <!-- ── Selected work ─────────────────────────────────────────────── -->
     <section id="work" class="section">
@@ -177,7 +224,7 @@ const description =
     <footer class="contact" id="contact">
       <div class="contact__inner">
         <p class="contact__lede reveal">
-          Open to <em class="serif-italic">full-stack, solutions & forward-deployed</em> roles.
+          Open to <em class="serif-italic">software & applied-AI</em> roles.
         </p>
 
         <p class="contact__status reveal" style="--reveal-delay: 120ms">
@@ -409,6 +456,77 @@ const description =
 
   .section--alt .tag {
     background: var(--color-paper);
+  }
+
+  /* ── What I'm building now (compact systems block) ────────────────── */
+  .now .section__inner {
+    gap: 1.75rem;
+  }
+
+  .now__stamp {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+
+  .now__intro,
+  .now__thread,
+  .now__pointer {
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-ink);
+    max-width: 36rem;
+  }
+
+  .now__pointer {
+    font-size: 0.9375rem;
+    color: var(--color-ink-muted);
+  }
+
+  .now__protocol {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    color: var(--color-rust);
+  }
+
+  .now-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .now-item {
+    border-top: 1px solid var(--color-rule);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 1.5rem 0;
+    min-width: 0;
+  }
+
+  .now-item:last-child {
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .now-item__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 2.25vw, 1.75rem);
+    line-height: 1;
+    letter-spacing: 0.005em;
+    color: var(--color-ink);
+    font-weight: 400;
+  }
+
+  .now-item__desc {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+    max-width: 36rem;
   }
 
   /* ── Writing list ─────────────────────────────────────────────────── */
