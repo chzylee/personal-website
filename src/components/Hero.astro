@@ -1,31 +1,51 @@
 ---
-// The hero leads with a rotating "reel" of practices Noah brings to a team.
-// Each line: a serif-italic purple verb (the brand collision) + Bebas display rest.
-// Items stack in one grid cell so the headline height never jumps between swaps.
+// Attempt 3 ("open reinvention") hero.
 //
-// On desktop, the right column holds a retro CRT "screen" (HeroScreen) that runs
-// a slideshow of career highlights, navigable by buttons / arrow keys / a game
-// controller. Behind everything sits a self-animating "constellation": a canvas
-// dot grid lit by a few soft energy centers that roam on their own paths (so the
-// field is alive even when the cursor is still), with the cursor as the primary,
-// strongest center on top, plus a faint per-node twinkle and a soft purple bloom.
-// Honors prefers-reduced-motion. See the "Interactive lattice" + "Hero CRT
-// screen" overrides in CLAUDE.md.
+// A confident, STATIC positioning statement (no rotating reel) that leads with
+// the proven SWE track record, threads applied AI as the current direction in
+// the subtext, and shows the proof as an editorial track-record strip.
+//
+// The signature device is the "working in the open" BUILD LOG panel in the
+// right column (desktop): a monospace, "as of"-dated, in-progress log naming
+// Ship Pipeline, ts-pmo, and /ratify. It replaces the arcade CRT used by the
+// other two attempts, and it is on-thesis: the through-line of the applied-AI
+// work is keeping a human accountable for what ships, so the site presents that
+// work as an honest, logged, in-progress record rather than a finished product.
+//
+// Behind everything sits the same self-animating "constellation" lattice (canvas
+// dot grid lit by roaming energy centers + the cursor) as ambient texture, plus
+// a soft purple bloom. Honors prefers-reduced-motion. See the "Interactive
+// lattice" + "Build-log panel" overrides in CLAUDE.md.
 import { Image } from 'astro:assets';
 import photo from '../assets/photo.jpg';
-import HeroScreen from './HeroScreen.astro';
 
-const reel = [
-  { verb: 'Securing', rest: ' the path to production.' },
-  { verb: 'Getting', rest: ' separate teams to ship together.' },
-  { verb: 'Training', rest: ' engineers for ownership.' },
-  { verb: 'Engineering', rest: ' trustworthy AI workflows.' },
-  { verb: 'Designing', rest: ' directly with customers.' },
+// Proven SWE track record, shown as an editorial stat strip. All figures are
+// verified facts already stated elsewhere on the site; no invented metrics.
+const trackRecord = [
+  { figure: '16,000+', label: 'vulnerabilities cleared' },
+  { figure: '300K+', label: 'Kafka msgs a day on AWS' },
+  { figure: '7 yrs', label: 'shipping software end-to-end' },
 ];
 
-const reelLabel =
-  'What I bring to a team: securing the path to production; getting separate teams to ship together; ' +
-  'training engineers to own their work; engineering trustworthy AI workflows; designing directly with customers.';
+// The applied-AI work, framed strictly in progress (honesty guardrails). Status
+// stamps are counts / version labels, never invented performance metrics.
+const buildLog = [
+  {
+    name: 'Ship Pipeline',
+    status: 'building',
+    desc: 'An idea through a staged ladder, every deliverable paired with a verifier. Run on 2 builds so far.',
+  },
+  {
+    name: 'ts-pmo',
+    status: 'v0 live',
+    desc: 'Long-term project ops: effort to work-stream to task, with behavioral and outcome accountability.',
+  },
+  {
+    name: '/ratify',
+    status: 'instrument',
+    desc: 'State your expectation before the AI reveal, then log it. The surprise rate is a comprehension signal.',
+  },
+];
 ---
 
 <section class="hero">
@@ -45,36 +65,41 @@ const reelLabel =
       <p class="hero__name">Noah Lee</p>
       <ul class="hero__roles">
         <li>Full-Stack Engineer</li>
-        <li>Community-Embedded</li>
+        <li>Building Applied AI</li>
       </ul>
     </div>
 
-    <h1 class="hero__headline reveal" style="--reveal-delay: 160ms" aria-label={reelLabel}>
-      <span class="hero__reel">
-        {reel.map((item, i) => (
-          <span class={`hero__reel-item${i === 0 ? ' is-active' : ''}`} aria-hidden="true">
-            <em class="hero__reel-verb">{item.verb}</em><br />{item.rest}
-          </span>
-        ))}
-      </span>
+    <h1 class="hero__headline reveal" style="--reveal-delay: 160ms">
+      Seven years shipping and securing<br />
+      software <em class="serif-italic">end to end.</em>
     </h1>
 
-    <p class="hero__sub reveal" style="--reveal-delay: 280ms">
-      Full-stack from frontend to infrastructure, with AI in the loop.<br />
-      <strong>I build products and platforms with a disciplined AI workflow.</strong>
+    <p class="hero__sub reveal" style="--reveal-delay: 260ms">
+      AWS, security at scale, ex-United Airlines.
+      <strong>My current work is applied AI: systems that keep a human accountable
+      for what ships.</strong>
     </p>
 
-    <div class="hero__status reveal" style="--reveal-delay: 360ms">
+    <dl class="hero__stats reveal" style="--reveal-delay: 340ms">
+      {trackRecord.map((s) => (
+        <div class="hero__stat">
+          <dt class="hero__stat-figure">{s.figure}</dt>
+          <dd class="hero__stat-label">{s.label}</dd>
+        </div>
+      ))}
+    </dl>
+
+    <div class="hero__status reveal" style="--reveal-delay: 420ms">
       <span class="hero__status-dot" aria-hidden="true"></span>
       <span class="hero__status-text">
-        <strong>Open to work</strong> · engineering &amp; solutions roles · Chicago, remote-open
+        <strong>Open to work</strong> · software &amp; applied-AI roles · Chicago, remote-open
       </span>
     </div>
 
-    <div class="hero__cta-row reveal" style="--reveal-delay: 440ms">
+    <div class="hero__cta-row reveal" style="--reveal-delay: 500ms">
       <a href="#contact" class="hero__cta hero__cta--primary">Get in touch</a>
-      <a href="#work" class="hero__cta hero__cta--secondary">
-        See the work
+      <a href="#now" class="hero__cta hero__cta--secondary">
+        See what I'm building
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
         </svg>
@@ -82,10 +107,34 @@ const reelLabel =
     </div>
   </div>
 
-  <div class="hero__screen reveal" style="--reveal-delay: 520ms">
-    <p class="hero__controller-hint" aria-hidden="true">Plug in your controller</p>
-    <HeroScreen />
-  </div>
+  <!-- Build-log panel: the hero's right-column anchor on desktop. Hidden on
+       mobile to keep the hero lean; the fuller "Now building" section below
+       carries the same systems on small screens. -->
+  <aside class="hero__log reveal" style="--reveal-delay: 560ms" aria-label="What I'm building now">
+    <div class="buildlog">
+      <div class="buildlog__bar">
+        <span class="buildlog__path">~/now-building</span>
+        <span class="buildlog__tag">log</span>
+      </div>
+      <div class="buildlog__body">
+        <p class="buildlog__meta">In progress · as of July 2026</p>
+        <ul class="buildlog__list">
+          {buildLog.map((item) => (
+            <li class="buildlog__item">
+              <div class="buildlog__head">
+                <span class="buildlog__name">{item.name}</span>
+                <span class="buildlog__status">{item.status}</span>
+              </div>
+              <p class="buildlog__desc">{item.desc}</p>
+            </li>
+          ))}
+        </ul>
+        <p class="buildlog__foot">
+          A fuller case study and a <span class="buildlog__route">/ledger</span> view are in progress.
+        </p>
+      </div>
+    </div>
+  </aside>
 </section>
 
 <style>
@@ -104,7 +153,7 @@ const reelLabel =
     padding: calc(var(--nav-height) + 3rem) 1.5rem 3rem;
   }
 
-  /* ── Interactive lattice backdrop (toned-down ambient texture) ── */
+  /* ── Interactive lattice backdrop (ambient texture) ── */
   .hero__lattice {
     position: absolute;
     inset: 0;
@@ -146,10 +195,10 @@ const reelLabel =
   }
 
   /* ── Identity block: face + big name + role labels, so "who is this" is instant.
-     The name is short, so it's set large for impact, but capped under the reel's
-     scale so the value-prop headline stays the biggest moment. Role labels stack
-     vertically to the right of the name, divided by a hairline (an editorial
-     nameplate, not floating corner text). ── */
+     Role labels stack vertically to the right of the name, divided by a hairline
+     (an editorial nameplate). The first role is the proven identity and carries
+     the accent; the second is the threaded current direction, phrased as an
+     activity in progress rather than a claimed specialist title. ── */
   .hero__identity {
     display: flex;
     align-items: center;
@@ -183,6 +232,7 @@ const reelLabel =
     gap: 0.2rem;
     padding-left: 1.25rem;
     border-left: 1px solid var(--color-rule);
+    min-width: 0;
   }
 
   .hero__roles li {
@@ -194,12 +244,12 @@ const reelLabel =
     color: var(--color-ink-muted);
   }
 
-  /* The first role is the headline credential; tint it the accent. */
+  /* The first role is the proven credential; tint it the accent. */
   .hero__roles li:first-child {
     color: var(--color-rust);
   }
 
-  /* ── Rotating headline reel ── */
+  /* ── Static headline ── */
   .hero__headline {
     font-family: var(--font-display);
     font-size: clamp(2.75rem, 6vw, 5.25rem);
@@ -210,39 +260,9 @@ const reelLabel =
     text-wrap: balance;
   }
 
-  /* All items share one grid cell, so the box is as tall as the tallest line
-     and swapping never reflows the page. */
-  .hero__reel {
-    display: grid;
-  }
-
-  .hero__reel-item {
-    grid-area: 1 / 1;
-    opacity: 0;
-    transform: translateY(0.4em);
-    transition:
-      opacity 0.5s ease,
-      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
-  }
-
-  .hero__reel-item.is-active {
-    opacity: 1;
-    transform: none;
-  }
-
-  /* Item exits upward — opposite of the enter-from-below entrance */
-  .hero__reel-item.is-exiting {
-    opacity: 0;
-    transform: translateY(-0.35em);
-  }
-
-  .hero__reel-verb {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-weight: 400;
+  .hero__headline .serif-italic {
     color: var(--color-rust);
-    /* serif descenders (Getting / Engineering / Designing) need a hair of room */
+    /* serif descenders need a hair of room at line-height 1.0 */
     padding-bottom: 0.04em;
   }
 
@@ -258,6 +278,39 @@ const reelLabel =
   .hero__sub strong {
     font-weight: 600;
     color: var(--color-ink);
+  }
+
+  /* ── Track-record stat strip ── */
+  .hero__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.75rem 2.25rem;
+    align-items: flex-end;
+    margin: 0;
+  }
+
+  .hero__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .hero__stat-figure {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    line-height: 0.95;
+    letter-spacing: 0.01em;
+    color: var(--color-ink);
+  }
+
+  .hero__stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    margin: 0;
   }
 
   /* ── Open-to-work status pill ── */
@@ -365,43 +418,142 @@ const reelLabel =
     border-color: var(--color-rust);
   }
 
-  /* ── CRT screen slot (desktop only; mobile keeps the hero lean) ── */
-  .hero__screen {
+  /* ── Build-log panel (desktop right column; hidden on mobile) ── */
+  .hero__log {
     position: relative;
     z-index: 2;
     display: none;
     width: 100%;
+    min-width: 0;
   }
 
-  /* Hidden "plug in your controller" hint above the CRT. Invisible at rest; the
-     lattice script raises its opacity as the cursor-light passes near it, so you
-     only find it by dragging across the grid. */
-  .hero__controller-hint {
-    position: absolute;
-    bottom: 100%;
-    left: 0;
-    margin-bottom: 0.75rem;
+  .buildlog {
+    background: color-mix(in srgb, var(--color-paper-soft) 82%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--color-rule);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px -30px color-mix(in srgb, var(--color-paper) 85%, transparent);
+  }
+
+  .buildlog__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1.125rem;
+    border-bottom: 1px solid var(--color-rule);
+    background: color-mix(in srgb, var(--color-paper) 40%, transparent);
+  }
+
+  .buildlog__path {
     font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--color-ink);
+  }
+
+  .buildlog__tag {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-rust);
+    border: 1px solid var(--color-rule);
+    border-radius: 3px;
+    padding: 0.15rem 0.45rem;
+  }
+
+  .buildlog__body {
+    padding: 1.25rem 1.25rem 1.375rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .buildlog__meta {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+
+  .buildlog__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  .buildlog__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding-top: 0.875rem;
+    border-top: 1px solid var(--color-rule);
+    min-width: 0;
+  }
+
+  .buildlog__item:first-child {
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .buildlog__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-width: 0;
+  }
+
+  .buildlog__name {
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--color-ink);
+    min-width: 0;
+  }
+
+  .buildlog__status {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--color-rust);
     white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
+    flex-shrink: 0;
   }
 
-  /* ── Desktop: split into content (left) + screen (right) ── */
+  .buildlog__desc {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-ink-muted);
+  }
+
+  .buildlog__foot {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    color: var(--color-ink-muted);
+    padding-top: 0.875rem;
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .buildlog__route {
+    color: var(--color-rust);
+  }
+
+  /* ── Desktop: split into content (left) + build-log (right) ── */
   @media (min-width: 1024px) {
     .hero {
       display: grid;
-      /* Content-sized tracks + justify-content:center keeps the column cluster
-         together and centered on ultra-wide viewports, instead of a greedy 1fr
-         flinging the content and CRT to opposite walls with a dead band between.
-         The hero stays full-bleed (so the lattice/bloom still cover the viewport
-         and track the cursor everywhere); only the cluster is centered. The left
-         track shrinks below 40rem on narrow desktops, so no overflow. */
-      grid-template-columns: minmax(0, 40rem) 26rem;
+      grid-template-columns: minmax(0, 40rem) 24rem;
       justify-content: center;
       align-items: center;
       gap: 3.5rem;
@@ -413,11 +565,11 @@ const reelLabel =
       gap: 1.75rem;
     }
 
-    .hero__screen { display: block; }
+    .hero__log { display: block; }
   }
 
   @media (min-width: 1280px) {
-    .hero { grid-template-columns: minmax(0, 40rem) 28rem; padding-inline: 5rem; }
+    .hero { grid-template-columns: minmax(0, 40rem) 26rem; padding-inline: 5rem; }
   }
 
   /* ── Mobile ── */
@@ -439,55 +591,32 @@ const reelLabel =
       font-size: 1rem;
       line-height: 1.6;
     }
+
+    /* Keep the mobile-strict above-the-fold set (headline, subtext, pill, primary
+       CTA) tight by moving the proof stat strip below the CTA row on small
+       viewports. The stats stay in the hero as supporting proof, just under the
+       fold-line CTAs, so they never push the pill/CTA down at 375x667. */
+    .hero__stats { order: 5; }
   }
 
   @media (max-width: 480px) {
     .hero { padding: calc(var(--nav-height) + 2.5rem) 1.25rem 2.5rem; }
     .hero__avatar { width: 56px; height: 56px; }
     .hero__name { font-size: 2.25rem; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero__reel-item {
-      transition: none;
-    }
+    .hero__stats { gap: 1.25rem 1.75rem; }
   }
 </style>
 
 <script>
-  // ── Rotating headline reel ──
-  // Progressive enhancement: item 0 is already `.is-active` in the HTML, so
-  // without JS (or under reduced motion) the hero shows a complete first line.
-  // First swap fires at ~1.2s (inside the 5-second scan window) so the signature
-  // motion proves itself before a recruiter scrolls; then a steady cadence.
-  const reel = document.querySelector<HTMLElement>('.hero__reel');
-  const reelReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-  if (reel && !reelReduce.matches) {
-    const items = Array.from(reel.querySelectorAll<HTMLElement>('.hero__reel-item'));
-    if (items.length > 1) {
-      let i = 0;
-      const advance = () => {
-        const current = items[i];
-        i = (i + 1) % items.length;
-        const next = items[i];
-        current.classList.add('is-exiting');
-        current.classList.remove('is-active');
-        next.classList.add('is-active');
-        setTimeout(() => current.classList.remove('is-exiting'), 750);
-      };
-      window.setTimeout(() => {
-        advance();
-        window.setInterval(advance, 3200);
-      }, 1200);
-    }
-  }
-
-  // ── Interactive lattice backdrop (toned-down ambient texture) ──
+  // ── Interactive lattice backdrop (ambient texture) ──
+  // A self-animating "constellation": a canvas dot grid lit by a few soft energy
+  // centers that roam on their own paths (so the field is alive even when the
+  // cursor is still), with the cursor as the primary, strongest center on top,
+  // plus a faint per-node twinkle and a soft purple bloom. Honors
+  // prefers-reduced-motion (renders a single static frame, no loop).
   const hero = document.querySelector<HTMLElement>('.hero');
   const canvas = document.querySelector<HTMLCanvasElement>('.hero__lattice');
   const bloom = document.querySelector<HTMLElement>('.hero__bloom');
-  const hint = document.querySelector<HTMLElement>('.hero__controller-hint');
   const reduceMq = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   // Read brand colors from the CSS tokens so the canvas stays single-sourced.
@@ -521,7 +650,6 @@ const reelLabel =
       let raf = 0;
       let onscreen = true;
       let inited = false;
-      let hintCx = -1, hintCy = -1; // hint center in CSS px, relative to the hero
 
       const measure = () => {
         const r = hero.getBoundingClientRect();
@@ -555,16 +683,6 @@ const reelLabel =
           eye.x = tgt.x = W * 0.32;
           eye.y = tgt.y = H * 0.52;
           inited = true;
-        }
-
-        // Locate the hidden "plug in your controller" hint so the render loop can
-        // reveal it by proximity. Skipped when it's display:none (mobile).
-        if (hint && hint.offsetParent !== null) {
-          const hr = hint.getBoundingClientRect();
-          hintCx = hr.left - r.left + hr.width / 2;
-          hintCy = hr.top - r.top + hr.height / 2;
-        } else {
-          hintCx = -1;
         }
       };
 
@@ -679,12 +797,6 @@ const reelLabel =
           bloom.style.transform = `translate(${eye.x / dpr}px, ${eye.y / dpr}px)`;
         }
 
-        // Reveal the controller hint as the cursor-light nears it.
-        if (hint && hintCx >= 0) {
-          const hd = Math.hypot(eye.x / dpr - hintCx, eye.y / dpr - hintCy);
-          hint.style.opacity = Math.max(0, Math.min(1, 1.15 - hd / 170)).toFixed(3);
-        }
-
         if (animate) raf = requestAnimationFrame((t) => render(t, true));
       };
 
@@ -720,19 +832,6 @@ const reelLabel =
       });
 
       measure();
-
-      // The hero grid centers its column cluster, so the CRT (and the hint
-      // anchored to it) settle into final position only after late layout shifts
-      // (web fonts, CRT content). Re-measure then, or the hint's captured center
-      // goes stale and it reveals when the cursor-light is nowhere near it.
-      const remeasure = () => {
-        measure();
-        if (reduceMq.matches || !onscreen) render(0, false);
-      };
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(remeasure);
-      }
-      window.addEventListener('load', remeasure);
 
       if (reduceMq.matches) {
         render(0, false); // single static frame, no loop
