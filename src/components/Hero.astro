@@ -591,6 +591,12 @@ const buildLog = [
       font-size: 1rem;
       line-height: 1.6;
     }
+
+    /* Keep the mobile-strict above-the-fold set (headline, subtext, pill, primary
+       CTA) tight by moving the proof stat strip below the CTA row on small
+       viewports. The stats stay in the hero as supporting proof, just under the
+       fold-line CTAs, so they never push the pill/CTA down at 375x667. */
+    .hero__stats { order: 5; }
   }
 
   @media (max-width: 480px) {
