@@ -4,8 +4,8 @@
 // Items stack in one grid cell so the headline height never jumps between swaps.
 //
 // On desktop, the right column holds a retro CRT "screen" (HeroScreen) that runs
-// a slideshow of career highlights, navigable by buttons / arrow keys / a game
-// controller. Behind everything sits a self-animating "constellation": a canvas
+// a two-channel slideshow (career achievements + the in-progress applied-AI
+// builds), navigable by buttons / arrow keys / a game controller. Behind everything sits a self-animating "constellation": a canvas
 // dot grid lit by a few soft energy centers that roam on their own paths (so the
 // field is alive even when the cursor is still), with the cursor as the primary,
 // strongest center on top, plus a faint per-node twinkle and a soft purple bloom.
@@ -19,13 +19,13 @@ const reel = [
   { verb: 'Securing', rest: ' the path to production.' },
   { verb: 'Getting', rest: ' separate teams to ship together.' },
   { verb: 'Training', rest: ' engineers for ownership.' },
-  { verb: 'Engineering', rest: ' trustworthy AI workflows.' },
+  { verb: 'Owning', rest: ' every change AI writes.' },
   { verb: 'Designing', rest: ' directly with customers.' },
 ];
 
 const reelLabel =
   'What I bring to a team: securing the path to production; getting separate teams to ship together; ' +
-  'training engineers to own their work; engineering trustworthy AI workflows; designing directly with customers.';
+  'training engineers to own their work; owning every change AI writes; designing directly with customers.';
 ---
 
 <section class="hero">
@@ -45,7 +45,7 @@ const reelLabel =
       <p class="hero__name">Noah Lee</p>
       <ul class="hero__roles">
         <li>Full-Stack Engineer</li>
-        <li>Community-Embedded</li>
+        <li>Building Applied AI</li>
       </ul>
     </div>
 
@@ -60,14 +60,14 @@ const reelLabel =
     </h1>
 
     <p class="hero__sub reveal" style="--reveal-delay: 280ms">
-      Full-stack from frontend to infrastructure, with AI in the loop.<br />
-      <strong>I build products and platforms with a disciplined AI workflow.</strong>
+      Seven years shipping full-stack software: AWS, security at scale, ex-United Airlines.<br />
+      <strong>Current work: applied-AI systems that keep a human accountable for what ships.</strong>
     </p>
 
     <div class="hero__status reveal" style="--reveal-delay: 360ms">
       <span class="hero__status-dot" aria-hidden="true"></span>
       <span class="hero__status-text">
-        <strong>Open to work</strong> · engineering &amp; solutions roles · Chicago, remote-open
+        <strong>Open to work</strong> · software &amp; applied-AI roles · Chicago, remote-open
       </span>
     </div>
 
@@ -242,7 +242,7 @@ const reelLabel =
     font-style: italic;
     font-weight: 400;
     color: var(--color-rust);
-    /* serif descenders (Getting / Engineering / Designing) need a hair of room */
+    /* serif descenders (Getting / Owning / Designing) need a hair of room */
     padding-bottom: 0.04em;
   }
 

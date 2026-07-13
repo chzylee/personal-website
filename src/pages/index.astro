@@ -35,13 +35,13 @@ const featuredSoftware = projects.filter((p) =>
 const featuredCommunity = communityProjects.slice(0, 1);
 
 const description =
-  'Noah Lee: full-stack / forward-deployed engineer (AWS, ex-United Airlines). Seven years shipping software end-to-end, including a 16,000+ vulnerability cross-team remediation, an AWS Lambda pipeline handling 300K+ Kafka messages a day, and FGC tools other organizers now run their own tournament series on. Open to work. Chicago, remote-open.';
+  'Noah Lee: full-stack engineer (AWS, security at scale, ex-United Airlines) whose current work is applied AI. Seven years shipping software end-to-end, including a 16,000+ vulnerability cross-team remediation and an AWS Lambda pipeline handling 300K+ Kafka messages a day. Now building Ship Pipeline and ts-pmo, in-progress systems that keep a human accountable for what AI ships. Open to software engineering & applied-AI roles. Chicago, remote-open.';
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title="Noah Lee: Full-Stack / Forward-Deployed Engineer" description={description} />
+    <BaseHead title="Noah Lee: Full-Stack Engineer, Building Applied AI" description={description} />
   </head>
 
   <body>
@@ -51,13 +51,58 @@ const description =
     <!-- Achievements: the hero's CRT relocates here on mobile, where the hero's
          right-column TV is hidden. Exactly one .crt instance is visible per
          viewport (see HeroScreen's multi-instance script). -->
-    <section class="hero-achievements" aria-label="Career achievements">
+    <section class="hero-achievements" aria-label="Career highlights and current builds">
       <div class="hero-achievements__inner">
         <HeroScreen />
       </div>
     </section>
 
     <About />
+
+    <!-- ── What I'm building now: the applied-AI systems, honestly framed as
+         in-progress experiments (see the Applied-AI honesty rules in CLAUDE.md).
+         The CRT above teases these; this block is the substantive read. ── -->
+    <section id="now" class="now">
+      <div class="now__inner">
+        <header class="now__header reveal">
+          <h2 class="now__heading">What I'm building now</h2>
+          <p class="now__stamp">In progress · as of July 2026</p>
+        </header>
+
+        <p class="now__intro reveal" style="--reveal-delay: 100ms">
+          The track record above is software engineering. The current work is applied AI: systems that
+          keep me accountable for what AI ships. Both are open experiments I build and use daily, not
+          products.
+        </p>
+
+        <ul class="now__list">
+          <li class="now__item reveal" style="--reveal-delay: 160ms">
+            <h3 class="now__name">Ship Pipeline</h3>
+            <p class="now__desc">
+              An LLM-assisted development system: an idea moves through a staged ladder, and every
+              deliverable is paired with a verifier. Run on 2 builds so far (Runway and Rotato), ongoing.
+            </p>
+          </li>
+          <li class="now__item reveal" style="--reveal-delay: 220ms">
+            <h3 class="now__name">ts-pmo</h3>
+            <p class="now__desc">
+              Long-term project ops: effort → work-stream → task tracking with behavioral and outcome
+              accountability. v0 is live; daily work lands in a Work Log through a debrief step.
+            </p>
+          </li>
+        </ul>
+
+        <p class="now__thread reveal" style="--reveal-delay: 280ms">
+          The through-line is <span class="now__protocol">/ratify</span>: before I see what the AI
+          changed, I state what I expect. Every decision gets logged as predicted, surprised, or
+          no-opinion, and the surprise rate is a signal of how well I still understand my own system.
+        </p>
+
+        <p class="now__pointer reveal" style="--reveal-delay: 340ms">
+          A case study on the ownership logs is coming once they are deep enough to be honest.
+        </p>
+      </div>
+    </section>
 
     <!-- ── Selected work ─────────────────────────────────────────────── -->
     <section id="work" class="section">
@@ -177,7 +222,7 @@ const description =
     <footer class="contact" id="contact">
       <div class="contact__inner">
         <p class="contact__lede reveal">
-          Open to <em class="serif-italic">full-stack, solutions & forward-deployed</em> roles.
+          Open to <em class="serif-italic">software &amp; applied-AI</em> roles.
         </p>
 
         <p class="contact__status reveal" style="--reveal-delay: 120ms">
@@ -252,6 +297,110 @@ const description =
 
   @media (max-width: 480px) {
     .hero-achievements { padding: 1rem 1.25rem 3.5rem; }
+  }
+
+  /* ── What I'm building now (compact systems block) ────────────────── */
+  .now {
+    padding: 6rem 2rem;
+    background: var(--color-paper-soft);
+    display: flex;
+    justify-content: center;
+    scroll-margin-top: var(--nav-height);
+  }
+
+  .now__inner {
+    max-width: 38rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-width: 0;
+  }
+
+  .now__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .now__heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.875rem, 3.5vw, 2.75rem);
+    line-height: 1.05;
+    letter-spacing: -0.005em;
+    color: var(--color-ink);
+    font-weight: 400;
+  }
+
+  .now__stamp {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+  }
+
+  .now__intro,
+  .now__thread,
+  .now__desc {
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-ink);
+  }
+
+  .now__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .now__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .now__item:last-child {
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .now__name {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    line-height: 1;
+    letter-spacing: 0.005em;
+    color: var(--color-ink);
+    font-weight: 400;
+  }
+
+  .now__desc {
+    font-size: 1rem;
+    color: var(--color-ink-muted);
+  }
+
+  .now__protocol {
+    font-family: var(--font-mono);
+    font-size: 0.9375em;
+    color: var(--color-rust);
+  }
+
+  .now__pointer {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+  }
+
+  @media (max-width: 640px) {
+    .now { padding: 4rem 1.5rem; }
+  }
+
+  @media (max-width: 480px) {
+    .now { padding: 3.5rem 1.25rem; }
   }
 
   /* ── Shared section shell ─────────────────────────────────────────── */

@@ -1,13 +1,16 @@
 ---
-// A retro CRT / arcade "screen" that runs a slideshow of career achievements.
-// Navigable by the on-screen arrows, the keyboard (← →), and a game controller
-// (Gamepad API) as an easter egg, including fight-stick POV-hat axes (e.g. a
-// HORI stick reports direction on axis 9, not the d-pad buttons). Decorative
-// chrome is aria-hidden; slide content is exposed to AT via an aria-live region.
-// Honors prefers-reduced-motion (no auto-advance/flicker; manual nav still works).
-import { achievements } from '../data/achievements';
+// A retro CRT / arcade "screen" that runs a two-channel slideshow: ACHIEVEMENTS
+// (the proven SWE + community track record) and NOW BUILDING (the applied-AI
+// systems, framed in progress). The top frame label switches with the active
+// slide's channel. Navigable by the on-screen arrows, the keyboard (← →), and a
+// game controller (Gamepad API) as an easter egg, including fight-stick POV-hat
+// axes (e.g. a HORI stick reports direction on axis 9, not the d-pad buttons).
+// Decorative chrome is aria-hidden; slide content is exposed to AT via an
+// aria-live region. Honors prefers-reduced-motion (no auto-advance/flicker;
+// manual nav still works).
+import { slides } from '../data/achievements';
 
-const total = achievements.length;
+const total = slides.length;
 const totalLabel = String(total).padStart(2, '0');
 ---
 
@@ -15,13 +18,13 @@ const totalLabel = String(total).padStart(2, '0');
   class="crt"
   role="group"
   aria-roledescription="carousel"
-  aria-label="Career achievements"
+  aria-label="Career highlights and current builds"
 >
   <div class="crt__bezel">
     <div class="crt__screen">
       <div class="crt__topbar" aria-hidden="true">
-        <span class="crt__frame">
-          <svg class="crt__trophy" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <span class="crt__frame crt__frame--ach">
+          <svg class="crt__frame-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
             <path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
             <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
@@ -29,14 +32,21 @@ const totalLabel = String(total).padStart(2, '0');
           </svg>
           ACHIEVEMENTS
         </span>
+        <span class="crt__frame crt__frame--now">
+          <svg class="crt__frame-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+          </svg>
+          NOW BUILDING
+        </span>
         <span class="crt__stagenum"><span data-stage-current>01</span> / {totalLabel}</span>
       </div>
 
       <div class="crt__stage">
-        {achievements.map((a, i) => (
+        {slides.map((a, i) => (
           <article
             class={`crt__slide${i === 0 ? ' is-active' : ''}`}
             data-slide={i}
+            data-channel={a.channel}
             data-label={`${a.figure} ${a.title}. ${a.context}`}
             aria-hidden={i !== 0 ? 'true' : 'false'}
           >
@@ -60,24 +70,24 @@ const totalLabel = String(total).padStart(2, '0');
   </div>
 
   <div class="crt__controls">
-    <button class="crt__btn" type="button" data-prev aria-label="Previous achievement">
+    <button class="crt__btn" type="button" data-prev aria-label="Previous highlight">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
     </button>
 
-    <div class="crt__dots" role="tablist" aria-label="Achievements">
-      {achievements.map((_, i) => (
+    <div class="crt__dots" role="tablist" aria-label="Highlights">
+      {slides.map((_, i) => (
         <button
           class={`crt__dot${i === 0 ? ' is-active' : ''}`}
           type="button"
           data-dot={i}
           role="tab"
           aria-selected={i === 0 ? 'true' : 'false'}
-          aria-label={`Achievement ${i + 1} of ${total}`}
+          aria-label={`Highlight ${i + 1} of ${total}`}
         ></button>
       ))}
     </div>
 
-    <button class="crt__btn" type="button" data-next aria-label="Next achievement">
+    <button class="crt__btn" type="button" data-next aria-label="Next highlight">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
     </button>
 
@@ -209,7 +219,14 @@ const totalLabel = String(total).padStart(2, '0');
     color: var(--color-rust);
   }
 
-  .crt__trophy { color: var(--color-rust); }
+  /* Two channel frames; exactly one is visible, driven by the active slide's
+     channel (.is-now on the root). No-JS default is the ACHIEVEMENTS frame,
+     matching slide 0. */
+  .crt__frame--now { display: none; }
+  .crt.is-now .crt__frame--ach { display: none; }
+  .crt.is-now .crt__frame--now { display: inline-flex; }
+
+  .crt__frame-icon { color: var(--color-rust); }
 
   .crt__stagenum { color: var(--color-ink-muted); }
   .crt__stagenum [data-stage-current] { color: var(--color-ink); }
@@ -437,8 +454,12 @@ const totalLabel = String(total).padStart(2, '0');
       slides[idx].setAttribute('aria-hidden', 'false');
       dots[idx].classList.add('is-active');
       dots[idx].setAttribute('aria-selected', 'true');
+      root.classList.toggle('is-now', slides[idx].dataset.channel === 'now');
       if (stageNum) stageNum.textContent = pad2(idx);
-      if (live) live.textContent = `Achievement ${idx + 1} of ${total}: ${slides[idx].dataset.label ?? ''}`;
+      if (live) {
+        const channel = slides[idx].dataset.channel === 'now' ? 'Now building' : 'Achievement';
+        live.textContent = `${channel}, highlight ${idx + 1} of ${total}: ${slides[idx].dataset.label ?? ''}`;
+      }
       restart();
     };
 
