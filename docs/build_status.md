@@ -16,7 +16,7 @@ Attempt 1 of 3 — `redesign/1-preserve`. Latitude: preserve the editorial dark/
 - [x] 5. Leave FGC content as-is (src/pages/fgc/ and FGC copy elsewhere). Do not touch. (No FGC file edited; About/community copy untouched except the AI paragraph.)
 - [x] 6. Update CLAUDE.md on this branch to match every change (Site Purpose spine + Applied-AI honesty rules + homepage section order + reel/roles/contact descriptions + IA table).
 - [x] 7. Build passes: `npm run build` (astro build) + `npm run check` (astro check). (0 errors, 0 warnings after content changes.)
-- [ ] 8. Self-review vs CLAUDE.md Enforcement Rules + §2 honesty guardrails. Run /design-review if available.
+- [x] 8. Self-review vs CLAUDE.md Enforcement Rules + §2 honesty guardrails. Ran gstack /design-review (diff-aware, homepage, desktop 1280 + mobile 375): 3 findings, all fixed and verified with before/after screenshots. FINDING-001: hero primary CTA never revealed at 375x667 (reveal.ts -10% rootMargin clipped it; above-the-fold elements now reveal on load per the script's documented intent). FINDING-002: now-block intro said "Two of them" with exactly two systems listed; now "Both". FINDING-003: contact lede split "applied-AI" across lines; now matches the pill wording. No console errors; no horizontal scroll at 375; tokens-only CSS; no em-dashes in visible copy (grep-verified).
 - [ ] 9. Open PR titled exactly "Site redesign — attempt 1 (preserve identity)". Set STATUS: DONE. Never merge.
 
 ## Honesty guardrails (HARD — see runbook §2)
