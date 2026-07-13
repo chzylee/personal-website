@@ -1,9 +1,9 @@
 # Build Status — redesign/1-preserve (Attempt 1: preserve identity)
 
-STATUS: IN-PROGRESS
+STATUS: DONE
 LOCK: PRIMARY · fable · 2026-07-13T04:49:05Z
 RUN-COUNT: 1
-RESUME POINTER: §3 content changes 1-6 done and pushed (commit 979e300 + this one). Build + check green after content changes. Remaining: self-review vs Enforcement Rules + §2 (item 8, incl. /design-review if available), then open the PR (item 9).
+RESUME POINTER: ATTEMPT 1 COMPLETE. All checklist items done; build + check green; PR #3 open (https://github.com/chzylee/personal-website/pull/3). Nothing left on this branch. Next scheduled tick should move to attempt 2 (redesign/2-elements).
 
 ## Attempt
 Attempt 1 of 3 — `redesign/1-preserve`. Latitude: preserve the editorial dark/purple identity, type system, and every signature element (CRT HeroScreen, constellation lattice, TV/event-reel scaffolding). Rework only copy, section content/order, IA, and ADD the "what I'm building now" systems block within that language. Nothing signature removed.
@@ -17,7 +17,7 @@ Attempt 1 of 3 — `redesign/1-preserve`. Latitude: preserve the editorial dark/
 - [x] 6. Update CLAUDE.md on this branch to match every change (Site Purpose spine + Applied-AI honesty rules + homepage section order + reel/roles/contact descriptions + IA table).
 - [x] 7. Build passes: `npm run build` (astro build) + `npm run check` (astro check). (0 errors, 0 warnings after content changes.)
 - [x] 8. Self-review vs CLAUDE.md Enforcement Rules + §2 honesty guardrails. Ran gstack /design-review (diff-aware, homepage, desktop 1280 + mobile 375): 3 findings, all fixed and verified with before/after screenshots. FINDING-001: hero primary CTA never revealed at 375x667 (reveal.ts -10% rootMargin clipped it; above-the-fold elements now reveal on load per the script's documented intent). FINDING-002: now-block intro said "Two of them" with exactly two systems listed; now "Both". FINDING-003: contact lede split "applied-AI" across lines; now matches the pill wording. No console errors; no horizontal scroll at 375; tokens-only CSS; no em-dashes in visible copy (grep-verified).
-- [ ] 9. Open PR titled exactly "Site redesign — attempt 1 (preserve identity)". Set STATUS: DONE. Never merge.
+- [x] 9. Open PR titled exactly "Site redesign — attempt 1 (preserve identity)". Set STATUS: DONE. Never merge. (PR: https://github.com/chzylee/personal-website/pull/3, base main, opened 2026-07-13. Not merged.)
 
 ## Honesty guardrails (HARD — see runbook §2)
 Ongoing efforts not finished products; no trend claims; vocabulary ceiling (experiment/log/instrument/in-progress/building — never study results/findings/proven method/productivity scores); no invented metrics; NO em-dashes in visible copy. Verified applied-AI facts are ONLY those in runbook §1; invent nothing beyond it.
