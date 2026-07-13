@@ -149,3 +149,6 @@ vite.config.ts.timestamp-*
 .wrangler
 .dev.vars*
 !.dev.vars.example
+
+# gstack working dir
+.gstack/
