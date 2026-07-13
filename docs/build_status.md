@@ -3,7 +3,7 @@
 STATUS: IN-PROGRESS
 LOCK: PRIMARY · fable · 2026-07-13T05:10:26Z
 RUN-COUNT: 1
-RESUME POINTER: Branch just seeded off clean main by the PRIMARY (fable) orchestrator. No content work done yet. Dispatch the Fable worker to do the PART II §3 content changes at Attempt 2 latitude (§4: elements fair game), build, self-review, and open the PR. Start from checklist item 1.
+RESUME POINTER: Items 1-8 done and pushed (Fable worker, run 1). Element repurpose: the CRT HeroScreen is now a two-channel reel (ACHIEVEMENTS + NOW BUILDING via a channel field per slide in achievements.ts; frame label/icon switch with the active slide). Build + check green; browser QA at 375x667 and 1280x800 passed (no horizontal scroll, hero CTA in fold, channel toggle verified). Remaining: item 9, open the PR and set STATUS: DONE.
 
 ## Attempt
 Attempt 2 of 3 — `redesign/2-elements`. Latitude (runbook §4): keep tokens/type/aesthetic, but signature elements (CRT HeroScreen, constellation lattice, TV/event-reel scaffolding) MAY be repurposed, moved, or replaced if it serves the applied-AI pivot better (e.g. the CRT could carry systems instead of only FGC achievements). Justify each element change in CLAUDE.md + PR notes. Nothing beyond the honesty guardrails and CLAUDE.md voice/accessibility/mobile-strict rules is invariant here.
@@ -11,14 +11,14 @@ Attempt 2 of 3 — `redesign/2-elements`. Latitude (runbook §4): keep tokens/ty
 Branch is off clean `main` (attempts never build on each other). The TV/event-reel WIP parked on `wip/event-reel-tv` is NOT present here; it may be reintroduced only if this attempt's latitude calls for it.
 
 ## Checklist (PART II §3, shared across all attempts)
-- [ ] 1. Rework positioning copy: hero identity block, roles, subtext, open-to-work pill, contact lede so SWE track record LEADS and applied AI reads as the threaded current direction. Open-to-work roles honestly span both (software engineering + applied-AI roles).
-- [ ] 2. Add "what I'm building now" block naming **Ship Pipeline** and **ts-pmo** as living, in-progress systems. (REQUIRED)
-- [ ] 3. Thread **/ratify** (prediction-before-reveal ownership protocol) as the through-line idea where it fits naturally.
-- [ ] 4. Soft forward pointer only toward a coming case study / Ledger. Do NOT build /ledger, invent data, or promise dates.
-- [ ] 5. Leave FGC content as-is (src/pages/fgc/ and FGC copy elsewhere). Do not touch.
-- [ ] 6. Update CLAUDE.md on this branch to match every change (including any element repurposing this attempt makes, with justification).
-- [ ] 7. Build passes: `npm run build` (astro build) + `npm run check` (astro check).
-- [ ] 8. Self-review vs CLAUDE.md Enforcement Rules + §2 honesty guardrails. Run gstack /design-review if available and fix findings.
+- [x] 1. Rework positioning copy: hero identity block, roles, subtext, open-to-work pill, contact lede so SWE track record LEADS and applied AI reads as the threaded current direction. Open-to-work roles honestly span both (software engineering + applied-AI roles).
+- [x] 2. Add "what I'm building now" block naming **Ship Pipeline** and **ts-pmo** as living, in-progress systems. (REQUIRED)
+- [x] 3. Thread **/ratify** (prediction-before-reveal ownership protocol) as the through-line idea where it fits naturally. (Hero reel `Owning` line, About ownership paragraph, CRT /ratify slide, now-block through-line paragraph.)
+- [x] 4. Soft forward pointer only toward a coming case study / Ledger. Do NOT build /ledger, invent data, or promise dates. (One muted mono line in the now block; no route, no numbers, no dates.)
+- [x] 5. Leave FGC content as-is (src/pages/fgc/ and FGC copy elsewhere). Do not touch. (FGC CRT slides carried over verbatim; src/pages/fgc/ untouched.)
+- [x] 6. Update CLAUDE.md on this branch to match every change (including any element repurposing this attempt makes, with justification). (Two-channel CRT justified under Project-Specific Overrides.)
+- [x] 7. Build passes: `npm run build` (astro build) + `npm run check` (astro check). (0 errors, 0 warnings.)
+- [x] 8. Self-review vs CLAUDE.md Enforcement Rules + §2 honesty guardrails. (Em-dash + hex grep clean; explicit align-items/min-width added to new flex CSS; browser QA at 375x667: no horizontal scroll, hero CTA in fold; two-channel toggle + aria-live verified; softened one intro line that overstated daily use.)
 - [ ] 9. Open PR titled exactly "Site redesign — attempt 2 (elements fair game)". Set STATUS: DONE. Never merge.
 
 ## Honesty guardrails (HARD — see runbook §2)

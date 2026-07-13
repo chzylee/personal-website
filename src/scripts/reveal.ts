@@ -21,5 +21,15 @@ if (!els.length || reduceMotion || !('IntersectionObserver' in window)) {
     { rootMargin: '0px 0px -10% 0px', threshold: 0.1 }
   );
 
-  els.forEach((el) => observer.observe(el));
+  els.forEach((el) => {
+    // Above-the-fold content animates in on load (its stagger comes from
+    // --reveal-delay). Without this, elements near the fold line can fall
+    // inside the observer's -10% bottom margin and never reveal on short
+    // viewports (e.g. the hero CTA row at 375x667).
+    if (el.getBoundingClientRect().top < window.innerHeight) {
+      el.classList.add('is-visible');
+    } else {
+      observer.observe(el);
+    }
+  });
 }

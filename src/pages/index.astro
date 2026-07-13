@@ -71,8 +71,8 @@ const description =
 
         <p class="now__intro reveal" style="--reveal-delay: 100ms">
           The track record above is software engineering. The current work is applied AI: systems that
-          keep me accountable for what AI ships. Both are open experiments I build and use daily, not
-          products.
+          keep me accountable for what AI ships. Both are living systems in progress, open experiments
+          rather than products.
         </p>
 
         <ul class="now__list">
@@ -304,6 +304,7 @@ const description =
     padding: 6rem 2rem;
     background: var(--color-paper-soft);
     display: flex;
+    align-items: flex-start;
     justify-content: center;
     scroll-margin-top: var(--nav-height);
   }
@@ -313,13 +314,19 @@ const description =
     width: 100%;
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     gap: 1.5rem;
+    min-width: 0;
+  }
+
+  .now__inner > * {
     min-width: 0;
   }
 
   .now__header {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     gap: 0.5rem;
   }
 
@@ -353,14 +360,17 @@ const description =
     list-style: none;
     display: flex;
     flex-direction: column;
+    align-items: stretch;
   }
 
   .now__item {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
     gap: 0.5rem;
     padding: 1.5rem 0;
     border-top: 1px solid var(--color-rule);
+    min-width: 0;
   }
 
   .now__item:last-child {
