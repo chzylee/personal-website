@@ -26,11 +26,32 @@ const pick = (re: RegExp, s: string | null): string | null =>
 const feed = await fetchText(`${SUBSTACK_URL}/feed`);
 const item = pick(/<item>([\s\S]*?)<\/item>/, feed);
 
+const rawCover = pick(/<enclosure url="([^"]+)"/, item);
+
+/**
+ * Substack serves covers through a Cloudinary-style CDN, so we can ask it for
+ * an exact crop instead of letting CSS blindly center-crop. `g_auto` picks the
+ * salient part of the frame, which matters when a landscape cover has to fill
+ * a portrait slot. Falls back to the original URL if the shape ever changes.
+ */
+function crop(url: string | null, w: number, h: number): string | null {
+  if (!url) return null;
+  const m = url.match(/^(https:\/\/substackcdn\.com\/image\/fetch\/)([^/]+)\/(.+)$/);
+  if (!m) return url;
+  const signature = m[2].split(',').find((p) => p.startsWith('$s_'));
+  const params = [signature, `w_${w}`, `h_${h}`, 'c_fill', 'g_auto', 'f_auto', 'q_auto:good']
+    .filter(Boolean)
+    .join(',');
+  return `${m[1]}${params}/${m[3]}`;
+}
+
 export const substackLatest = {
   title: pick(/<title><!\[CDATA\[([\s\S]*?)\]\]>/, item) ?? 'In Your Corner',
   url: pick(/<link>(https?:[^<]+)<\/link>/, item) ?? SUBSTACK_URL,
-  /** Post cover image; null renders the slide without a still. */
-  image: pick(/<enclosure url="([^"]+)"/, item),
+  /** 16:9 band for the desktop slide; null renders the slide without a still. */
+  image: crop(rawCover, 960, 540),
+  /** 2:3 strip for the mobile slide, art-directed via <picture>. */
+  imagePortrait: crop(rawCover, 600, 900),
 };
 
 // Newest video in the event-series playlist. The playlist is unlisted, so it

@@ -23,6 +23,8 @@ interface Slide {
   cta?: string;
   /** Optional still image. Placement set by `media`. */
   image?: string | null;
+  /** Portrait variant, swapped in on mobile where the still becomes a strip. */
+  imagePortrait?: string | null;
   /** Still layout: 'top' (default, landscape band above text) or 'right'
       (portrait strip beside the text). */
   media?: 'top' | 'right';
@@ -38,6 +40,7 @@ const slides: Slide[] = [
     href: substackLatest.url,
     cta: 'Read it',
     image: substackLatest.image,
+    imagePortrait: substackLatest.imagePortrait,
   },
   {
     tag: 'Now building',
@@ -90,7 +93,7 @@ const videoThumb = `https://i.ytimg.com/vi/${playlistLatest.videoId}/hqdefault.j
       <div class="crt__stage">
         {slides.map((s, i) => (
           <article
-            class={`crt__slide${i === 0 ? ' is-active' : ''}${s.video ? ' crt__slide--video' : ''}${s.media === 'right' ? ' crt__slide--media-right' : ''}`}
+            class={`crt__slide${i === 0 ? ' is-active' : ''}${s.video ? ' crt__slide--video' : ''}${s.image ? ' crt__slide--has-media' : ''}${s.media === 'right' ? ' crt__slide--media-right' : ''}`}
             data-slide={i}
             data-label={`${s.tag}. ${s.title}. ${s.context}`}
             aria-hidden={i !== 0 ? 'true' : 'false'}
@@ -118,7 +121,12 @@ const videoThumb = `https://i.ytimg.com/vi/${playlistLatest.videoId}/hqdefault.j
               <>
                 {s.image && (
                   <span class="crt__still">
-                    <img src={s.image} alt="" width="480" height="270" loading="lazy" decoding="async" />
+                    <picture>
+                      {s.imagePortrait && (
+                        <source media="(max-width: 1023px)" srcset={s.imagePortrait} />
+                      )}
+                      <img src={s.image} alt="" width="480" height="270" loading="lazy" decoding="async" />
+                    </picture>
                   </span>
                 )}
                 <span class="crt__cat">{s.tag}</span>
@@ -387,6 +395,9 @@ const videoThumb = `https://i.ytimg.com/vi/${playlistLatest.videoId}/hqdefault.j
     border: 1px solid var(--color-rule);
   }
 
+  /* <picture> is art direction only; let the <img> take the sizing rules. */
+  .crt__still picture { display: contents; }
+
   .crt__still img {
     width: 100%;
     height: 100%;
@@ -409,6 +420,25 @@ const videoThumb = `https://i.ytimg.com/vi/${playlistLatest.videoId}/hqdefault.j
     height: auto;
     flex: none;
     margin: 0;
+  }
+
+  /* On the narrow mobile screen a top band letterboxes into a sliver, so every
+     still moves to the same right-hand strip the map slide uses: image and text
+     split the width instead of stacking. The <picture> above swaps in a
+     portrait crop to match. */
+  @media (max-width: 1023px) {
+    .crt__slide--has-media { padding-right: 42%; }
+
+    .crt__slide--has-media .crt__still {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 38%;
+      height: auto;
+      flex: none;
+      margin: 0;
+    }
   }
 
   /* ── Slide CTA ── */
