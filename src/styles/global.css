@@ -6,7 +6,16 @@
   --color-paper-soft:   #1a1815;
   --color-ink:          #f2ede6;
   --color-ink-muted:    #8a8480;
+  /* Three-purple brand system, one hue family:
+     --color-rust  #9b6dff  Site accent. Electric, reads on near-black (5.6:1).
+                            Text, strokes, links, glows. (Name kept for compat.)
+     --color-brand #6b3fd4  Shared anchor, also the Substack accent. Deeper, so
+                            on the dark site it ONLY fills solid surfaces that
+                            carry light text (5.5:1 on ink); never used as text.
+     #4e3780 lives on Substack only (the "In Your Corner" logo underline on
+     cream, 9.2:1); it fails on dark, so it never appears on the site. */
   --color-rust:         #9b6dff;
+  --color-brand:        #6b3fd4;
   --color-rule:         #2a2723;
 
   /* Slightly elevated surface, used for the context strip */

@@ -1,49 +1,139 @@
 ---
-// A retro CRT / arcade "screen" that runs a slideshow of career achievements.
+// A retro CRT / arcade "screen" running a short reel of what Noah is up to:
+// the latest In Your Corner letter (fetched at build time), what he's building
+// in public, FindMyFGC for the scene, and (last) a playable YouTube embed of
+// the newest video from his Melty Blood event-series playlist. The TV is the
+// personal surface of the site, not a stats board.
+//
 // Navigable by the on-screen arrows, the keyboard (← →), and a game controller
 // (Gamepad API) as an easter egg, including fight-stick POV-hat axes (e.g. a
 // HORI stick reports direction on axis 9, not the d-pad buttons). Decorative
-// chrome is aria-hidden; slide content is exposed to AT via an aria-live region.
-// Honors prefers-reduced-motion (no auto-advance/flicker; manual nav still works).
-import { achievements } from '../data/achievements';
+// chrome is aria-hidden; slide content is exposed to AT via an aria-live
+// region; inactive slides are `inert` so their links never catch focus.
+// Honors prefers-reduced-motion (no auto-advance/flicker; manual nav works).
+import { substackLatest, playlistLatest, PLAYLIST_ID } from '../data/tv';
 
-const total = achievements.length;
+interface Slide {
+  /** Small mono channel label. */
+  tag: string;
+  title: string;
+  context: string;
+  /** Where the slide's CTA link goes (non-video slides). */
+  href?: string;
+  cta?: string;
+  /** Optional still image. Placement set by `media`. */
+  image?: string | null;
+  /** Still layout: 'top' (default, landscape band above text) or 'right'
+      (portrait strip beside the text). */
+  media?: 'top' | 'right';
+  /** The video slide renders a click-to-load YouTube facade instead. */
+  video?: boolean;
+}
+
+const slides: Slide[] = [
+  {
+    tag: 'In Your Corner',
+    title: substackLatest.title,
+    context: 'The latest letter from my Substack.',
+    href: substackLatest.url,
+    cta: 'Read it',
+    image: substackLatest.image,
+  },
+  {
+    tag: 'Now building',
+    title: 'skill-library',
+    context: 'Claude Code skills in my workflow: use what you like or install the whole plugin.',
+    href: 'https://github.com/chzylee/skill-library',
+    cta: 'Browse the repo',
+  },
+  {
+    tag: 'For the scene',
+    title: 'FindMyFGC',
+    context: 'Find fighting game events near you wherever you are.',
+    href: 'https://www.findmyfgc.cc/',
+    cta: 'Find your next event',
+    image: '/find-my-fgc-map.png',
+    media: 'right',
+  },
+  {
+    tag: 'Melt Your Blood',
+    title: 'Latest from my event series',
+    context: 'For players ascending toward top-level play.',
+    video: true,
+  },
+];
+
+const total = slides.length;
 const totalLabel = String(total).padStart(2, '0');
+const videoThumb = `https://i.ytimg.com/vi/${playlistLatest.videoId}/hqdefault.jpg`;
 ---
 
 <section
   class="crt"
   role="group"
   aria-roledescription="carousel"
-  aria-label="Career achievements"
+  aria-label="Now showing"
 >
   <div class="crt__bezel">
     <div class="crt__screen">
       <div class="crt__topbar" aria-hidden="true">
         <span class="crt__frame">
-          <svg class="crt__trophy" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/>
-            <path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
-            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/>
-            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
+          <svg class="crt__tv-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="20" height="15" x="2" y="7" rx="2"/>
+            <path d="m17 2-5 5-5-5"/>
           </svg>
-          ACHIEVEMENTS
+          NOW SHOWING
         </span>
         <span class="crt__stagenum"><span data-stage-current>01</span> / {totalLabel}</span>
       </div>
 
       <div class="crt__stage">
-        {achievements.map((a, i) => (
+        {slides.map((s, i) => (
           <article
-            class={`crt__slide${i === 0 ? ' is-active' : ''}`}
+            class={`crt__slide${i === 0 ? ' is-active' : ''}${s.video ? ' crt__slide--video' : ''}${s.media === 'right' ? ' crt__slide--media-right' : ''}`}
             data-slide={i}
-            data-label={`${a.figure} ${a.title}. ${a.context}`}
+            data-label={`${s.tag}. ${s.title}. ${s.context}`}
             aria-hidden={i !== 0 ? 'true' : 'false'}
+            inert={i !== 0}
           >
-            <span class="crt__cat">{a.tag}</span>
-            <span class="crt__figure">{a.figure}</span>
-            <span class="crt__title">{a.title}</span>
-            <span class="crt__context">{a.context}</span>
+            {s.video ? (
+              <div
+                class="crt__video"
+                data-video-slot
+                data-video={playlistLatest.videoId}
+                data-list={PLAYLIST_ID}
+              >
+                <img class="crt__video-thumb" src={videoThumb} alt="" width="480" height="360" loading="lazy" decoding="async" />
+                <span class="crt__video-tag">{s.tag}</span>
+                <button class="crt__video-play" type="button" data-video-play>
+                  <span class="crt__video-play-ring" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M8 5.14v14l11-7-11-7z"/>
+                    </svg>
+                  </span>
+                  Press play
+                </button>
+              </div>
+            ) : (
+              <>
+                {s.image && (
+                  <span class="crt__still">
+                    <img src={s.image} alt="" width="480" height="270" loading="lazy" decoding="async" />
+                  </span>
+                )}
+                <span class="crt__cat">{s.tag}</span>
+                <span class="crt__title">{s.title}</span>
+                <span class="crt__context">{s.context}</span>
+                {s.href && s.cta && (
+                  <a class="crt__cta" href={s.href} target="_blank" rel="noopener noreferrer">
+                    {s.cta}
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                    </svg>
+                  </a>
+                )}
+              </>
+            )}
           </article>
         ))}
       </div>
@@ -60,24 +150,24 @@ const totalLabel = String(total).padStart(2, '0');
   </div>
 
   <div class="crt__controls">
-    <button class="crt__btn" type="button" data-prev aria-label="Previous achievement">
+    <button class="crt__btn" type="button" data-prev aria-label="Previous slide">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
     </button>
 
-    <div class="crt__dots" role="tablist" aria-label="Achievements">
-      {achievements.map((_, i) => (
+    <div class="crt__dots" role="tablist" aria-label="Slides">
+      {slides.map((_, i) => (
         <button
           class={`crt__dot${i === 0 ? ' is-active' : ''}`}
           type="button"
           data-dot={i}
           role="tab"
           aria-selected={i === 0 ? 'true' : 'false'}
-          aria-label={`Achievement ${i + 1} of ${total}`}
+          aria-label={`Slide ${i + 1} of ${total}`}
         ></button>
       ))}
     </div>
 
-    <button class="crt__btn" type="button" data-next aria-label="Next achievement">
+    <button class="crt__btn" type="button" data-next aria-label="Next slide">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
     </button>
 
@@ -171,7 +261,12 @@ const totalLabel = String(total).padStart(2, '0');
     );
     opacity: 0.5;
     mix-blend-mode: multiply;
+    transition: opacity 0.3s ease;
   }
+
+  /* Ease off the CRT chrome while a video is actually playing. */
+  .crt.is-playing .crt__scanlines { opacity: 0.12; }
+  .crt.is-playing .crt__vignette { opacity: 0.3; }
 
   .crt__vignette {
     background: radial-gradient(
@@ -179,6 +274,7 @@ const totalLabel = String(total).padStart(2, '0');
       transparent 55%,
       color-mix(in srgb, var(--color-paper) 85%, transparent) 100%
     );
+    transition: opacity 0.3s ease;
   }
 
   .crt__glass {
@@ -189,7 +285,7 @@ const totalLabel = String(total).padStart(2, '0');
     );
   }
 
-  /* ── Top bar (achievement framing) ── */
+  /* ── Top bar (channel framing) ── */
   .crt__topbar {
     position: relative;
     z-index: 1;
@@ -209,7 +305,7 @@ const totalLabel = String(total).padStart(2, '0');
     color: var(--color-rust);
   }
 
-  .crt__trophy { color: var(--color-rust); }
+  .crt__tv-icon { color: var(--color-rust); }
 
   .crt__stagenum { color: var(--color-ink-muted); }
   .crt__stagenum [data-stage-current] { color: var(--color-ink); }
@@ -230,6 +326,7 @@ const totalLabel = String(total).padStart(2, '0');
     flex-direction: column;
     justify-content: center;
     gap: 0.3rem;
+    min-width: 0;
     opacity: 0;
     filter: blur(4px);
     transition: opacity 0.4s ease, filter 0.4s ease;
@@ -239,6 +336,10 @@ const totalLabel = String(total).padStart(2, '0');
     opacity: 1;
     filter: blur(0);
   }
+
+  /* Inactive slides must never catch the pointer (their links sit above the
+     stage) — `inert` handles focus/AT, this handles hover. */
+  .crt__slide[inert] { pointer-events: none; }
 
   .crt__cat {
     display: inline-flex;
@@ -258,20 +359,13 @@ const totalLabel = String(total).padStart(2, '0');
     background: var(--color-rust);
   }
 
-  .crt__figure {
-    font-family: var(--font-display);
-    font-size: clamp(2.5rem, 3.4vw, 3.5rem);
-    line-height: 0.9;
-    color: var(--color-ink);
-    text-shadow: 0 0 20px color-mix(in srgb, var(--color-rust) 30%, transparent);
-  }
-
   .crt__title {
     font-family: var(--font-display);
-    font-size: 1.5rem;
+    font-size: clamp(1.35rem, 1.8vw, 1.75rem);
     line-height: 1.02;
     letter-spacing: 0.01em;
     color: var(--color-ink);
+    text-shadow: 0 0 20px color-mix(in srgb, var(--color-rust) 30%, transparent);
   }
 
   .crt__context {
@@ -280,6 +374,166 @@ const totalLabel = String(total).padStart(2, '0');
     line-height: 1.4;
     letter-spacing: 0.01em;
     color: var(--color-ink-muted);
+  }
+
+  /* ── Still image (broadcast frame above the text) ── */
+  .crt__still {
+    display: block;
+    flex: 0 1 46%;
+    min-height: 0;
+    margin-bottom: 0.45rem;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--color-rule);
+  }
+
+  .crt__still img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── media: 'right' — a portrait still as a full-height strip on the right,
+     text flowing on the left (contrast to the default top-band still). ── */
+  .crt__slide--media-right {
+    padding-right: 42%;
+  }
+
+  .crt__slide--media-right .crt__still {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 38%;
+    height: auto;
+    flex: none;
+    margin: 0;
+  }
+
+  /* ── Slide CTA ── */
+  .crt__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    align-self: flex-start;
+    margin-top: 0.35rem;
+    padding: 0.35rem 0;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-rust);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-rust) 45%, transparent);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .crt__cta:hover {
+    color: var(--color-ink);
+    border-color: var(--color-ink);
+  }
+
+  .crt__cta:focus-visible {
+    outline: 2px solid var(--color-rust);
+    outline-offset: 3px;
+  }
+
+  /* ── Video slide: click-to-load YouTube facade ── */
+  .crt__slide--video { justify-content: stretch; }
+
+  .crt__video {
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--color-rule);
+    background: var(--color-paper);
+  }
+
+  .crt__video-thumb {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+  }
+
+  .crt__video-tag {
+    position: absolute;
+    left: 0.65rem;
+    bottom: 0.55rem;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    background: color-mix(in srgb, var(--color-paper) 78%, transparent);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  .crt__video-play {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    text-shadow: 0 1px 8px color-mix(in srgb, var(--color-paper) 80%, transparent);
+    background: radial-gradient(
+      80% 80% at 50% 50%,
+      color-mix(in srgb, var(--color-paper) 35%, transparent),
+      transparent
+    );
+    transition: color 0.2s ease;
+  }
+
+  .crt__video-play-ring {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    color: var(--color-ink);
+    background: color-mix(in srgb, var(--color-brand) 90%, transparent);
+    border: 1px solid var(--color-brand);
+    transition: transform 0.25s var(--crt-ease), background 0.2s ease;
+  }
+
+  .crt__video-play-ring svg { margin-left: 3px; }
+
+  .crt__video-play:hover .crt__video-play-ring {
+    transform: scale(1.08);
+    background: var(--color-brand);
+  }
+
+  .crt__video-play:focus-visible {
+    outline: 2px solid var(--color-rust);
+    outline-offset: -3px;
+    border-radius: 6px;
+  }
+
+  :global(.crt__video-frame) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
   }
 
   /* ── Bottom HUD: P1 nameplate (lights when a controller connects) ── */
@@ -416,29 +670,71 @@ const totalLabel = String(total).padStart(2, '0');
     const live = root.querySelector<HTMLElement>('.crt__live');
     const prevBtn = root.querySelector<HTMLButtonElement>('[data-prev]');
     const nextBtn = root.querySelector<HTMLButtonElement>('[data-next]');
+    const videoSlot = root.querySelector<HTMLElement>('[data-video-slot]');
+    const videoFacade = videoSlot?.innerHTML ?? '';
     const total = slides.length;
     if (total === 0) return null;
 
     let idx = 0;
     let timer = 0;
     let inView = true;
+    let playing = false;
 
     const pad2 = (n: number) => String(n + 1).padStart(2, '0');
+
+    // Loading the YouTube iframe is deferred until the visitor actually asks
+    // for it, so the page never pays for YouTube's JS up front. Leaving the
+    // slide tears the iframe down (audio must not keep playing off-screen)
+    // and restores the facade.
+    const startVideo = () => {
+      if (!videoSlot || playing) return;
+      const iframe = document.createElement('iframe');
+      // Embed the specific (public) video and let &list continue into the
+      // playlist. The bare /embed/videoseries?list= endpoint fails for unlisted
+      // playlists ("An error occurred"), which this avoids.
+      iframe.src = `https://www.youtube-nocookie.com/embed/${videoSlot.dataset.video}?list=${videoSlot.dataset.list}&autoplay=1&rel=0`;
+      iframe.title = 'Melty Blood event series archive';
+      iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.className = 'crt__video-frame';
+      videoSlot.replaceChildren(iframe);
+      playing = true;
+      root.classList.add('is-playing');
+      halt();
+    };
+
+    const stopVideo = () => {
+      if (!videoSlot || !playing) return;
+      videoSlot.innerHTML = videoFacade;
+      wireVideo();
+      playing = false;
+      root.classList.remove('is-playing');
+    };
+
+    const wireVideo = () => {
+      videoSlot
+        ?.querySelector<HTMLButtonElement>('[data-video-play]')
+        ?.addEventListener('click', startVideo);
+    };
+    wireVideo();
 
     const go = (n: number) => {
       const target = ((n % total) + total) % total;
       if (target === idx) return;
+      if (playing) stopVideo();
       slides[idx].classList.remove('is-active');
       slides[idx].setAttribute('aria-hidden', 'true');
+      slides[idx].toggleAttribute('inert', true);
       dots[idx].classList.remove('is-active');
       dots[idx].setAttribute('aria-selected', 'false');
       idx = target;
       slides[idx].classList.add('is-active');
       slides[idx].setAttribute('aria-hidden', 'false');
+      slides[idx].toggleAttribute('inert', false);
       dots[idx].classList.add('is-active');
       dots[idx].setAttribute('aria-selected', 'true');
       if (stageNum) stageNum.textContent = pad2(idx);
-      if (live) live.textContent = `Achievement ${idx + 1} of ${total}: ${slides[idx].dataset.label ?? ''}`;
+      if (live) live.textContent = `Slide ${idx + 1} of ${total}: ${slides[idx].dataset.label ?? ''}`;
       restart();
     };
 
@@ -446,7 +742,7 @@ const totalLabel = String(total).padStart(2, '0');
     const prev = () => go(idx - 1);
 
     const restart = () => {
-      if (reduce.matches) return;
+      if (reduce.matches || playing) return;
       window.clearInterval(timer);
       if (inView) timer = window.setInterval(next, 5000);
     };
@@ -465,7 +761,11 @@ const totalLabel = String(total).padStart(2, '0');
       ([e]) => {
         inView = e.isIntersecting;
         if (inView) restart();
-        else halt();
+        else {
+          halt();
+          // Off-screen video keeps playing audio otherwise.
+          if (playing) stopVideo();
+        }
       },
       { threshold: 0.25 }
     );

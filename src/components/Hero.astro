@@ -1,7 +1,7 @@
 ---
-// The hero leads with a rotating "reel" of practices Noah brings to a team.
-// Each line: a serif-italic purple verb (the brand collision) + Bebas display rest.
-// Items stack in one grid cell so the headline height never jumps between swaps.
+// The hero leads with a single static headline stating what Noah does: the two
+// halves of him ("trade" / "craft") set as the serif-italic purple accent (the
+// brand collision) against Bebas display. One clear positioning line, not a reel.
 //
 // On desktop, the right column holds a retro CRT "screen" (HeroScreen) that runs
 // a slideshow of career highlights, navigable by buttons / arrow keys / a game
@@ -15,17 +15,6 @@ import { Image } from 'astro:assets';
 import photo from '../assets/photo.jpg';
 import HeroScreen from './HeroScreen.astro';
 
-const reel = [
-  { verb: 'Securing', rest: ' the path to production.' },
-  { verb: 'Getting', rest: ' separate teams to ship together.' },
-  { verb: 'Training', rest: ' engineers for ownership.' },
-  { verb: 'Engineering', rest: ' trustworthy AI workflows.' },
-  { verb: 'Designing', rest: ' directly with customers.' },
-];
-
-const reelLabel =
-  'What I bring to a team: securing the path to production; getting separate teams to ship together; ' +
-  'training engineers to own their work; engineering trustworthy AI workflows; designing directly with customers.';
 ---
 
 <section class="hero">
@@ -44,32 +33,31 @@ const reelLabel =
       />
       <p class="hero__name">Noah Lee</p>
       <ul class="hero__roles">
-        <li>Full-Stack Engineer</li>
-        <li>Community-Embedded</li>
+        <li>Software Engineer</li>
+        <li>Gaming Event Organizer</li>
       </ul>
     </div>
 
-    <h1 class="hero__headline reveal" style="--reveal-delay: 160ms" aria-label={reelLabel}>
-      <span class="hero__reel">
-        {reel.map((item, i) => (
-          <span class={`hero__reel-item${i === 0 ? ' is-active' : ''}`} aria-hidden="true">
-            <em class="hero__reel-verb">{item.verb}</em><br />{item.rest}
-          </span>
-        ))}
-      </span>
+    <h1 class="hero__headline reveal" style="--reveal-delay: 160ms">
+      Software by <em class="hero__headline-accent">trade,</em><br />community by <em class="hero__headline-accent">craft.</em>
     </h1>
 
     <p class="hero__sub reveal" style="--reveal-delay: 280ms">
-      Full-stack from frontend to infrastructure, with AI in the loop.<br />
-      <strong>I build products and platforms with a disciplined AI workflow.</strong>
+      I build systems for a living, organize events on the side, and write about the patterns in between.
     </p>
 
-    <div class="hero__status reveal" style="--reveal-delay: 360ms">
+    <a
+      href="https://endotlee.substack.com/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="hero__status reveal"
+      style="--reveal-delay: 360ms"
+    >
       <span class="hero__status-dot" aria-hidden="true"></span>
       <span class="hero__status-text">
-        <strong>Open to work</strong> · engineering &amp; solutions roles · Chicago, remote-open
+        <strong>Writing In Your Corner</strong> · new essays weekly · Chicago
       </span>
-    </div>
+    </a>
 
     <div class="hero__cta-row reveal" style="--reveal-delay: 440ms">
       <a href="#contact" class="hero__cta hero__cta--primary">Get in touch</a>
@@ -199,7 +187,9 @@ const reelLabel =
     color: var(--color-rust);
   }
 
-  /* ── Rotating headline reel ── */
+  /* ── Static headline: the one place display + serif-italic + purple collide.
+     The two "by X" payoff nouns carry the accent as a matched pair, so the
+     duality reads visually as well as in the words. ── */
   .hero__headline {
     font-family: var(--font-display);
     font-size: clamp(2.75rem, 6vw, 5.25rem);
@@ -210,39 +200,12 @@ const reelLabel =
     text-wrap: balance;
   }
 
-  /* All items share one grid cell, so the box is as tall as the tallest line
-     and swapping never reflows the page. */
-  .hero__reel {
-    display: grid;
-  }
-
-  .hero__reel-item {
-    grid-area: 1 / 1;
-    opacity: 0;
-    transform: translateY(0.4em);
-    transition:
-      opacity 0.5s ease,
-      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
-  }
-
-  .hero__reel-item.is-active {
-    opacity: 1;
-    transform: none;
-  }
-
-  /* Item exits upward — opposite of the enter-from-below entrance */
-  .hero__reel-item.is-exiting {
-    opacity: 0;
-    transform: translateY(-0.35em);
-  }
-
-  .hero__reel-verb {
+  .hero__headline-accent {
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 400;
     color: var(--color-rust);
-    /* serif descenders (Getting / Engineering / Designing) need a hair of room */
+    /* serif descenders need a hair of room at line-height 1.0 */
     padding-bottom: 0.04em;
   }
 
@@ -260,8 +223,17 @@ const reelLabel =
     color: var(--color-ink);
   }
 
-  /* ── Open-to-work status pill ── */
+  /* ── Status pill: the writing status, linking to In Your Corner. The dot
+     conveys real state (actively publishing) per the decorative-dot ration. ── */
+  a.hero__status:hover { border-color: var(--color-rust); }
+
+  .hero__status:focus-visible {
+    outline: 2px solid var(--color-rust);
+    outline-offset: 3px;
+  }
+
   .hero__status {
+    transition: border-color 0.2s ease;
     display: inline-flex;
     align-items: center;
     gap: 0.625rem;
@@ -342,10 +314,12 @@ const reelLabel =
     outline-offset: 3px;
   }
 
+  /* The shared brand anchor (#6b3fd4) surfaces on the site here: a solid fill
+     carrying light ink text (5.5:1), the one accent both surfaces share. */
   .hero__cta--primary {
-    background: var(--color-rust);
-    color: var(--color-paper);
-    border: 1px solid var(--color-rust);
+    background: var(--color-brand);
+    color: var(--color-ink);
+    border: 1px solid var(--color-brand);
   }
 
   .hero__cta--primary:hover {
@@ -447,42 +421,9 @@ const reelLabel =
     .hero__name { font-size: 2.25rem; }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .hero__reel-item {
-      transition: none;
-    }
-  }
 </style>
 
 <script>
-  // ── Rotating headline reel ──
-  // Progressive enhancement: item 0 is already `.is-active` in the HTML, so
-  // without JS (or under reduced motion) the hero shows a complete first line.
-  // First swap fires at ~1.2s (inside the 5-second scan window) so the signature
-  // motion proves itself before a recruiter scrolls; then a steady cadence.
-  const reel = document.querySelector<HTMLElement>('.hero__reel');
-  const reelReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-  if (reel && !reelReduce.matches) {
-    const items = Array.from(reel.querySelectorAll<HTMLElement>('.hero__reel-item'));
-    if (items.length > 1) {
-      let i = 0;
-      const advance = () => {
-        const current = items[i];
-        i = (i + 1) % items.length;
-        const next = items[i];
-        current.classList.add('is-exiting');
-        current.classList.remove('is-active');
-        next.classList.add('is-active');
-        setTimeout(() => current.classList.remove('is-exiting'), 750);
-      };
-      window.setTimeout(() => {
-        advance();
-        window.setInterval(advance, 3200);
-      }, 1200);
-    }
-  }
-
   // ── Interactive lattice backdrop (toned-down ambient texture) ──
   const hero = document.querySelector<HTMLElement>('.hero');
   const canvas = document.querySelector<HTMLCanvasElement>('.hero__lattice');

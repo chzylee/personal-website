@@ -8,7 +8,6 @@ import About from '../components/About.astro';
 import Photography from '../components/Photography.astro';
 import { projects } from '../data/projects';
 import { communityProjects } from '../data/communityProjects';
-import { getCollection } from 'astro:content';
 import '../styles/global.css';
 
 const iconModules = import.meta.glob<{ default: ImageMetadata }>(
@@ -24,24 +23,19 @@ function slugify(title: string) {
   return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
-const allPosts = await getCollection('writing', ({ data }) => !data.draft);
-const recentPosts = allPosts
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-  .slice(0, 3);
-
 const featuredSoftware = projects.filter((p) =>
   ['FindMyFGC', 'adomi-san-bot'].includes(p.title)
 );
 const featuredCommunity = communityProjects.slice(0, 1);
 
 const description =
-  'Noah Lee: full-stack / forward-deployed engineer (AWS, ex-United Airlines). Seven years shipping software end-to-end, including a 16,000+ vulnerability cross-team remediation, an AWS Lambda pipeline handling 300K+ Kafka messages a day, and FGC tools other organizers now run their own tournament series on. Open to work. Chicago, remote-open.';
+  'Software engineer + gaming event organizer. I build tools people can run without me and write about understanding how we work and think to find the right next move.';
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title="Noah Lee: Full-Stack / Forward-Deployed Engineer" description={description} />
+    <BaseHead title="Noah Lee: Software Engineer + Gaming Event Organizer" description={description} />
   </head>
 
   <body>
@@ -51,7 +45,7 @@ const description =
     <!-- Achievements: the hero's CRT relocates here on mobile, where the hero's
          right-column TV is hidden. Exactly one .crt instance is visible per
          viewport (see HeroScreen's multi-instance script). -->
-    <section class="hero-achievements" aria-label="Career achievements">
+    <section class="hero-achievements" aria-label="Now showing">
       <div class="hero-achievements__inner">
         <HeroScreen />
       </div>
@@ -135,36 +129,18 @@ const description =
       <div class="section__inner">
         <header class="section__header reveal">
           <span class="eyebrow">Writing</span>
-          <h2 class="section__heading">Notes on development, growth, and mentality.</h2>
+          <h2 class="section__heading">Writing on how we work and think.</h2>
         </header>
 
-        <ul class="post-list">
-          {recentPosts.map((post, i) => {
-            const date = post.data.date.toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              timeZone: 'UTC',
-            });
-            return (
-              <li class="post-item reveal" style={`--reveal-delay: ${i * 90}ms`}>
-                <a href={`/blog/${post.slug}`} class="post-item__link">
-                  <div class="post-item__row">
-                    <h3 class="post-item__title">{post.data.title}</h3>
-                    <time class="post-item__date" datetime={post.data.date.toISOString()}>{date}</time>
-                  </div>
-                  <p class="post-item__desc">{post.data.description}</p>
-                </a>
-              </li>
-            );
-          })}
-        </ul>
+        <p class="writing-pointer reveal" style="--reveal-delay: 90ms">
+          My essays and letters live at In Your Corner, my Substack.
+        </p>
 
         <div class="section__footer">
-          <a href="/blog" class="more-link">
-            All writing
+          <a href="https://endotlee.substack.com/" target="_blank" rel="noopener noreferrer" class="more-link">
+            In Your Corner on Substack
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+              <path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
             </svg>
           </a>
         </div>
@@ -177,11 +153,11 @@ const description =
     <footer class="contact" id="contact">
       <div class="contact__inner">
         <p class="contact__lede reveal">
-          Open to <em class="serif-italic">full-stack, solutions & forward-deployed</em> roles.
+          Working on something? <em class="serif-italic">We should talk.</em>
         </p>
 
         <p class="contact__status reveal" style="--reveal-delay: 120ms">
-          Chicago, remote-open. I usually reply within a day.
+          Projects, questions, or a read that landed. Tell me what you're working on.
         </p>
 
         <div class="contact__email-row reveal" style="--reveal-delay: 160ms">
@@ -218,6 +194,20 @@ const description =
               <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
               <rect width="4" height="12" x="2" y="9"/>
               <circle cx="4" cy="4" r="2"/>
+            </svg>
+          </a>
+          <a href="https://substack.com/@endotlee" target="_blank" rel="noopener noreferrer" class="contact__icon-link" aria-label="Substack" title="Substack" role="listitem">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 3.5h16"/>
+              <path d="M4 7.5h16"/>
+              <path d="M4 11.5h16v9l-8-4.25L4 20.5z"/>
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/npc.nvrcn?igsh=MWlmdnZtZ21xZmN0bA%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" class="contact__icon-link" aria-label="Instagram" title="Instagram" role="listitem">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
             </svg>
           </a>
         </div>
@@ -409,6 +399,15 @@ const description =
 
   .section--alt .tag {
     background: var(--color-paper);
+  }
+
+  /* ── Writing pointer (the writing hub is Substack) ────────────────── */
+  .writing-pointer {
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: var(--color-ink-muted);
+    max-width: 36rem;
   }
 
   /* ── Writing list ─────────────────────────────────────────────────── */

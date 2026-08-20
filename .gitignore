@@ -152,3 +152,6 @@ vite.config.ts.timestamp-*
 
 # gstack working dir
 .gstack/
+
+# Writing content lives on Substack now; keep local drafts untracked
+src/content/writing/
