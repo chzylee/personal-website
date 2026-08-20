@@ -162,6 +162,9 @@ import HeroScreen from './HeroScreen.astro';
     line-height: 0.9;
     letter-spacing: 0.02em;
     color: var(--color-ink);
+    /* The name is the anchor of the identity block: never let it break into
+       two lines. If space runs out, the roles list wraps below instead. */
+    white-space: nowrap;
   }
 
   .hero__roles {
